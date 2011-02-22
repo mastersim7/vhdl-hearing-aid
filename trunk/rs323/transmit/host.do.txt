@@ -1,0 +1,6 @@
+#hostinterface
+restart -f- nowave
+view signals wave
+add wave system_clk
+force system_clk 0,1 50ns -repeat 100ns
+run 10000000ns
