@@ -1,0 +1,2 @@
+this is the filters that are going to be used for now until I move the 
+files to final design /shwan
