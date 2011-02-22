@@ -12,7 +12,7 @@
 % All frequency values are in Hz.
 Fs = 22300;  % Sampling Frequency
 
-N    = 255;      % Order
+N    = 900;      % Order220
 
 
 FcB11=	1% First Cutoff Frequency
@@ -33,9 +33,12 @@ flag = 'scale';  % Sampling Flag
 
 % Create the window vector for the design algorithm.
 win = hamming(N+1);
+%win = nuttallwin(N+1);
 
 % Calculate the coefficients using the FIR1 function.
 b1  = fir1(N, [FcB11 FcB12]/(Fs/2), 'bandpass', win, flag);
+% tested a highpass b1  = fir1(N, 100/(Fs/2), 'high', win, flag);
+
 Hd1 = dfilt.dffir(b1);
 b2  = fir1(N, [FcB12 FcB2]/(Fs/2), 'bandpass', win, flag);
 Hd2 = dfilt.dffir(b2);
@@ -51,7 +54,8 @@ b7  = fir1(N, [FcB6 FcB7]/(Fs/2), 'bandpass', win, flag);
 Hd7 = dfilt.dffir(b7);
 b8  = fir1(N, [FcB7 FcB8]/(Fs/2), 'bandpass', win, flag);
 Hd8 = dfilt.dffir(b8);
-Hd9 = dfilt.dffir(b1+b2+b3+b4+b5+b6+b7+b8);
+Hd9 = dfilt.dffir (b1+b2+b3+b4+b5+b6+b7+b8); %
+%added up the filters here to see
     [H1 W1] = freqz(b1,1);
     
     [H2 W2] = freqz(b2,1);
@@ -62,7 +66,8 @@ Hd9 = dfilt.dffir(b1+b2+b3+b4+b5+b6+b7+b8);
     [H7 W7] = freqz(b7,1);
     [H8 W8] = freqz(b8,1);
     
-    [H9 W9] = freqz(b1+b2+b3+b4+b5+b6+b7+b8,1);
+    [H9 W9] = freqz(b1+b2+b3+b4+b5+b6+b7+b8); %b2+b3+b4
+    %added up the filters here to see hjow they look like in the bank
     
 % [EOF]
 plot(W1*Fs/2/pi, 20*log10(abs(H1)));
@@ -76,4 +81,4 @@ plot(W7*Fs/2/pi, 20*log10(abs(H7)));
 plot(W8*Fs/2/pi, 20*log10(abs(H8)));
 plot(W9*Fs/2/pi, 20*log10(abs(H9)));
 
-fvtool (Hd1,Hd2,Hd3,Hd4,Hd5,Hd6,Hd7,Hd9)
+fvtool (Hd1,Hd2,Hd3,Hd4,Hd5,Hd6,Hd7,Hd9)%
