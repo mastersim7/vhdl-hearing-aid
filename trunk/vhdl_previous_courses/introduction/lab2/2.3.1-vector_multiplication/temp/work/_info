@@ -1,0 +1,37 @@
+m255
+K3
+13
+cModel Technology
+dE:\Program\Modeltech_xe_starter\examples
+Evector_multiplication
+Z0 w1284996595
+Z1 DPx4 ieee 11 numeric_std 0 22 =NSdli^?T5OD8;4F<blj<3
+Z2 DPx4 ieee 9 math_real 0 22 zjAF7SKfg_RPI0GT^n1N`1
+Z3 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+Z4 dE:\Skola\Master\introduction_to_electronic_system_design\lab2\2.3.1-vector_multiplication\temp
+Z5 8E:/Skola/Master/introduction_to_electronic_system_design/lab2/2.3.1-vector_multiplication/temp/vector_multiplication.vhd
+Z6 FE:/Skola/Master/introduction_to_electronic_system_design/lab2/2.3.1-vector_multiplication/temp/vector_multiplication.vhd
+l0
+L13
+VM5G=]Him@zKC2WLOX^TM[1
+!s100 >`fohihnJ6AE8m@R:25]K0
+Z7 OX;C;6.4b;39
+32
+Z8 o-work work -2002 -explicit -O0
+Z9 tExplicit 1
+Avector_multiplication_arch
+R1
+R2
+R3
+Z10 DEx4 work 21 vector_multiplication 0 22 M5G=]Him@zKC2WLOX^TM[1
+l21
+L20
+Z11 Vn]]hkhTLg;TYoa@eOFmO70
+Z12 !s100 f?5_El^J0IKX3JiQDoU`f2
+R7
+32
+Z13 Mx3 4 ieee 14 std_logic_1164
+Z14 Mx2 4 ieee 9 math_real
+Z15 Mx1 4 ieee 11 numeric_std
+R8
+R9
