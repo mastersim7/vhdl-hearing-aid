@@ -1,6 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_Std.all;
+use work.sine_package.all;
+
 
 entity SD_tb is
     port ( out_sign : out std_logic );
@@ -14,33 +16,36 @@ architecture behav_SD_tb of SD_tb is
             sign: out std_logic);  
     end component;
     
-    signal input : std_logic_vector(11 downto 0); 
+    component sine_wave
+    port( clock, reset, enable: in std_logic;
+          wave_out: out sine_vector_type);
+    end component;
+
+    signal wave_out : std_logic_vector(11 downto 0); 
     signal clk,reset : std_logic := '0'; 
     signal output : std_logic_vector(11 downto 0);
     signal sign : std_logic;
+    signal enable : std_logic := '1';
 begin
     clk <= not clk after 10 ns;
     
-    sd_comp : SD port map( input,clk,reset,output,sign );
+    sw : sine_wave port map( clk, reset, enable, wave_out );
+    sd_comp : SD port map( wave_out,clk,reset,output,sign );
+    
     out_sign <= sign;
     
     tb: process
     begin
-        input <= "000000000000";
-        reset <= '0';
-        wait for 40 ns;
+        enable <= '0';
         reset <= '1';
-        wait for 40 ns;
+        wait for 100 ns;
         reset <= '0';
-        wait for 40 ns;
-        input <= "000000100000";
-        wait for 40 ns;
-        input <= "100000000001";
-        wait for 40 ns;
-        input <= "000000100001";
-        wait for 40 ns;
-        input <= "000110000001";
-        wait for 40 ns;
+        enable <= '1';
+        wait for 100 ns;
+        
+        -- Test bench stimulus
+        wait for 1 ms;
+        enable <= '0';
     end process;
 
  end architecture;
