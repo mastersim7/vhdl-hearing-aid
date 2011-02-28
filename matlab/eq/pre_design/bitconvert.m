@@ -1,11 +1,24 @@
 magnitude = 23
 greatest = 2^ 23 
-x=0.6
-y = x * greatest
+%val1=cellstr(24)
+val1= cell(111,1);
+
+
+str = '000000010101111010001000';
+n = 111;
+
+% no pre-allocation
+
+for i=1:n
+   l{i} = str;
+end
+
+for i=1:n ,
+y = b1(i) * greatest
 y=round(y);
 
-val = dec2bin(mod((y),2^24),24)
-
+l(i) = dec2bin(mod((y),2^24),24)
+end;
 
 
 
