@@ -120,7 +120,7 @@ exp_power  = 0 ;
 %     precision = 16 ;
 % end
 
-precision = 16 ;            % See the note above.
+precision = 23 ;            % See the note above.
 str_Fr = num2str (dec, precision) ;
 % Some egs of dec = 1045.0137 , 1.0450137e+018 , 0.131835937 , 0.0000131835937
 
