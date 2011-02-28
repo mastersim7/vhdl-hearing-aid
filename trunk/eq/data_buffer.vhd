@@ -40,10 +40,21 @@ BEGIN
             IF CE = '1' THEN            --  kHz
                 IF load = '1' THEN      --  22300 kHz
                      Sample_Buffer(Pointer):=sample_in ;
+                     if pointer /= 220 then 
                      Pointer := Pointer +1;
+                     else pointer:= 0;
+                     end if ; 
+                     
                 ELSIF (LOAD = '0') and (READ = '1') THEN 
-                    sample_out <= Sample_Buffer(Pointer - 1) ;
+                     if pointer /= 0 then 
+                     sample_out <= Sample_Buffer(Pointer - 1) ;
+                      else 
+                     sample_out <= Sample_Buffer(N) ;
+                      end if;
+                     if pointer /= 220 then 
                      Pointer := Pointer +1;
+                     else pointer:= 0;
+                     end if ; 
                 END IF;
                 OE <= '1';
         ELSE
