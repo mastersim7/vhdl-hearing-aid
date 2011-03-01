@@ -10,7 +10,7 @@ n = 111;
 % no pre-allocation
 
 for i=1:n
-   l{i} = str;
+   l(i) = str;
 end
 
 for i=1:n ,
