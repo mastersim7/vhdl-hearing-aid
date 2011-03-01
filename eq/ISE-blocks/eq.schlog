@@ -1,0 +1,7 @@
+select figure at 1550 1942 18 -branches -sn=1
+select figure at 1541 1933 18 -branches -sn=1
+select figure at 1338 764 18 -branches -sn=1
+select figure at 1329 755 18 -branches -sn=1
+update symbols multiplier
+select figure at 1461 1929 18 -branches -sn=1
+select figure at 1452 1920 18 -branches -sn=1
