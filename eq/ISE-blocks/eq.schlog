@@ -1,7 +1,17 @@
-select figure at 1550 1942 18 -branches -sn=1
-select figure at 1541 1933 18 -branches -sn=1
-select figure at 1338 764 18 -branches -sn=1
-select figure at 1329 755 18 -branches -sn=1
-update symbols multiplier
-select figure at 1461 1929 18 -branches -sn=1
-select figure at 1452 1920 18 -branches -sn=1
+select figure at 1647 1544 14 -branches -sn=1
+move instance at 1424 1584 to 1120 1136 R0 -keepConn -sn=1
+select figure at 1392 778 14 -branches -sn=1
+move instance at 1136 896 to 1488 1568 R0 -keepConn -sn=1
+select figure at 1354 1043 14 -branches -sn=1
+move instance at 1120 1136 to 1104 944 R0 -keepConn -sn=1
+select figure at 1724 1544 14 -branches -sn=1
+select figure at 1611 1636 14 -branches -sn=1
+select figure at 1604 1629 14 -branches -sn=1
+select figure at 1661 1512 14 -branches -sn=1
+move instance at 1488 1568 to 1120 1328 R0 -keepConn -sn=1
+select figure at 1421 1534 14 -branches -sn=1
+select figure at 1414 1527 14 -branches -sn=1
+select figure at 1392 898 14 -branches -sn=1
+select figure at 1385 891 14 -branches -sn=1
+select figure at 962 1371 14 -branches -sn=1
+select figure at 955 1364 14 -branches -sn=1
