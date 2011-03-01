@@ -3,7 +3,7 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_signed.ALL;
 
-ENTITY multiplyer IS
+ENTITY multiplier IS
     GENERIC ( N : NATURAL := 12; 
 	      M : NATURAL := 24	); -- width of samples
                 
@@ -14,7 +14,7 @@ ENTITY multiplyer IS
             
             DO       : OUT STD_LOGIC_VECTOR( N+M-1   DOWNTO 0 ));  -- result
 END ENTITY;
-ARCHITECTURE multiplyer_arch OF multiplyer IS 
+ARCHITECTURE multiplier_arch OF multiplier IS 
 BEGIN 
 DO<= DI * DI_C;
-END ARCHITECTURE multiplyer_arch;
+END ARCHITECTURE multiplier_arch;
