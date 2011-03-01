@@ -10,14 +10,14 @@ n = 111;
 % no pre-allocation
 
 for i=1:n
-   l(i) = str;
+   l{i} = str;
 end
 
 for i=1:n ,
 y = b1(i) * greatest
 y=round(y);
 
-l(i) = dec2bin(mod((y),2^24),24)
+l{i} = dec2bin(mod((y),2^24),24)
 end;
 
 
