@@ -1,33 +1,26 @@
 magnitude = 23
 greatest = 2^ 23 
-%val1=cellstr(24)
-val1= cell(111,1);
-
-
-str = '000000010101111010001000';
 n = 111;
-
-% no pre-allocation
-
-for i=1:n
-   l{i} = str;
-end
-
+for m=1:8 ,
 for i=1:n ,
-y = b1(i) * greatest
+y = b1(i) * greatest;
 y=round(y);
-
-l{i} = dec2bin(mod((y),2^24),24)
+l{m,i} = dec2bin(mod((y),2^24),24);
+end;
 end;
 
 
+%now let's write them to a text file 
+fid=fopen('coeff.txt','wt');
+[rows,cols]=size(l);
 
-% 
-% str = dec2bin(y,23)
-% zeros = dec2bin(0,1)
-% ones = dec2bin(1,1)
-%   
-% str1= [zeros str]
-% 
-% str1+str1
-%   
+for i=1:cols
+%fprintf(fid,'%s,',l{i,1:end})
+fprintf(fid,'CO(1,1)=%s;\t',l{1:rows,i});
+fprintf(fid,'\n');
+end
+
+fclose(fid);
+
+
+
