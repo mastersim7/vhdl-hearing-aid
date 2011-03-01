@@ -836,6 +836,9 @@ proc restore { { project_dir "" } } {
   } "A problem occured while restoring project settings."
 
   set user_files { 
+      "../coeff_IO.vhd" 
+      "../data_buffer.vhd" 
+      "../multiplier.vhd" 
       "eq.sch"}
 
   HandleException {
