@@ -2,27 +2,62 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE work.EQ_data_type.all;
-ENTITY filterblock IS 
-	GENERIC ( L : NATURAL := 12); 
+USE work.EQ_functions.all;
+ENTITY filterblock IS  
 	PORT	( 	clk : IN STD_LOGIC ;
-			DI1 : IN STD_LOGIC_VECTOR(L-1 DOWNTO 0); 
-			DI2 : IN STD_LOGIC_VECTOR(L-1 DOWNTO 0); 
-			DO  : OUT  STD_LOGIC_VECTOR(L-1 DOWNTO 0);
+			DI1 : IN sample; 
+			DI2 : IN sample; 
+			DO  : OUT  sample;
 			READ : OUT STD_LOGIC;
 			OE	:  OUT STD_LOGIC
 		);
 END filterblock;
 
 ARCHITECTURE filterblock_arch of filterblock IS 
-	COMPONENT multiplier IS
-    		GENERIC ( N : NATURAL := 12; 
-	      		  M : NATURAL := 24	); -- width of samples
-                
-		PORT (      DI      : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );     -- sample
-			    DI_C      : IN  STD_LOGIC_VECTOR( M-1 DOWNTO 0 );     -- Coefficient            
-		            DO       : OUT STD_LOGIC_VECTOR( N+M-1   DOWNTO 0 ));  -- result
-	END COMPONENT multiplier;
+	--Components
+
+	
+	--Signals
+	 
+	
+	
 BEGIN 
+
+
+
+COMPUTER: PROCESS(clk,DI1,DI2) IS 
+
+	VARIABLE DISUM : sample;
+	VARIABLE TMP1: Multi_Result;
+	VARIABLE TMP_BAND : Multi_Result_Array;
+	
+	VARIABLE i,m : INTEGER;
+	
+	BEGIN 
+	If rising_edge(clk) then 
+	
+	-- VARIABLES 
+		
+		if i /=110 then 
+		DISUM := eq_adder(DI1,DI2);
+		TMP1 := DISUM * CO(m,i);
+		TMP_BAND(m) := TMP1+TMP_BAND(m)
+		i := i+1;
+		elsif m /= 4 then 
+			m := m+1;
+		else 
+		DO <= '1';
+		TMP_BAND
+				
+ 
+		
+
+
+
+
+
+
+END IF ; --clk
 END filterblock_arch; 
 
 			
