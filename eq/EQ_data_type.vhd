@@ -7,4 +7,6 @@ Package EQ_data_type IS
     TYPE sample IS  STD_LOGIC_VECTOR( L-1 DOWNTO 0 );
     TYPE Multi_Result IS STD_LOGIC_VECTOR( (2*L)-1 DOWNTO 0 );
     TYPE Multi_Result_Array is ARRAY (3 downto 0) of Multi_Result;
+    TYPE state_type_eq IS ( IDLE, COMPUTE_DATA, GAIN_DATA, SUM_DATA);
+    
 end EQ_data_type;
