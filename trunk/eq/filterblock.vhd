@@ -6,7 +6,8 @@ USE work.EQ_functions.all;
 ENTITY filterblock IS  
 	PORT	( 	clk : IN STD_LOGIC ;
 			DI1 : IN sample; 
-			DI2 : IN sample; 
+			DI2 : IN sample;
+			DIN : IN STD_LOGIC; 
 			DO  : OUT  sample;
 			READ : OUT STD_LOGIC;
 			OE	:  OUT STD_LOGIC
@@ -18,14 +19,20 @@ ARCHITECTURE filterblock_arch of filterblock IS
 
 	
 	--Signals
-	 
+  SIGNAL   state        : state_type_eq := IDLE;
+  SIGNAL   next_state   : state_type_eq := IDLE;
 	
 	
 BEGIN 
 
+update_state: PROCESS ( clk )
+BEGIN
+    IF clk'EVENT and clk = '1' THEN
+        state <= next_state;
+    END IF;
+END PROCESS update_state;
 
-
-COMPUTER: PROCESS(clk,DI1,DI2) IS 
+COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS 
 
 	VARIABLE DISUM : sample;
 	VARIABLE TMP1: Multi_Result;
@@ -38,16 +45,27 @@ COMPUTER: PROCESS(clk,DI1,DI2) IS
 	
 	-- VARIABLES 
 		
-		if i /=110 then 
-		DISUM := eq_adder(DI1,DI2);
-		TMP1 := DISUM * CO(m,i);
-		TMP_BAND(m) := TMP1+TMP_BAND(m)
-		i := i+1;
-		elsif m /= 4 then 
-			m := m+1;
-		else 
-		DO <= '1';
-		TMP_BAND
+	CASE state IS
+                    
+        -- Idle state is wating for the new sample to arrive
+        WHEN IDLE =>
+	      IF DIN = '1' then 
+	        next_state <= COMPUTE_DATA
+	      END if;
+	      -- Compute state takes the new data set and does computing we want to have two parallel computing going on at the same time , filters 1-4 5-8
+	      WHEN COMPUTE_DATA =>
+	                  	if i /=110 then 
+	               	   DISUM := eq_adder(DI1,DI2);
+		                 TMP1 := DISUM * CO(m,i);
+    		               TMP_BAND(m) := TMP1+TMP_BAND(m)
+	                   i := i+1;
+		                 elsif m /= 4 then 
+			               m := m+1;
+		                 else 
+		                 DO <= '1';
+		                 TMP_BAND
+		                 
+		    WHEN GAIN_DATA =>
 				
  
 		
