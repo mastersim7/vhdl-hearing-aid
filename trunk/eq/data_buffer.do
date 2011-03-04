@@ -7,22 +7,20 @@ view wave
 
 # Loading work.data_buffer(data_buffer_arch)#1
 add wave sim:/data_buffer/*
-force clk 0 0ns, 1 50ns -repeat 100ns
+# 50 MHz clock
+force clk 0 0ns, 1 10ns -repeat 20ns
 
-run 100ns
+run 20ns
 force reset 1
-run 100ns
+run 20ns
 force reset 0
-run 1ns
-force ce  1 
-run 1ns
+run 20ns
 force sample_in 001110111111
-run 1ns 
-force load 1
-run 5000ns 
-force load 0 
-run 1 ns 
-force read 1 
-run 10000ns 
+run 20ns 
+force WE 1
+run 20ns 
+force WE 0
+force RE 1 0, 0 400ns 
+run 4us 
 
 
