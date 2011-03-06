@@ -56,7 +56,7 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
   VARIABLE TMP_BAND : Multi_Result_Array;
   VARIABLE Gain_multiplied : Gain_Multi_Result;
 --  VARIABLE GAIN : gain_type;
- 	VARIABLE i,m : INTEGER;
+ 	VARIABLE i,m,ii : INTEGER;
 	
 	BEGIN 
 	If rising_edge(clk) then 
@@ -68,6 +68,8 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
         -- Idle state is wating for the new sample to arrive
         WHEN IDLE =>
             m:=1;
+            i :=1;
+            ii:=1;
             DO<=(others=>'0');
 	      IF DIN = '1' then 
 	        READ <= '1';
@@ -93,13 +95,13 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
             -- loop should be changed to a serial one using if as above, if this one is not working well
 		WHEN GAIN_DATA =>
 
-		FOR i IN 1 TO number_of_filters LOOP
+		IF ii =/ number_of_filters THEN
 		       Gain_multiplied(i) := TMP_BAND(i) * GAIN(i);				-- 60 bits of result
-		END LOOP;
-		
-
-	        
+		       ii := ii+1;
+		else 
+		   
 		     next_state <= SUM_DATA;
+   	      end if;
 		     
 		WHEN SUM_DATA =>
 		FOR i IN 1 TO number_of_filters LOOP
