@@ -10,5 +10,8 @@ Package EQ_data_type IS
     TYPE Gain_Multi_Result IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(59 DOWNTO 0 );
     TYPE Multi_Result_Array is ARRAY (8 downto 1) of Multi_Result;
     TYPE state_type_eq IS ( IDLE, COMPUTE_DATA, GAIN_DATA,SUM_DATA);
-    
+    --CONSTANT TAPS_CONST: taps_type;
 end EQ_data_type;
+Package BODY EQ_data_type IS
+
+END EQ_data_type;
