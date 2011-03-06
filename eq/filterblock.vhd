@@ -87,7 +87,7 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
 		     
 		WHEN SUM_DATA =>
 		FOR i IN 1 TO number_of_filters LOOP
-		 DO_Var:= DO_Var+Gain_multiplied(i);-- length of DO_VAR??
+		 DO_Var:= DO_Var+(Gain_multiplied(i)(35 downto 0));-- length of DO_VAR??
 		END LOOP;
 		DO <= DO_Var ;
 		OE <='1';
