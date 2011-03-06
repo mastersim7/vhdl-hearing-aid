@@ -78,7 +78,7 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
 		             -- some signal to the summer to make the avarage   should be added here
 
             -- loop should be changed to a serial one using if as above, if this one is not working well
-		WHEN (GAIN_DATA and GAIN_DATA2) =>
+		WHEN GAIN_DATA =>
 
 		FOR i IN 1 TO number_of_filters LOOP
 		       Gain_multiplied(i) := TMP_BAND(i) * GAIN(i);				-- 60 bits of result
@@ -132,11 +132,13 @@ COMPUTER2: PROCESS(clk,DI1,DI2,state,next_state) IS
 		                   i :=0;
 		                 else 
 		                 --READ <='0' ;
-		                 next_state <= GAIN_DATA2;
+		                 --next_state <= GAIN_DATA2;
 		             END IF;
 		                 
 		             -- some signal to the summer to make the avarage   should be added here
-
+			WHEN others =>
+			NULL;
+			End CASE;
 
 END IF ; --clk
 END PROCESS COMPUTER2;
