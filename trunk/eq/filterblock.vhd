@@ -95,7 +95,7 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
             -- loop should be changed to a serial one using if as above, if this one is not working well
 		WHEN GAIN_DATA =>
 
-		IF ii =/ number_of_filters THEN
+		IF ii /= number_of_filters THEN
 		       Gain_multiplied(i) := TMP_BAND(i) * GAIN(i);				-- 60 bits of result
 		       ii := ii+1;
 		else 
