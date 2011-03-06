@@ -11,7 +11,7 @@ ENTITY filterblock IS
 			DIN : IN STD_LOGIC; -- shows that newdata has been added in register
 			DO  : OUT  sample;
 			READ: OUT STD_LOGIC;
-			OE  : OUT STD_LOGIC;
+			OE  : OUT STD_LOGIC
 			--co  : IN  taps_type
 		);
 END filterblock;
@@ -37,6 +37,7 @@ CONSTANT CO:taps_type:=(( "111111111111000101100000","111111111110111111111110",
 	
       --constants 
       CONSTANT number_of_filters: NATURAL :=	8;
+      CONSTANT GAIN : gain_type:=( "011111111111111111111111","011111111111111111111111","011111111111111111111111","011111111111111111111111","011111111111111111111111","011111111111111111111111","011111111111111111111111","011111111111111111111111"); 
 BEGIN 
 
 
@@ -54,8 +55,8 @@ COMPUTER: PROCESS(clk,DI1,DI2,state,next_state) IS
 	VARIABLE DO_Var: Multi_Result;
   VARIABLE TMP_BAND : Multi_Result_Array;
   VARIABLE Gain_multiplied : Gain_Multi_Result;
-  VARIABLE GAIN : gain_type;
-	VARIABLE i,m : INTEGER;
+--  VARIABLE GAIN : gain_type;
+ 	VARIABLE i,m : INTEGER;
 	
 	BEGIN 
 	If rising_edge(clk) then 
@@ -119,7 +120,7 @@ COMPUTER2: PROCESS(clk,DI1,DI2,state,next_state) IS
 	VARIABLE DO_Var: Multi_Result;
   VARIABLE TMP_BAND : Multi_Result_Array;
   VARIABLE Gain_multiplied : Gain_Multi_Result;
-  VARIABLE GAIN : gain_type;
+ -- VARIABLE GAIN : gain_type;
 	VARIABLE i,m : INTEGER;
 	
 	BEGIN 
