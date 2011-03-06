@@ -16,9 +16,11 @@ fid=fopen('coeff.txt','wt');
 for m=1:rows,
 for i=1:cols,
 %fprintf(fid,'%s,',l{i,1:end})
-fprintf(fid,'tc(%i,%i)<="%s";', m, i, l{m,i});
-fprintf(fid,'\n');
+%fprintf(fid,'tc(%i,%i)<="%s";', m, i, l{m,i});
+fprintf(fid,'"%s",',l{m,i});
+
 end
+fprintf(fid,'\b),\n(');
 end
 fclose(fid);
 
