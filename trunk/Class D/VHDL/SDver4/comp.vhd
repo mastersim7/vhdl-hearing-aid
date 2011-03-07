@@ -3,7 +3,7 @@
 library ieee;
 
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_signed.all;
 
 entity comp is
     generic ( N : integer:= 12);
@@ -20,10 +20,10 @@ if clk'EVENT and clk='1' then
   if reset='1' then 
    output <='0';
   else
-    if input>"10000000000" then
-      output<='0';
-    else
+    if input>"000000000000" then
       output<='1';
+    else
+      output<='0';
       end if;
   end if;
 end if;

@@ -56,16 +56,19 @@ begin
     --L1: latch port map(addout2, clk, latchout2);
     C0: comp port map(addout2, clk, reset, sign1);
     
+    feed<="011111111111" WHEN addout2(N-1)='0' ELSE
+          "100000000000";
+    
     process(clk, sign1, addout2)
       begin
         if clk'event and clk='1' then
         sign<= sign1;
         output<=addout2;
-        if sign1='1' then
-          feed<="111111111111";
-        else
-          feed<="000000000000";
-        end if;
+        --if sign1='1' then
+--          feed<="111111111111";
+--        else
+--          feed<="000000000000";
+--        end if;
       end if;
     end process;
     
