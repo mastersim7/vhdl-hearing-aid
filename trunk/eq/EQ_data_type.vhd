@@ -12,6 +12,6 @@ Package EQ_data_type IS
     TYPE state_type_eq IS ( IDLE, COMPUTE_DATA, GAIN_DATA,SUM_DATA);
     --CONSTANT TAPS_CONST: taps_type;
 end EQ_data_type;
-Package BODY EQ_data_type IS
 
+Package BODY EQ_data_type IS
 END EQ_data_type;

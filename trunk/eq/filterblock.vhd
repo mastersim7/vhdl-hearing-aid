@@ -4,6 +4,7 @@ USE ieee.numeric_std.ALL;
 USE ieee.std_logic_unsigned.all;
 USE work.EQ_data_type.all;
 USE work.EQ_functions.all;
+
 ENTITY filterblock IS  
 	PORT	( 	clk : IN STD_LOGIC ;
 			DI1 : IN sample; 
