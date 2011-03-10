@@ -10,27 +10,115 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_signed.all;
 USE work.EQ_data_type.ALL;
+USE work.EQ_functions.ALL;
+USE std.textio.ALL;
+USE ieee.std_logic_textio.ALL;
 
 entity EQ_functions_tb is
+    PORT( a_sig : OUT sample;
+          b_sig : OUT sample;
+          y_sig : OUT sample);
 end;
 
 architecture EQ_functions_tb_arch of EQ_functions_tb is
-    signal clk : std_logic := '0';
     
-    TYPE di_type IS ARRAY(0 TO 10) OF sample;
-    CONSTANT di1 : di_type := (
-        "011111111111",
-        "100000000000",
-        "011100000000",
-        
+    -----------------------------------------------------------------------------
+	-- Declarations
+	-----------------------------------------------------------------------------
+    constant Size   : integer := 100;
+    constant num_bits : natural := 12;
+    
+    type sample_array is array (Size-1 downto 0) of sample;
+    
+    -----------------------------------------------------------------------------
+	-- Functions
+	-----------------------------------------------------------------------------
+    -- Convert character to std_logic
+    function bin (myChar : character) return std_logic is
+		variable bin : std_logic;
+	begin
+		case myChar is
+			when '0' => bin := '0';
+			when '1' => bin := '1';
+			when 'x' => bin := '0';
+			when others => 
+                assert (false) 
+                report "no binary character read" 
+                severity failure;
+		end case;
+		return bin;
+	end bin;
+    
+    -- Load an operand
+    function loadOperand (fileName : string) return sample_array is 
+		file objectFile : text open read_mode is fileName;
+		variable memory : sample_array;
+		variable L      : line;
+		variable index  : natural := 0;
+		variable myChar : character;
+	begin
+		while not endfile(objectFile) loop
+			readline(objectFile, L);
+			for i in num_bits-1 downto 0 loop
+				read(L, myChar);
+				memory(index)(i) := bin(myChar);
+			end loop;
+			index := index + 1;
+		end loop;
+		return memory;
+	end loadOperand;
+    
+    -- Convert std_logic_vector to string. Used for printing assertions
+    function to_string(sv: Std_Logic_Vector) return string is
+        variable bv: bit_vector(sv'range) := to_bitvector(sv);
+        variable lp: line;
+    begin
+        write(lp, bv);
+        return lp.all;
+    end to_string;
+    
+    -----------------------------------------------------------------------------
+	-- Test bench signals/constants
+	-----------------------------------------------------------------------------
+    CONSTANT AMem : sample_array := loadOperand(string'("a.tv"));
+    CONSTANT BMem : sample_array := loadOperand(string'("b.tv"));
+    CONSTANT YMem : sample_array := loadOperand(string'("y.tv"));
+    
+    SIGNAL clk   : STD_LOGIC := '0';
 begin
     clk <= not clk after 10 ns;
     
     tb: process( clk )
-        variable result : sample := 0;
-        variable i : integer range 0 to 10;
+        variable a : sample := (others => '0');
+        variable b : sample := (others => '0');
+        variable y : sample := (others => '0');
+        variable count : natural range 0 to Size := 0;
     begin
-        result := function(
+        if clk'event and clk = '1' then
+            if count < Size then
+                a := AMem(count);
+                b := BMem(count);
+                y := eq_adder(a,b);
+                
+                assert y = YMem(count)
+                    report  "Error in function eq_adder. Output is not what expected." &
+                            " A: " & to_string(a) &
+                            " B: " & to_string(b) &
+                            " Y: " & to_string(y) &
+                            " Expected y: " & to_string(YMem(count))
+                    severity error;
+                    
+                a_sig <= a;
+                b_sig <= b;
+                y_sig <= y;
+                
+                count := count + 1;
+            else
+                assert false
+                    report "Test bench finished"
+                    severity error;
+            end if;
+        end if;
     end process;
 
  end architecture;
