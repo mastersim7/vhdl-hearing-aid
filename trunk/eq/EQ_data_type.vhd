@@ -2,8 +2,9 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 Package EQ_data_type IS 
- 
-    TYPE taps_type IS ARRAY (1 to 8, 1 TO 111) OF STD_LOGIC_VECTOR( 23 downto 0 );
+    SUBTYPE coefficient_type IS STD_LOGIC_VECTOR(23 DOWNTO 0);
+    TYPE taps_type IS ARRAY (1 to 8, 1 TO 111) OF coefficient_type;
+    
     TYPE gain_type IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR( 23 downto 0 );
     SUBTYPE sample IS  STD_LOGIC_VECTOR( 11 DOWNTO 0 );
     SUBTYPE Multi_Result IS STD_LOGIC_VECTOR(35 DOWNTO 0 );
