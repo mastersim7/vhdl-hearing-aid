@@ -1,5 +1,5 @@
 -- gain_amplifier.vhd
--- Author: Mathias Lundell,Shwan Ciyako
+-- Author: Shwan Ciyako,Anandhavel Sakthivel
 -- Date: 2011-03-16
 -- Description:
 -- basic amplifier
@@ -14,14 +14,14 @@ USE work.EQ_functions.ALL;
 
 ENTITY gain_amplifier IS
     GENERIC(
-            NUM_BITS_OUT : NATURAL := 12; --mathias is this number ok?
+            NUM_BITS_OUT : NATURAL := 13; --mathias is this number ok?
             NUM_OF_GAINS : NATURAL := 8;
-            NUM_OF_FILTERS);
+            NUM_OF_FILTERS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
-            RAW_OUTPUT : IN sample;
-            GAIN : IN sample;
+            RAW_OUTPUT : IN extended_sample; --13 bits
+            GAIN : IN extended_sample;
             OE      : OUT STD_LOGIC; 
             Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END;
@@ -53,3 +53,8 @@ BEGIN
                  Q<=SUMMED(NUM_BITS_OUT-1 DOWNTO 0);
                  OE<='1'
               END IF;
+          END IF; --CE
+     END IF; --reset
+    END IF; --clk
+END ARCHITECTURE;
+              

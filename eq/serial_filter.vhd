@@ -1,5 +1,5 @@
 -- serial_filter.vhd
--- Author: Mathias Lundell
+-- Author: Mathias Lundell,Shwan Ciyako,Anandhavel Sakthivel
 -- Date: 2011-03-16
 -- Description:
 -- A serial filter
@@ -39,7 +39,7 @@ ARCHITECTURE serial_filter_arch OF serial_filter IS
 BEGIN
 
 PROCESS(clk, CE)
-    VARIABLE two_samples : STD_LOGIC_VECTOR( 2*sample'LENGTH-1 DOWNTO 0 );
+    VARIABLE two_samples : extended_sample; 
     VARIABLE i,m : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -53,6 +53,7 @@ BEGIN
               -- how do we handle CE ? it should be high until OE goes high then it goes low ?    
               IF i /= NUM_OF_COEFFS THEN 
                  two_samples := eq_addition(sample1, sample2);
+                 
                  Q <= eq_multiply(two_samples,CO(m,i));
                  --the main will take care of summing and saving this valeus in a array
                  i := i+1;
