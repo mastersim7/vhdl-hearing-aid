@@ -1,3 +1,10 @@
+% generate_random.m
+% Mathias Lundell
+% 2011-03-10
+% Generates a random integer based on a specific number of bits. The
+% generated integer could either be signed or unsigned.
+% n : number of bits
+% signed : 1 = negative and positive numbers; 0 = only positive numbers
 function num = generate_random(n, signed)
 
 % Generate random numbers

@@ -3,9 +3,9 @@ greatest = 2^ 23
 n = 111;
 for m=1:8 ,
 for i=1:n ,
-y = b{m}(i) * greatest;
-y=round(y);
-l{m,i} = dec2bin(mod((y),2^24),24);
+    y = b{m}(i) * greatest;
+    y=round(y);
+    l{m,i} = dec2bin(mod((y),2^24),24);
 end;
 end;
 
