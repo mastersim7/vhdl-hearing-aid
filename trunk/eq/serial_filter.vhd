@@ -15,13 +15,15 @@ USE work.EQ_functions.ALL;
 
 ENTITY serial_filter IS
     GENERIC(
-            NUM_BITS_OUT : NATURAL := 37 );
+            NUM_BITS_OUT : NATURAL := 37;
+            NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_FILTERS);-- this can very well be the length'coefconst
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
-            
+            OE      : OUT STD_LOGIC;
             Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END;
 
@@ -35,6 +37,17 @@ PROCESS(clk, CE)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         IF CE = '1' THEN
-            two_samples := eq_addition(sample1, sample2);
-            Q <= eq_multiply -- i stop here, will continue when possible... 
+        -- how do we handle CE ? it should be high until OE goes high then it goes low ?    
+        IF i /= NUM_OF_COEFFS THEN 
+           two_samples := eq_addition(sample1, sample2);
+           Q <= eq_multiply(two_samples,CO(m,i));
+           i := i+1;
+        ELSIF m /= (NUM_OF_FILTERS)
+	   i:=0;
+           m:=m+1;
+	ELSE 
+	   OE <= '1' ; -- we are done doing calculation for the  filters this should let the main know and CE goes low ?
+           m:=0;
+           i:=0;
+        END IF;		
 END ARCHITECTURE serial_filter_arch;
