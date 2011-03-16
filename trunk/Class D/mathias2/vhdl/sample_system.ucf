@@ -1,0 +1,24 @@
+# System clock
+NET "clk"  LOC = "T9";
+
+# LEDs
+NET "led<0>"  LOC = "K12";
+NET "led<1>"  LOC = "P14";
+NET "led<2>"  LOC = "L12";
+NET "led<3>"  LOC = "N14";
+NET "led<4>"  LOC = "P13";
+NET "led<5>"  LOC = "N12";
+NET "led<6>"  LOC = "P12";
+NET "led<7>"  LOC = "P11";
+
+# ADC
+NET "ADC_DOUT" LOC = "B5";
+NET "ADC_DIN"  LOC = "B6";
+NET "ADC_SCK"  LOC = "A7";
+NET "ADC_CS"   LOC = "A8";
+
+# DAC
+NET "DAC_CS"   LOC = "D7" ;
+NET "DAC_SCK"  LOC = "D8" ;
+NET "DAC_SDI"  LOC = "D10";
+NET "DAC_LDAC" LOC = "B4" ;
