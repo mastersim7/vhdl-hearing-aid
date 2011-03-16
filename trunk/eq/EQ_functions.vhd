@@ -18,7 +18,7 @@ USE work.EQ_data_type.ALL;
 PACKAGE EQ_functions IS 
     FUNCTION eq_adder(DI1,DI2 : sample ) RETURN STD_LOGIC_VECTOR;
     
-    FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0), coeff : coefficient_type
+    FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0); coeff : coefficient_type)
         RETURN STD_LOGIC_VECTOR;
 END EQ_functions;
 
@@ -49,7 +49,7 @@ PACKAGE BODY EQ_functions IS
     END eq_adder;
     
     -- Function for multiplying two signed values
-    FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0), coeff : coefficient_type)
+    FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0); coeff : coefficient_type)
     RETURN STD_LOGIC_VECTOR IS
         VARIABLE output : STD_LOGIC_VECTOR(input'LENGTH+coeff'LENGTH-1 DOWNTO 0);
     BEGIN
