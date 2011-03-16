@@ -1,6 +1,6 @@
 -- EQ_functions.vhd
 -- Author: Shwan Ciyako, Anandhavel Sakthivel, Mathias Lundell
--- Date: 2011-02-10
+-- Date: 2011-03-16
 
 -- Description:
 -- Function eq_adder used together with the symmetrical filters to add together the 
@@ -9,10 +9,11 @@
 
 -- Comments:
 -- Function eq_adder behaviourally tested using 1000 test vectors.
+-- Function eq_multiply behaviourally tested using 1000 test vectors.
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-USE ieee.std_logic_signed.all;
+USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 
 PACKAGE EQ_functions IS 
@@ -24,6 +25,10 @@ END EQ_functions;
 
 
 PACKAGE BODY EQ_functions IS 
+
+    -- Function eq_adder used together with the symmetrical filters to add together the 
+    -- newest and oldest sample before multiplication with common coefficient. Input
+    -- parameters are n bits and output is n+1 bits in order to avoid overflow
     FUNCTION eq_adder(DI1,DI2 : sample) RETURN  STD_LOGIC_VECTOR IS
         VARIABLE DO : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0);
         CONSTANT MSB : NATURAL := DI1'LEFT;
@@ -48,13 +53,17 @@ PACKAGE BODY EQ_functions IS
         RETURN DO;
     END eq_adder;
     
+    
     -- Function for multiplying two signed values
+    -- The result is a std logic vector of length of sample + length of coefficient.
+    -- After multiplication the result is shifted left 1 step in order to keep format fixed point
+    -- decimal.
     FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0); coeff : coefficient_type)
     RETURN STD_LOGIC_VECTOR IS
-        VARIABLE output : STD_LOGIC_VECTOR(input'LENGTH+coeff'LENGTH-1 DOWNTO 0);
+        VARIABLE output : SIGNED(input'LENGTH+coeff'LENGTH-1 DOWNTO 0);
     BEGIN
-        output := STD_LOGIC_VECTOR(SIGNED(input) * SIGNED(output));
+        output := SIGNED(input) * SIGNED(coeff);
         output := SHIFT_LEFT(output, 1);
-        return output;
+        RETURN STD_LOGIC_VECTOR(output);
     END eq_multiply;
 END EQ_functions;
