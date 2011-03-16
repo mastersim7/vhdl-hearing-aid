@@ -1,7 +1,6 @@
--- eq_adder_tb.vhd
--- Author:
--- Date:
--- Description:
+--Author: Shwan Ciyako, Anandhavel Sakthivel, Mathias Lundell
+-- Date: 2011-02-10
+
 -- Function used together with the symmetrical filters to add together the newest and
 -- oldest sample before multiplication with common coefficient.
 
