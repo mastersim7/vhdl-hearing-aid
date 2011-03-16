@@ -30,7 +30,7 @@ PACKAGE BODY EQ_functions IS
     -- newest and oldest sample before multiplication with common coefficient. Input
     -- parameters are n bits and output is n+1 bits in order to avoid overflow
     FUNCTION eq_adder(DI1,DI2 : sample) RETURN  STD_LOGIC_VECTOR IS
-        VARIABLE DO : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0);
+        VARIABLE DO : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0); 
         CONSTANT MSB : NATURAL := DI1'LEFT;
         VARIABLE p1, p2 : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0);
     BEGIN   

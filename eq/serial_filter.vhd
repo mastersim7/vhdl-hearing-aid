@@ -12,7 +12,7 @@
 -- I wanted to add the one set of calculations to be one CE here , it was possiabele for main to 
 -- ask for them one by one then this component had /shwan
 -- I want to make communication between here and BUFFER directly done with no interaction from main
-become only a adder multiplier. 
+-- become only a adder multiplier. 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -22,8 +22,8 @@ USE work.EQ_functions.ALL;
 ENTITY serial_filter IS
     GENERIC(
             NUM_BITS_OUT : NATURAL := 37;
-            NUM_OF_COEFFS : NATURAL := 110;
-            NUM_OF_FILTERS);-- this can very well be the length'coefconst
+            NUM_OF_COEFFS : NATURAL := 110;-- this can very well be the CO'LENGTH
+            NUM_OF_FILTERS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
@@ -34,7 +34,7 @@ ENTITY serial_filter IS
 END;
 
 ARCHITECTURE serial_filter_arch OF serial_filter IS
-    
+-- FILTER COEEFS WILL BE ADDED HERE    
 
 BEGIN
 
@@ -50,16 +50,18 @@ BEGIN
 	ELSE
 	
            IF CE = '1' THEN
-           -- how do we handle CE ? it should be high until OE goes high then it goes low ?    
+              -- how do we handle CE ? it should be high until OE goes high then it goes low ?    
               IF i /= NUM_OF_COEFFS THEN 
                  two_samples := eq_addition(sample1, sample2);
                  Q <= eq_multiply(two_samples,CO(m,i));
+                 --the main will take care of summing and saving this valeus in a array
                  i := i+1;
-              ELSIF m /= (NUM_OF_FILTERS) --the main will take care of saving this valeus in a array
+              ELSIF m /= (NUM_OF_FILTERS) 
 	         i:=0;
                  m:=m+1;
 	      ELSE 
-	         OE <= '1' ; -- we are done doing calculation for the  filters this should let the main know and CE goes low ?
+	         OE <= '1' ; 
+	         -- we are done doing calculation for the  filters this should let the main know and CE goes low ?
                  m:=0;
                  i:=0;
               END IF;		--comp
