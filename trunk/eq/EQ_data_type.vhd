@@ -1,3 +1,7 @@
+
+-- Author: Shwan Ciyako, Anandhavel Sakthivel, Mathias Lundell
+-- Date: 2011-02-10
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
