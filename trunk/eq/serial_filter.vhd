@@ -22,6 +22,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -36,11 +37,10 @@ ENTITY serial_filter IS
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
-			  --CO      : IN coefficient_type;
             OE      : OUT STD_LOGIC;
-            Q	    : OUT Multi_Result;
-          --  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
-END;
+            Q	    : OUT Multi_Result);
+				--  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+END ENTITY;
 
 ARCHITECTURE serial_filter_arch OF serial_filter IS
 -- FILTER COEEFS WILL BE ADDED HERE    
@@ -50,7 +50,7 @@ BEGIN
 PROCESS(clk, CE)
     VARIABLE two_samples : extended_sample; 
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
-    VARIABLE mac : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
+    VARIABLE mac,temp : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
@@ -65,10 +65,11 @@ BEGIN
             IF count /= NUM_OF_COEFFS THEN 
                 -- Add two samples together, multiply with coefficient, accumulate result
 
-                two_samples := eq_addition(sample1, sample2);
-                mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));
+                two_samples := eq_adder(sample1, sample2);
+               -- mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));
+				      mac         := (mac) + (eq_multiply(two_samples,CO));
 
-                count       := count + 1;
+                           count       := count + 1;
             ELSE 
                 count := 0;
                 Q     <= mac;

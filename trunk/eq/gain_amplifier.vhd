@@ -9,6 +9,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -23,9 +24,9 @@ ENTITY gain_amplifier IS
 				reset   : IN STD_LOGIC;
             RAW_OUTPUT : IN extended_sample; --13 bits
             GAIN : IN extended_sample;
-            SUMMED_OUT_TO_AVERAGE : OUT extended_sample;
+            --SUMMED_OUT_TO_AVERAGE : OUT extended_sample;
             OE      : OUT STD_LOGIC; 
-            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-2 DOWNTO 0));
 END;
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
     
@@ -54,8 +55,8 @@ BEGIN
 					  i := i+1;
               ELSE 
                  i:=0;
-					  SUMMED_OUT_TO_AVERAGE <= SUMMED;
-                 Q<=SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12);
+					  --SUMMED_OUT_TO_AVERAGE <= SUMMED;
+                 Q<=SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12));
                  OE<='1';
               END IF;-- i
           END IF; --CE
