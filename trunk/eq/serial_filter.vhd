@@ -35,7 +35,8 @@ ENTITY serial_filter IS
             sample1 : IN sample;
             sample2 : IN sample;
             OE      : OUT STD_LOGIC;
-            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+            Q	    : OUT Multi_Result;
+          --  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END;
 
 ARCHITECTURE serial_filter_arch OF serial_filter IS

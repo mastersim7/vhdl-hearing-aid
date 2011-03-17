@@ -14,6 +14,7 @@ ENTITY regular_buffer IS
     PORT (  clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
             sample_in    : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+            CE		 : IN STD_LOGIC;
             RE           : IN  STD_LOGIC;
             WE           : IN  STD_LOGIC;
             sample_out_1 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
@@ -37,7 +38,7 @@ BEGIN
                 counter := 0;
                 sample_out_1 <= samples(samples'LEFT+counter);
                 sample_out_2 <= samples(samples'RIGHT-counter);
-            ELSE
+            ELSIF CE='1' THEN
                 REWE := RE & WE;
                 CASE (REWE) IS
                     WHEN "01" =>
