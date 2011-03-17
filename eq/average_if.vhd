@@ -6,6 +6,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -29,7 +30,7 @@ ARCHITECTURE average_if_arch OF average_if IS
 BEGIN
 
 PROCESS(clk, CE)
-    VARIABLE Gained_Samples_var: Gained_result_Array;
+    VARIABLE Gained_Samples_var: Gained_result_Array_16;
     
     VARIABLE i,m,mo : INTEGER;
 BEGIN
@@ -45,8 +46,11 @@ BEGIN
 
               IF i /= NUM_OF_SAMPLES THEN 
                   IF m /= NUM_OF_BANDS THEN 
-                 Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
-                  m:=m+1;
+                -- Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
+                  
+						Gained_Samples_var(m) := Gained_Samples(m)+Gained_Samples_var(m);
+						
+						m:=m+1;
                   ELSE
                   m:=0;
                   i := i+1;
@@ -54,13 +58,17 @@ BEGIN
               ELSE 
                  IF mo /= NUM_OF_BANDS THEN
                  Q<=Gained_Samples_var(mo);
-                 OE<='1'
+                 OE<='1';
+					  mo := mo+1;
                  ELSE 
                  OE<='0';
+					  i := 0;
+					  mo := 0;
                  END IF; --output
               END IF;--i
               END IF; --req
           END IF; --CE
      END IF; --reset
     END IF; --clk
+	 End Process;
 END ARCHITECTURE;
