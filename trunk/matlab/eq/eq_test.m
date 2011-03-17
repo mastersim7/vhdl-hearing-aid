@@ -10,6 +10,7 @@ samples_num = 220; % number of randomly generated samples
 samples_int = 0; 
 samples_frac = 0.0;
 samples_bin = ''; 
+samples_max = 2^(samples_n-1)-1;
 
 % Summed pairs of samples
 summed_samples_int = 0;
@@ -75,13 +76,31 @@ end
 % Add all the results of multiplications together
 pre_output_int = sum(coeff_x_summed_samples_int);
 pre_output_bin = int2bin(pre_output_int, pre_output_n);
+pre_output_frac = pre_output_int/coeff_x_summed_samples_max;
+
+% At this point we have the output from a single filter. I think we can test a filter
+% with this and then we have to decide to either keep the 37 bits until we have summed
+% the output from all eight filters. But let's say we cut the binary numbers to 12 bits and
+% evaluate that case (for the sake of it). /Mathias
 
 % Cut 'pre_output' in 12 bits and get the final output
-output_int = pre_output_int;
-for i = 1 : output_n
-output_bin(i) = pre_output_bin(i);
-end
+%output_int = pre_output_int;
+steps_to_right_shift = pre_output_n-output_n;
+output_int = floor(pre_output_int/2^steps_to_right_shift);
+output_bin = int2bin(output_int, output_n);
 
+output_frac = output_int/output_max;
+
+%for i = 1 : output_n
+%output_bin(i) = pre_output_bin(i);
+%end
+
+% Calculate output_int with new number of bits (12 bits)
+%output_int = 0;
+%for i = output_n:-1:1
+  %  if i =
+ %   output_int = output_int + 2^
+%output_frac = 
 % COMMENTS:
 %
 % 1) I'm still not sure about final step. Need to read about conversion of
@@ -92,10 +111,3 @@ end
 % 2) I'm also not sure about 40 bits for 'pre_output'.
 % 3) Do we neet to export results to excel?
 % /Alexey
-
-
-
-
-
-
-
