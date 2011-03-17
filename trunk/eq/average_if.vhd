@@ -18,6 +18,7 @@ ENTITY average_if IS
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
             REQ     :IN STD_LOGIC;
+				reset   :IN STD_LOGIC;
             Gained_Samples: IN Gained_result_Array; --an 8 array of 13 bit vectors
             OE      : OUT STD_LOGIC; 
             Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
@@ -28,7 +29,7 @@ ARCHITECTURE average_if_arch OF average_if IS
 BEGIN
 
 PROCESS(clk, CE)
-    VARIABLE Gained_Samples_var: IN Gained_result_Array;
+    VARIABLE Gained_Samples_var: Gained_result_Array;
     
     VARIABLE i,m,mo : INTEGER;
 BEGIN
@@ -44,7 +45,7 @@ BEGIN
 
               IF i /= NUM_OF_SAMPLES THEN 
                   IF m /= NUM_OF_BANDS THEN 
-                 Gained_Samples_var(m)= if_adder(Gained_Samples(m),Gained_Samples_var(m));
+                 Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
                   m:=m+1;
                   ELSE
                   m:=0;
