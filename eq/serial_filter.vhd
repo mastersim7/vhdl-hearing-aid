@@ -32,8 +32,10 @@ ENTITY serial_filter IS
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
+				reset   : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
+			  --CO      : IN coefficient_type;
             OE      : OUT STD_LOGIC;
             Q	    : OUT Multi_Result;
           --  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
@@ -61,8 +63,8 @@ BEGIN
         ELSIF CE = '1' THEN   
             IF count /= NUM_OF_COEFFS THEN 
                 -- Add two samples together, multiply with coefficient, accumulate result
-                two_samples := eq_addition(sample1, sample2);
-                mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO(i)));
+                two_samples := eq_adder(sample1, sample2);
+                mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO(count)));
                 count       := count + 1;
             ELSE 
                 count := 0;
@@ -74,5 +76,5 @@ BEGIN
             OE <= '0';
         END IF;
     END IF;
-
+END PROCESS;
 END ARCHITECTURE serial_filter_arch;
