@@ -39,6 +39,7 @@ COMPONENT serial_filter IS
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
+            reset   : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
             RE	    : OUT STD_LOGIC; -- used to ask for a new pair of samples
@@ -62,7 +63,8 @@ FIR2:  serial_filter PORT MAP(clk,CE_FIR2,sample1,sample2,OE_FIR2,Q_FIR2);
 
 
 
-
+PROCESS (clk,reset)
+BEGIN 
 IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
         IF reset ='1' THEN 
@@ -71,6 +73,8 @@ IF clk'EVENT AND clk = '1' THEN
             OE    <= '0';
         ELSIF CE = '1' THEN 
         -- do the job
+        
+        
         END IF; --reset 
 END IF; --clk
 END;
