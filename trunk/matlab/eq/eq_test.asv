@@ -40,7 +40,7 @@ pre_output_int = 0; % Is the result of adding all the results of multiplication
 pre_output_bin = '';
 pre_output_max = 2^(pre_output_n-1)-1;
 
-output_n = 12;      % pre_output, "cutted" in 12 bits is final output
+output_n = 12;      % pre_output, cutted in 12 bits is final output
 output_int = 0;
 output_bin = '';
 output_max = 2^(output_n-1)-1;
@@ -87,7 +87,7 @@ pre_output_frac = pre_output_int/pre_output_max;
 %   with this and then we have to decide to either keep the 37 bits until we have summed
 %   the output from all eight filters. But let's say we cut the binary numbers to 12 bits and
 %   evaluate that case (for the sake of it). 
-%   /Mathias-08:30-110317
+%   /Mathias-8:30-110317
 
 % Cut 'pre_output' in 12 bits and get the final output:
 
@@ -106,8 +106,8 @@ output_frac = output_int/output_max;
 % Calculate output_int with new number of bits (12 bits)
 %output_int = 0;
 %for i = output_n:-1:1
-%  if i =
-%   output_int = output_int + 2^
+  %  if i =
+ %   output_int = output_int + 2^
 %output_frac = 
 
 % COMMENTS:
