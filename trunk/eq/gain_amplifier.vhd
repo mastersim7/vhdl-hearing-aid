@@ -34,7 +34,7 @@ BEGIN
 
 PROCESS(clk, CE)
     VARIABLE GAIND_Q : STD_LOGIC_VECTOR( 2*extended_sample'LENGTH-1 DOWNTO 0 );
-    VARIABLE SUMMED : extended_sample;
+    VARIABLE SUMMED : STD_LOGIC_VECTOR( 2*extended_sample'LENGTH-1 DOWNTO 0 );
     VARIABLE i : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -48,13 +48,14 @@ BEGIN
 
               IF i /= NUM_OF_GAINS THEN 
                  GAIND_Q := eq_gain_multiply(RAW_OUTPUT,GAIN);
-                 SUMMED := eq_adder(SUMMED, GAIND_Q(GAIND_Q'LEFT DOWNTO (GAIND_Q'LEFT - 13)));-- how this adder should be need details about saturation 
-                  
-                 i := i+1;
+                -- SUMMED := eq_adder(SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12)), GAIND_Q(GAIND_Q'LEFT DOWNTO (GAIND_Q'LEFT - 13)));-- how this adder should be need details about saturation 
+                  -- do we loose any bits in summed because sending 12 receiving 13 again truncating it to 12 /anand
+                 SUMMED := SUMMED + GAIND_Q;
+					  i := i+1;
               ELSE 
                  i:=0;
 					  SUMMED_OUT_TO_AVERAGE <= SUMMED;
-                 Q<=SUMMED(NUM_BITS_OUT-1 DOWNTO 0);
+                 Q<=SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12);
                  OE<='1';
               END IF;-- i
           END IF; --CE
