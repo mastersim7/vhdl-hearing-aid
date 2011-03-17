@@ -13,6 +13,12 @@
 -- ask for them one by one then this component had /shwan
 -- I want to make communication between here and BUFFER directly done with no interaction from main
 -- become only a adder multiplier. 
+--
+-- I want it to be a single serial filter. That's the reason for making it a component. Then you can
+-- order them any way you want in another file, just import them as components. It will be easier to debug
+-- and will be easier to fit together with the rest of the design.
+-- CE should be high when we want to calculate a result.
+-- OE goes high when calculations are finished. And then goes low again.
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -22,8 +28,7 @@ USE work.EQ_functions.ALL;
 ENTITY serial_filter IS
     GENERIC(
             NUM_BITS_OUT : NATURAL := 37;
-            NUM_OF_COEFFS : NATURAL := 110;-- this can very well be the CO'LENGTH
-            NUM_OF_FILTERS: NATURAL := 8);
+            NUM_OF_COEFFS : NATURAL := 110);
     PORT( 
             clk     : IN STD_LOGIC;
             CE      : IN STD_LOGIC;
@@ -40,34 +45,33 @@ BEGIN
 
 PROCESS(clk, CE)
     VARIABLE two_samples : extended_sample; 
-    VARIABLE i,m : INTEGER;
+    VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
+    VARIABLE mac : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
-	IF reset ='1' THEN 
-	    Q <= (others=>'0');
-	    i:=0;m:=0;
-	    OE<='0';
-	ELSE
-	
-           IF CE = '1' THEN
-              -- how do we handle CE ? it should be high until OE goes high then it goes low ?    
-              IF i /= NUM_OF_COEFFS THEN 
-                 two_samples := eq_addition(sample1, sample2);
-                 
-                 Q <= eq_multiply(two_samples,CO(m,i));
-                 --the main will take care of summing and saving this valeus in a array
-                 i := i+1;
-              ELSIF m /= (NUM_OF_FILTERS) 
-	         i:=0;
-                 m:=m+1;
-	      ELSE 
-	         OE <= '1' ; 
-	         -- we are done doing calculation for the  filters this should let the main know and CE goes low ?
-                 m:=0;
-                 i:=0;
-              END IF;		--comp
-           END IF;         --ce
-        END IF;         --reset
-    END IF;             --clk
+        -- Synchronous reset
+        IF reset ='1' THEN 
+            mac := (OTHERS => '0');
+            Q   <= (OTHERS => '0');
+            count := 0;
+            OE    <= '0';
+            
+        -- CE high, calculate a result. Output updated when all coefficients used
+        ELSIF CE = '1' THEN   
+            IF count /= NUM_OF_COEFFS THEN 
+                -- Add two samples together, multiply with coefficient, accumulate result
+                two_samples := eq_addition(sample1, sample2);
+                mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO(i)));
+                count       := count + 1;
+            ELSE 
+                count := 0;
+                Q     <= mac;
+                OE    <= '1';
+            END IF;
+        -- OE should go low after a single CE clock cycle.
+        ELSE
+            OE <= '0';
+        END IF;
+    END IF;
 
 END ARCHITECTURE serial_filter_arch;
