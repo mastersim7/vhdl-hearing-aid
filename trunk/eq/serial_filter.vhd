@@ -31,8 +31,14 @@ ENTITY serial_filter IS
             NUM_OF_COEFFS : NATURAL := 110);
     PORT( 
             clk     : IN STD_LOGIC;
+<<<<<<< .mine
+            reset   : IN STD_LOGIC;
+            CO      : IN coefficient_type;
+            CE      : IN STD_LOGIC;
+=======
             CE      : IN STD_LOGIC;
 				reset   : IN STD_LOGIC;
+>>>>>>> .r95
             sample1 : IN sample;
             sample2 : IN sample;
 			  --CO      : IN coefficient_type;
@@ -63,8 +69,13 @@ BEGIN
         ELSIF CE = '1' THEN   
             IF count /= NUM_OF_COEFFS THEN 
                 -- Add two samples together, multiply with coefficient, accumulate result
+<<<<<<< .mine
+                two_samples := eq_addition(sample1, sample2);
+                mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));
+=======
                 two_samples := eq_adder(sample1, sample2);
                 mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO(count)));
+>>>>>>> .r95
                 count       := count + 1;
             ELSE 
                 count := 0;
