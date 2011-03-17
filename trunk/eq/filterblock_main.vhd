@@ -43,13 +43,13 @@ COMPONENT serial_filter IS
             sample2 : IN sample;
             RE	    : OUT STD_LOGIC; -- used to ask for a new pair of samples
             OE      : OUT STD_LOGIC;
-            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+            Q       : OUT Multi_Result); --STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END;
 
 
 -- signals 
-CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2
-Q_FIR1,Q_FIR2
+SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC;
+SIGNAL Q_FIR1,Q_FIR2 :  Multi_Result;
 
 BEGIN 
 PROCESS(clk, CE)
@@ -71,5 +71,6 @@ IF clk'EVENT AND clk = '1' THEN
             OE    <= '0';
         ELSIF CE = '1' THEN 
         -- do the job
-        
+        END IF; --reset 
+END IF; --clk
 END;
