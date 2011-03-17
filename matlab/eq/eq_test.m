@@ -112,11 +112,6 @@ output_frac = output_int/output_max;
 
 % COMMENTS:
 %
-% 1) I'm still not sure about final step. Need to read about conversion of
-%    binary numbers. (Can we just throw away last bits to make the output 12 bits?)
-%    Now it cuts, for example 
-%    0001110001010100001011111000000000100101 to 
-%    000111000101
 % 2) I'm also not sure about 40 bits for 'pre_output'.
 % 3) Do we need to export results to excel?
 % /Alexey-04:30-110317
