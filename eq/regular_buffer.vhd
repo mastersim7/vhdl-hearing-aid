@@ -47,8 +47,10 @@ BEGIN
                             samples(m) := samples(m-1);
                         END LOOP;
                         samples(0) := sample_in;
+                        UPDATED<= '1';
 
                     WHEN "10" =>
+                        UPDATED<= '1';
                         -- Read samples
                         sample_out_1 <= samples(0+counter);
                         sample_out_2 <= samples(NUM_OF_TAPS-1-counter);
