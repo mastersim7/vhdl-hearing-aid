@@ -16,7 +16,7 @@ Package EQ_data_type IS
     TYPE Gain_Multi_Result IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(36 DOWNTO 0 );
 	 
     TYPE Gained_result_Array is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 12 downto 0 );
-	 TYPE Gained_result_Array_16 is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 12 downto 0 );
+	 TYPE Gained_result_Array_16 is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 15 downto 0 );
     TYPE state_type_eq IS ( IDLE, COMPUTE_DATA, GAIN_DATA,SUM_DATA);
     TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
     --CONSTANT TAPS_CONST: taps_type;

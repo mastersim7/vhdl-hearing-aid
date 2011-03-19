@@ -24,12 +24,13 @@ ENTITY gain_amplifier IS
 				reset   : IN STD_LOGIC;
             RAW_OUTPUT : IN extended_sample; --13 bits
             GAIN : IN extended_sample;
-            --SUMMED_OUT_TO_AVERAGE : OUT extended_sample;
+           --SUMMED_OUT_TO_AVERAGE : OUT extended_sample;
             OE      : OUT STD_LOGIC; 
-            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-2 DOWNTO 0));
+				
+            OUTPUT_TO_CLASSD:sample);--output to class d
 END;
+
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
-    
 
 BEGIN
 
@@ -56,7 +57,7 @@ BEGIN
               ELSE 
                  i:=0;
 					  --SUMMED_OUT_TO_AVERAGE <= SUMMED;
-                 Q<=SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12));
+                 OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12));
                  OE<='1';
               END IF;-- i
           END IF; --CE
