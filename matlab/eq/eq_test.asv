@@ -67,9 +67,6 @@ end
 
 % Generate array of multipications between summed samples and corresponding
 % coefficients:
-% ! And now it's WRONG, because we need to go from the middle to the ends
-%   of samples buffer, not from the ends to middle. Need correcting!
-%   /Alexey-14:46-110317
 for i = 1 : coeff_num
     coeff_x_summed_samples_int(i) = summed_samples_int(i) * coeff_int(i);
     
@@ -112,6 +109,24 @@ output_frac = output_int/output_max;
 %  if i =
 %   output_int = output_int + 2^
 %output_frac = 
+
+% Writing coeffs, samples and outputs in files as binary numbers
+% to use them in the VHDL testbench:
+
+% Opening files for writing
+fid_samples = fopen('samples.tv', 'w');
+fid_coeff = fopen('coeff.tv', 'w');
+fid_output = fopen('output.tv', 'w');
+% Writing values in files
+fprintf(fid_samples, '%s', samples_bin);
+fprintf(fid_coeff, '%s\n\n', coeff_bin)
+fprintf(fid_output, '%s\n\n', output_bin)
+% Closing files
+fclose(fid_samples);
+fclose(fid_coeff);
+fclose(fid_output);
+
+diary 
 
 % COMMENTS:
 %

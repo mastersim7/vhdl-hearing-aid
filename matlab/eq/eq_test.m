@@ -110,6 +110,22 @@ output_frac = output_int/output_max;
 %   output_int = output_int + 2^
 %output_frac = 
 
+% Writing coeffs, samples and outputs in files as binary numbers
+% to use them in the VHDL testbench:
+
+% Opening files for writing
+fid_samples = fopen('samples.tv', 'w');
+fid_coeff = fopen('coeff.tv', 'w');
+fid_output = fopen('output.tv', 'w');
+% Writing values in files
+fprintf(fid_samples, '%c%c%c%c%c%c%c%c%c%c%c%c\n', samples_bin);
+fprintf(fid_coeff, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_bin)
+fprintf(fid_output, '%s', output_bin)
+% Closing files
+fclose(fid_samples);
+fclose(fid_coeff);
+fclose(fid_output);
+
 % COMMENTS:
 %
 % 2) I'm also not sure about 40 bits for 'pre_output'.
