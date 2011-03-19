@@ -1,3 +1,13 @@
+-- eq_main.vhd
+-- Author: Shwan Ciyako,Anandhavel Sakthivel
+-- It is still in the implementation phase. 
+ 
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.std_logic_signed.ALL;
+USE work.EQ_data_type.ALL;
+USE work.EQ_functions.ALL;
 
 ENTITY eq_main IS
 	  GENERIC(
@@ -11,10 +21,10 @@ ENTITY eq_main IS
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
-            updated: IN STD_LOGIC;
-		RE      : OUT STD_LOGIC;
+            updated : IN STD_LOGIC;
+		      RE      : OUT STD_LOGIC;
             OE      : OUT STD_LOGIC; 
-	      Q2       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
+	         Q2      : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
             Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END eq_main;
 
