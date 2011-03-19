@@ -20,9 +20,9 @@ ENTITY average_if IS
             CE      : IN STD_LOGIC;
             REQ     :IN STD_LOGIC;
 				reset   :IN STD_LOGIC;
-            Gained_Samples: IN Gained_result_Array; --an 8 array of 13 bit vectors
+            Gained_Samples: IN Gained_result_Array_16; --an 8 array of 16 bit vectors
             OE      : OUT STD_LOGIC; 
-            Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+            Q       : OUT Gained_result_Array_16);
 END;
 ARCHITECTURE average_if_arch OF average_if IS
     
@@ -36,7 +36,9 @@ PROCESS(clk, CE)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
-	    Q <= (others=>'0');
+	   FOR k IN 1 TO 8 LOOP
+          Q(k) <= (OTHERS => '0');
+                END LOOP;
 	    i:=0;
 	    OE<='0';
 	ELSE
@@ -45,6 +47,7 @@ BEGIN
              IF REQ = '1' THEN 
 
               IF i /= NUM_OF_SAMPLES THEN 
+				      OE<='0';
                   IF m /= NUM_OF_BANDS THEN 
                 -- Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
                   
@@ -56,16 +59,10 @@ BEGIN
                   i := i+1;
                   end IF; --m
               ELSE 
-                 IF mo /= NUM_OF_BANDS THEN
-                 Q<=Gained_Samples_var(mo);
+                 Q<=Gained_Samples_var;
                  OE<='1';
-					  mo := mo+1;
-                 ELSE 
-                 OE<='0';
 					  i := 0;
-					  mo := 0;
-                 END IF; --output
-              END IF;--i
+					 END IF;--i
               END IF; --req
           END IF; --CE
      END IF; --reset
