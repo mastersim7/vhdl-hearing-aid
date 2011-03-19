@@ -6,6 +6,8 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE work.EQ_data_type.ALL;
+USE work.EQ_functions.ALL;
 
 ENTITY regular_buffer IS
     GENERIC ( N        : NATURAL := 12;    -- Bit length of the vectors
@@ -13,19 +15,19 @@ ENTITY regular_buffer IS
     
     PORT (  clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
-            sample_in    : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+            sample_in    : IN sample;
             CE		 : IN STD_LOGIC;
             RE           : IN  STD_LOGIC;
             WE           : IN  STD_LOGIC;
             UPDATED      : OUT STD_LOGIC;
-            sample_out_1 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-            sample_out_2 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 ));
+            sample_out_1 : OUT sample;
+            sample_out_2 : OUT sample);
 END ENTITY;
 
 ARCHITECTURE regular_buffer_arch OF regular_buffer IS
 BEGIN
     buffer_process: PROCESS( clk )
-        --TYPE buffer_type IS ARRAY (0 TO NUM_OF_TAPS-1) OF STD_LOGIC_VECTOR(N-1 DOWNTO 0);
+        TYPE buffer_type IS ARRAY (0 TO NUM_OF_TAPS-1) OF STD_LOGIC_VECTOR(N-1 DOWNTO 0);
         VARIABLE samples : buffer_type;
         VARIABLE counter : NATURAL RANGE 0 TO NUM_OF_TAPS/2-1;
         VARIABLE REWE : STD_LOGIC_VECTOR(1 DOWNTO 0);

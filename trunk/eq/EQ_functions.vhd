@@ -20,7 +20,7 @@ PACKAGE EQ_functions IS
     FUNCTION eq_adder(DI1,DI2 : sample ) RETURN STD_LOGIC_VECTOR;
 	 FUNCTION if_adder(DI1,DI2 : extended_sample) RETURN  STD_LOGIC_VECTOR;
     FUNCTION eq_multiply(input : STD_LOGIC_VECTOR(sample'LENGTH DOWNTO 0); coeff : coefficient_type) RETURN STD_LOGIC_VECTOR;
-	 FUNCTION eq_gain_multiply(RAW_OUTPUT: STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0); GAIN : STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0))
+	 FUNCTION eq_gain_multiply(RAW_OUTPUT: STD_LOGIC_VECTOR(Multi_Result'LENGTH-1 DOWNTO 0); GAIN : STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0))
 	 RETURN STD_LOGIC_VECTOR;
 END EQ_functions;
 
@@ -93,9 +93,9 @@ PACKAGE BODY EQ_functions IS
         RETURN STD_LOGIC_VECTOR(output);
     END eq_multiply;
 	 
-	 FUNCTION eq_gain_multiply(RAW_OUTPUT: STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0); GAIN : STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0))
+	 FUNCTION eq_gain_multiply(RAW_OUTPUT: STD_LOGIC_VECTOR(Multi_Result'LENGTH-1 DOWNTO 0); GAIN : STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0))
 	 RETURN STD_LOGIC_VECTOR IS
-        VARIABLE output_gain : SIGNED(RAW_OUTPUT'LENGTH+GAIN'LENGTH-1 DOWNTO 0);
+        VARIABLE output_gain : SIGNED(Multi_Result'LENGTH+GAIN'LENGTH-1 DOWNTO 0);
     BEGIN
         output_gain := SIGNED(RAW_OUTPUT) * SIGNED(GAIN);
         output_gain := SHIFT_LEFT(output_gain, 1);
