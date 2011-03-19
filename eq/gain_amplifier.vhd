@@ -23,11 +23,11 @@ ENTITY gain_amplifier IS
             CE      : IN STD_LOGIC;
 		reset   : IN STD_LOGIC;
 		FB_OE   : IN STD_LOGIC;
-            RAW_OUTPUT : IN Gain_Array ;--array (7 downto 0) of extended_sample; --13 bits
+            RAW_OUTPUT : IN Multi_Result_array ;-- 1 to 8 of 36 to 0 
             GAIN : IN Gain_Array;
             OE      : OUT STD_LOGIC; 
-            OUTPUT_TO_CLASSD:sample;
-            GAIND_Q_OUT: OUT  Gained_result_Array_16);--output to class d
+            OUTPUT_TO_CLASSD: OUT sample;--output to class d
+            GAIND_Q_OUT: OUT  Gained_result_Array_16);
 END;
 
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
@@ -35,13 +35,13 @@ ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
 BEGIN
 
 PROCESS(clk, CE)
-    VARIABLE GAIND_Q :Gain_Multi_Result; --STD_LOGIC_VECTOR( 2*extended_sample'LENGTH-1 DOWNTO 0 );
-    VARIABLE SUMMED : STD_LOGIC_VECTOR( 2*extended_sample'LENGTH-1 DOWNTO 0 );
+    VARIABLE GAIND_Q :Gain_Multi_Result; 
+    VARIABLE SUMMED : Gain_Multi; -- 50 bits
     VARIABLE i : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
-	    Q <= (others=>'0');
+	    OUTPUT_TO_CLASSD<= (others=>'0');
 	    i:=0;
 	    OE<='0';
 	ELSE
@@ -53,9 +53,9 @@ BEGIN
                  i := i+1;
               ELSE 
                  i:=0;
-                 OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 12));
+                 OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11));
                 FOR m IN 1 TO 8 LOOP
-                 GAIND_Q_OUT(m)<= GAIND_Q(m)(36 downto 14);
+                 GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
                 END LOOP;
 
                  OE<='1';

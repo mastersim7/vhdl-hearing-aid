@@ -46,7 +46,7 @@ CONSTANT CO:taps_type:=(( "111111111111000101100000","111111111110111111111110",
 -- The Coefficents will be here or in the package 
 
 -- serialfilter component 
-COMPONENT serial_filter IS
+COMPONENT serial_filter IS 
     GENERIC(
             NUM_BITS_OUT : NATURAL := 37;
             NUM_OF_COEFFS : NATURAL := 110);
@@ -84,9 +84,10 @@ BEGIN
 IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
         IF reset ='1' THEN 
-            Q   <= (OTHERS => '0');
-				Q2   <= (OTHERS => '0');
-            count := 0;
+                FOR k IN 1 TO 8 LOOP
+                Q(k) <= (OTHERS => '0');
+                END LOOP;
+					 count := 0;
             OE    <= '0';
         ELSIF CE = '1' THEN 
         
