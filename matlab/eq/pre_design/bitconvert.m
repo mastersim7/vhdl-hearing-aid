@@ -1,13 +1,31 @@
-magnitude = 23
-greatest = (2^ 23-1) -1
-n = 111;
+%magnitude = 24
+%greatest = (2^ magnitude-1) -1
+%n = 111;
+% Coefficients
+coeff_num = 10; % number of randomly generated coefficients
+coeff_int = 0;
+coeff_frac = 0.0;
+coeff_bin = '';  
+coeff_n = 24;    % Coefficients should be 24 bits
+coeff_max = 2^(coeff_n-1)-1;
+
+
+
+
+
+
+
 for m=1:8 ,
-for i=1:n ,
-    y = b{m}(i) * greatest;
+for i=1:coeff_num ,
+    y = b{m}(i) * coeff_max;
     y=round(y);
-    l{m,i} = dec2bin(mod((y),2^24),24);
+    
+    l{m,i} = int2bin(int32(y))
+    %(mod((y),2^24),24);
 end;
 end;
+
+
 
 
 %now let's write them to a text file 
