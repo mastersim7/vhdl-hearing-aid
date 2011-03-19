@@ -13,9 +13,12 @@ Package EQ_data_type IS
     SUBTYPE sample IS  STD_LOGIC_VECTOR( 11 DOWNTO 0 );
     SUBTYPE extended_sample IS  STD_LOGIC_VECTOR( 12 DOWNTO 0 );
     SUBTYPE Multi_Result IS STD_LOGIC_VECTOR(36 DOWNTO 0 );
-    TYPE Gain_Multi_Result IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(36 DOWNTO 0 );
+    TYPE Multi_Result_array  IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(36 DOWNTO 0 )
+    TYPE Gain_Multi_Result IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(25 DOWNTO 0 );
 	 
     TYPE Gained_result_Array is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 12 downto 0 );
+    TYPE Gain_Array is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 12 downto 0 );
+    
 	 TYPE Gained_result_Array_16 is ARRAY(1 to 8) OF STD_LOGIC_VECTOR( 15 downto 0 );
     TYPE state_type_eq IS ( IDLE, COMPUTE_DATA, GAIN_DATA,SUM_DATA);
     TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
