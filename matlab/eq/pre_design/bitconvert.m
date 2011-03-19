@@ -1,5 +1,5 @@
 magnitude = 23
-greatest = 2^ 23 
+greatest = (2^ 23-1) -1
 n = 111;
 for m=1:8 ,
 for i=1:n ,
