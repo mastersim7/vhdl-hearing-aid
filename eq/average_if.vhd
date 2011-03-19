@@ -17,15 +17,16 @@ ENTITY average_if IS
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
+            reset   :IN STD_LOGIC;
             CE      : IN STD_LOGIC;
+            OE_GAINAMP : IN STD_LOGIC;
             REQ     :IN STD_LOGIC;
-				reset   :IN STD_LOGIC;
             Gained_Samples: IN Gained_result_Array_16; --an 8 array of 16 bit vectors
             OE      : OUT STD_LOGIC; 
             Q       : OUT Gained_result_Array_16);
 END;
 ARCHITECTURE average_if_arch OF average_if IS
-    
+    signal started : std_logic;
 
 BEGIN
 
@@ -42,9 +43,12 @@ BEGIN
 	    i:=0;
 	    OE<='0';
 	ELSE
-	
            IF CE = '1' THEN --slower clock
-             IF REQ = '1' THEN 
+           
+	IF started = '1' THEN 
+	
+             IF (REQ and OE_GAINAMP) = '1' THEN 
+              
 
               IF i /= NUM_OF_SAMPLES THEN 
 				      OE<='0';
@@ -61,9 +65,14 @@ BEGIN
               ELSE 
                  Q<=Gained_Samples_var;
                  OE<='1';
-					  i := 0;
+                 i := 0;
+                 started <='0';
 					 END IF;--i
               END IF; --req
+      ELSIF OE_GAINAMP = '1' THEN 
+      started <='1' ; 
+      
+      END IF; --started
           END IF; --CE
      END IF; --reset
     END IF; --clk

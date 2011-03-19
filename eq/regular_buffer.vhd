@@ -17,6 +17,7 @@ ENTITY regular_buffer IS
             CE		 : IN STD_LOGIC;
             RE           : IN  STD_LOGIC;
             WE           : IN  STD_LOGIC;
+            UPDATED      : OUT STD_LOGIC;
             sample_out_1 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
             sample_out_2 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 ));
 END ENTITY;
