@@ -23,9 +23,9 @@ ENTITY filterblock_main IS
             sample1 : IN sample;
             sample2 : IN sample;
             updated: IN STD_LOGIC;
-		RE      : OUT STD_LOGIC;
+		      RE      : OUT STD_LOGIC;
             OE      : OUT STD_LOGIC; 
-	      Q2       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
+	         Q2       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
             Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END filterblock_main;
 
