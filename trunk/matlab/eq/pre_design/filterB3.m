@@ -56,9 +56,9 @@ b{7}  = fir1(N, [FcB6 FcB7]/(Fs/2), 'bandpass', win, flag);
 Hd7 = dfilt.dffir(b{7});
 b{8}  = fir1(N, [FcB7 FcB8]/(Fs/2), 'bandpass', win, flag);
 Hd8 = dfilt.dffir(b{8});
-Hd9 = dfilt.dffir(b{9});
+%Hd9 = dfilt.dffir(b{9});
 
-Hd(10) = dfilt.dffir (b{1}+b{2}+b{3}+b{4}+b{5}+b{6}+b{7}+b{8}+b{9}); %
+Hd(9) = dfilt.dffir (b{1}+b{2}+b{3}+b{4}+b{5}+b{6}+b{7}+b{8})%+b{9}); %
 %added up the filters here to see
     [H1 W1] = freqz(b{1},1);
     
