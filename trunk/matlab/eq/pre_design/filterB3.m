@@ -15,7 +15,7 @@ Fs = 22300;  % Sampling Frequency
 N    = 219;      % Order220
 
 
-FcB11=	78 % First Cutoff Frequency
+FcB11=	1 % First Cutoff Frequency
 FcB12=	((1e4)/(2^7))% Second Cutoff Frequency
 FcB2=   ((1e4)/(2^6))
 FcB3=     ((1e4)/(2^5))
@@ -38,11 +38,11 @@ win = hamming(N+1);
 % Calculate the coefficients using the FIR1 function.
 %b{9}=fir1(N, 78/(Fs/2), 'high', win, flag);
 %b{9}  = (fir1(N, [FcB11 FcB8]/(Fs/2), 'bandpass', win, flag))./2^6;
-b{1}=(fir1(N, (FcB11)/(Fs/2), 'low', win, flag))./2;
+b{1}=(fir1(N, (FcB12)/(Fs/2), 'low', win, flag))./2;
 % tested a highpass b1  = fir1(N, 100/(Fs/2), 'high', win, flag);
 
 Hd1 = dfilt.dffir(b{1});
-b{2}  = (fir1(N, [FcB12+30 FcB2+40]/(Fs/2), 'bandpass', win, flag))
+b{2}  = (fir1(N, [FcB12+30 FcB2+40]/(Fs/2), 'bandpass', win, flag));
 Hd2 = dfilt.dffir(b{2});
 b{3}  = fir1(N, [FcB2+140 FcB3+100]/(Fs/2), 'bandpass', win, flag);
 Hd3 = dfilt.dffir(b{3});
@@ -58,7 +58,7 @@ b{8}  = fir1(N, [FcB7 FcB8]/(Fs/2), 'bandpass', win, flag);
 Hd8 = dfilt.dffir(b{8});
 %Hd9 = dfilt.dffir(b{9});
 
-Hd(9) = dfilt.dffir (b{1}+b{2}+b{3}+b{4}+b{5}+b{6}+b{7}+b{8})%+b{9}); %
+Hd(9) = dfilt.dffir (b{1}+b{2}+b{3}+b{4}+b{5}+b{6}+b{7}+b{8});%+b{9}); %
 %added up the filters here to see
     [H1 W1] = freqz(b{1},1);
     
@@ -83,9 +83,9 @@ plot(W5*Fs/2/pi, 20*log10(abs(H5)));
 plot(W6*Fs/2/pi, 20*log10(abs(H6)));
 plot(W7*Fs/2/pi, 20*log10(abs(H7)));
 plot(W8*Fs/2/pi, 20*log10(abs(H8)));
-plot(W9*Fs/2/pi, 20*log10(abs(H9)));
+plot(W9*Fs/2/pi, 20*log10(abs(H9)),'r');
 %plot(W9*Fs/2/pi, 20*log10(abs(H10)));
 
 hold off
 
-fvtool (Hd1,Hd2,Hd3,Hd4,Hd5,Hd6,Hd7,Hd8)%
+fvtool (Hd1,Hd2,Hd3,Hd4,Hd5,Hd6,Hd7,Hd8);%
