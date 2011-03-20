@@ -22,7 +22,7 @@ ENTITY filterblock_main IS
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
-            updated: IN STD_LOGIC;
+            updated: IN STD_LOGIC;  -- works as STARTED here no need to add more signals
 		      RE      : OUT STD_LOGIC;
             OE      : OUT STD_LOGIC; 
             Q       : OUT Multi_Result_array);
@@ -95,7 +95,7 @@ IF clk'EVENT AND clk = '1' THEN
         
         WHEN WAIT_SAMPLE => 
               OE <= '0';
-	        IF UPDATED = '1' THEN 
+	        IF UPDATED = '1' THEN
 	        RE <= '1'; 
 	        NEXT_STATE <= COMPUTE_DATA ; 
 	        END IF ;

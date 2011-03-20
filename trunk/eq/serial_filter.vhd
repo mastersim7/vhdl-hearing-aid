@@ -37,6 +37,7 @@ ENTITY serial_filter IS
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
+            updated : IN STD_LOGIC;
             OE      : OUT STD_LOGIC;
             Q	    : OUT Multi_Result);
 				--  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
@@ -51,6 +52,7 @@ PROCESS(clk, CE)
     VARIABLE two_samples : extended_sample; 
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
     VARIABLE mac,temp : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
+    VARIABLE started :STD_LOGIC;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
@@ -61,24 +63,24 @@ BEGIN
             OE    <= '0';
             
         -- CE high, calculate a result. Output updated when all coefficients used
-        ELSIF CE = '1' THEN   
+        ELSIF CE = '1' THEN  
+            IF staretd = '1' THEN  
+            
             IF count /= NUM_OF_COEFFS THEN 
                 -- Add two samples together, multiply with coefficient, accumulate result
 
                 two_samples := eq_adder(sample1, sample2);
-               -- mac         := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));
-				      mac         := (mac) + (eq_multiply(two_samples,CO));
-
-                           count       := count + 1;
+                -- who chnaged from signed to unsigned why ?
+              mac:= SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));  
+              --  mac:= (mac) + (eq_multiply(two_samples,CO));
+                count:= count + 1;
             ELSE 
                 count := 0;
                 Q     <= mac;
                 OE    <= '1';
-            END IF;
+            END IF; --count
         -- OE should go low after a single CE clock cycle.
-        ELSE
-            OE <= '0';
-        END IF;
+        END IF; --ce and reset
     END IF;
 END PROCESS;
 END ARCHITECTURE serial_filter_arch;
