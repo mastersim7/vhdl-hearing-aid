@@ -64,15 +64,15 @@ BEGIN
             started <= '0';
         -- CE high, calculate a result. Output updated when all coefficients used
         ELSIF CE = '1' THEN  
-            IF staretd = '1' THEN  
+            IF started = '1' THEN  
             
             IF count /= NUM_OF_COEFFS THEN 
                 -- Add two samples together, multiply with coefficient, accumulate result
 
                 two_samples := eq_adder(sample1, sample2);
                 -- who chnaged from signed to unsigned why ?
-              mac:= SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));  
-              --  mac:= (mac) + (eq_multiply(two_samples,CO));
+                 -- mac := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));  
+               mac:= (mac) + (eq_multiply(two_samples,CO));
                 count:= count + 1;
             ELSE 
                 count := 0;
@@ -87,5 +87,6 @@ BEGIN
         -- OE should go low after a single CE clock cycle.
         END IF; --ce and reset
     END IF;
+END IF;
 END PROCESS;
 END ARCHITECTURE serial_filter_arch;
