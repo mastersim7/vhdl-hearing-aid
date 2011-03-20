@@ -95,10 +95,10 @@ PACKAGE BODY EQ_functions IS
 	 
 	 FUNCTION eq_gain_multiply(RAW_OUTPUT: STD_LOGIC_VECTOR(Multi_Result'LENGTH-1 DOWNTO 0); GAIN : STD_LOGIC_VECTOR(extended_sample'LENGTH-1 DOWNTO 0))
 	 RETURN STD_LOGIC_VECTOR IS
-        VARIABLE output_gain : SIGNED(Multi_Result'LENGTH+GAIN'LENGTH-1 DOWNTO 0);
+        VARIABLE output_gain : SIGNED(Multi_Result'LENGTH+extended_sample'LENGTH-1 DOWNTO 0);
     BEGIN
         output_gain := SIGNED(RAW_OUTPUT) * SIGNED(GAIN);
-        output_gain := SHIFT_LEFT(output_gain, 1);
+        --output_gain := SHIFT_LEFT(output_gain, 1);
         RETURN STD_LOGIC_VECTOR(output_gain);
     END eq_gain_multiply;
 END EQ_functions;
