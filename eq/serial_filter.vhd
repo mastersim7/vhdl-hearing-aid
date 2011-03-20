@@ -78,7 +78,7 @@ BEGIN
                 count := 0;
                 Q     <= mac;
                 OE    <= '1';
-                started <= '0'
+                started <= '0';
             END IF; --count
             ELSE 
             started <= updated;
@@ -87,6 +87,5 @@ BEGIN
         -- OE should go low after a single CE clock cycle.
         END IF; --ce and reset
     END IF;
-END IF;
 END PROCESS;
 END ARCHITECTURE serial_filter_arch;
