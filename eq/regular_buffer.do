@@ -14,7 +14,7 @@ force re 0 0
 force we 0 0
 force reset 0 0
 force sample_in 000000000000 0
-
+force ce 1 0
 run 20ns
 force reset 1
 run 20ns

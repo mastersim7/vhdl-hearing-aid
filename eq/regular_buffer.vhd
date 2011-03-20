@@ -53,10 +53,10 @@ BEGIN
                         UPDATED<= '1';
 
                     WHEN "10" =>
-                        UPDATED<= '1';
+                        UPDATED<= '0';
                         -- Read samples
-                        sample_out_1 <= samples(0+counter);
-                        sample_out_2 <= samples(NUM_OF_TAPS-1-counter);
+                        sample_out_1 <= samples(counter);
+                        sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
                 
                         IF counter < NUM_OF_TAPS/2-1 THEN
                             counter := counter + 1;
@@ -64,21 +64,21 @@ BEGIN
                             counter := 0;
                         END IF;
 								
-                    WHEN "11" =>
-                        sample_out_1 <= samples(0+counter);
-                        sample_out_2 <= samples(NUM_OF_TAPS-1 - counter);
+                   -- WHEN "11" =>
+                  --      sample_out_1 <= samples(counter);
+                  --      sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
                         
-                        IF counter < NUM_OF_TAPS/2-1 THEN
+                  --      IF counter < NUM_OF_TAPS/2-1 THEN
                             counter := counter + 1;
-                        ELSE
+                   --     ELSE
                             counter := 0;
-                        END IF;
+                  --      END IF;
                         
                         -- Update the stored samples (propagate samples downward in stack)
-                        FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
-                            samples(m+1) := samples(m);
-                        END LOOP;
-                        samples(0) := sample_in;
+                   --     FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
+                   --         samples(m+1) := samples(m);
+                    --    END LOOP;
+                     --   samples(0) := sample_in;
 								
                     WHEN OTHERS =>
                         NULL;
