@@ -69,9 +69,9 @@ BEGIN
                   --      sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
                         
                   --      IF counter < NUM_OF_TAPS/2-1 THEN
-                            counter := counter + 1;
+                    --        counter := counter + 1;
                    --     ELSE
-                            counter := 0;
+                    --        counter := 0;
                   --      END IF;
                         
                         -- Update the stored samples (propagate samples downward in stack)

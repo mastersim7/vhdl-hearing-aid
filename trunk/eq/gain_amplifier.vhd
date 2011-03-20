@@ -49,7 +49,8 @@ BEGIN
 	    IF CE = '1' THEN --slower clock
             IF started = '1' THEN 
               IF i /= NUM_OF_GAINS THEN 
-                 GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
+               --  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
+                 GAIND_Q(i):= STD_LOGIC_VECTOR(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)));
                  SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
                  i := i+1;
               ELSE 
