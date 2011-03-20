@@ -61,7 +61,7 @@ BEGIN
             Q   <= (OTHERS => '0');
             count := 0;
             OE    <= '0';
-            
+            started <= '0';
         -- CE high, calculate a result. Output updated when all coefficients used
         ELSIF CE = '1' THEN  
             IF staretd = '1' THEN  
@@ -78,7 +78,12 @@ BEGIN
                 count := 0;
                 Q     <= mac;
                 OE    <= '1';
+                started <= '0'
             END IF; --count
+            ELSE 
+            started <= updated;
+            OE <= '0';
+            END IF ; --started
         -- OE should go low after a single CE clock cycle.
         END IF; --ce and reset
     END IF;
