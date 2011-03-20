@@ -45,14 +45,14 @@ END ENTITY;
 
 ARCHITECTURE serial_filter_arch OF serial_filter IS
 -- FILTER COEEFS WILL BE ADDED HERE    
-
+signal started :STD_LOGIC;
 BEGIN
 
 PROCESS(clk, CE)
     VARIABLE two_samples : extended_sample; 
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
     VARIABLE mac,temp : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
-    VARIABLE started :STD_LOGIC;
+     
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
