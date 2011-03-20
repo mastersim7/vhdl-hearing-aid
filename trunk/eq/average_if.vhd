@@ -42,10 +42,11 @@ BEGIN
                 END LOOP;
 	    i:=0;
 	    OE<='0';
+    	    started <='0';
 	ELSE
            IF CE = '1' THEN --slower clock
            
-	IF started = '1' THEN 
+	      IF started = '1' THEN 
 	
              IF (REQ and OE_GAINAMP) = '1' THEN 
               
@@ -69,9 +70,8 @@ BEGIN
                  started <='0';
 					 END IF;--i
               END IF; --req
-      ELSIF OE_GAINAMP = '1' THEN 
-      started <='1' ; 
-      
+      ELSE
+      started <=OE_GAINAMP ; 
       END IF; --started
           END IF; --CE
      END IF; --reset

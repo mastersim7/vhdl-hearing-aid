@@ -31,7 +31,7 @@ ENTITY gain_amplifier IS
 END;
 
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
-
+SIGNAL started : STD_LOGIC;
 BEGIN
 
 PROCESS(clk, CE)
@@ -44,9 +44,10 @@ BEGIN
 	    OUTPUT_TO_CLASSD<= (others=>'0');
 	    i:=0;
 	    OE<='0';
+	    started <='0';
 	ELSE
 	    IF CE = '1' THEN --slower clock
-
+            IF started = '1' THEN 
               IF i /= NUM_OF_GAINS THEN 
                  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
                  SUMMED := SUMMED + GAIND_Q(i);
@@ -60,6 +61,9 @@ BEGIN
 
                  OE<='1';
               END IF;-- i
+            ELSE 
+            started <= FB_OE ;
+            END IF; -- STARTED 
           END IF; --CE
      END IF; --reset
     END IF; --clk
