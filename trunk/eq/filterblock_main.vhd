@@ -23,7 +23,7 @@ ENTITY filterblock_main IS
             sample1 : IN sample;
             sample2 : IN sample;
             updated: IN STD_LOGIC;  -- works as STARTED here no need to add more signals
-		      RE      : OUT STD_LOGIC;
+		        RE      : OUT STD_LOGIC;
             OE      : OUT STD_LOGIC; 
             Q       : OUT Multi_Result_array);
 END filterblock_main;
@@ -121,7 +121,7 @@ IF clk'EVENT AND clk = '1' THEN
 
         			count_filters := count_filters + 1 ;
         		ELSE 
-        		      Q<= Q_sig;      
+        		  Q<= Q_sig;      
 	        		OE <='1';
 	        		count_filters := 0;
 	        		

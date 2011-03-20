@@ -7,7 +7,7 @@ USE work.EQ_data_type.all;
 entity Transmit_Receive is
 GENERIC(m:INTEGER:=200;--initially sending 
         n:INTEGER:= 80);--receiving 80 bits for 8 gain levels (start+8 bits of data+stop per byte)
-   PORT( CLK : in STD_LOGIC;
+   PORT( clk : in STD_LOGIC;
          x: in STD_LOGIC;
 			AVERAGE_SIG_LEV: IN AVERAGE_SIG_LEV_type;
 			AVERAGE_SIG_LEV_ENABLE:IN STD_LOGIC;
