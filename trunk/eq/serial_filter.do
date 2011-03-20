@@ -15,8 +15,8 @@ force CE 1
 run 200
 force updated 1 
 run 100
-
+force updated 0
 force sample1 000000000001
 force sample2 000000000001
 
-run 13000ns
+run 19000ns
