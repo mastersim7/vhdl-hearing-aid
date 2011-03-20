@@ -15,11 +15,11 @@ ENTITY HIF_RS232_Receive_from_PC IS
 			m:INTEGER:=8);   --No.of.Bands
 			
 
-	PORT(     system_clk : IN STD_LOGIC;	--Main clock input
-		 serial_data_inp : IN STD_LOGIC; 	--Serial data input(bit by bit)
-				   RESET : IN STD_LOGIC;	--System reset
-			  data_ready : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
-	gain_data_array_rx   : OUT Gained_result_Array ); --Band Gain value with 13 bits			
+	PORT(     system_clk_Rx : IN STD_LOGIC;	--Main clock input
+		 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
+				   RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
+			  data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
+	     gain_data_array_Rx : OUT Gained_result_Array ); --Band Gain value with 13 bits			
 END HIF_RS232_Receive_from_PC;
 
 ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
@@ -32,18 +32,18 @@ ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
 	SIGNAL LUT 		: Gained_result_Array ;	--Array for LUT to convert internally the gain values from 8 bits to 13 bits
 							
 BEGIN
-	startbit <= serial_data_inp; --Receive bits from PC serially, serial_data_inp is mapped with receive pin of RS232 using UCF file
-	PROCESS(system_clk,RESET)
+	startbit <= serial_data_inp_Rx; --Receive bits from PC serially, serial_data_inp_Rx is mapped with receive pin of RS232 using UCF file
+	PROCESS(system_clk_Rx,RESET_Rx)
 		VARIABLE enable:STD_LOGIC;
 	BEGIN
-		IF(rising_edge(system_clk) AND RESET = '0') THEN
+		IF(rising_edge(system_clk_Rx) AND RESET_Rx = '0') THEN
       		IF( (startbit = '0' or enable = '1')) THEN  --Check to start new reception or complete one comple byte transfer
 				enable := '1';
 				i <= i+1;
 				IF(i=5207) THEN  --Count corresponds to 50MHz for 9600 bps and can be changed IF we are working with 1MHz or any  other frequency
 					i <= 0;
 					IF(j < n ) THEN 
-						receive(j) <= serial_data_inp; --Receiving at 9600 bps and storing it, serial bits are packed
+						receive(j) <= serial_data_inp_Rx; --Receiving at 9600 bps and storing it, serial bits are packed
 						j <= j + 1;
 						IF ( j = n-2 ) THEN
 							gain_data <= receive( n-3 downto 0); -- Packed datas are first stored in the local cariable and then used for value conversion
@@ -118,17 +118,17 @@ BEGIN
 							k <= k+1;
 							IF(k = 8) THEN 		--Final gain values of 13 bits are now ready
 								k<=0;
-								gain_data_array_rx(1) <= LUT(1); 
-								gain_data_array_rx(2) <= LUT(2);
-								gain_data_array_rx(3) <= LUT(3);
-								gain_data_array_rx(4) <= LUT(4);
-								gain_data_array_rx(5) <= LUT(5);
-								gain_data_array_rx(6) <= LUT(6);
-								gain_data_array_rx(7) <= LUT(7);
-								gain_data_array_rx(8) <= LUT(8);
-								data_ready  <= '1';	-- Set a flag that gain values are ready and to be accpted by EQUALIZER
+								gain_data_array_Rx(1) <= LUT(1); 
+								gain_data_array_Rx(2) <= LUT(2);
+								gain_data_array_Rx(3) <= LUT(3);
+								gain_data_array_Rx(4) <= LUT(4);
+								gain_data_array_Rx(5) <= LUT(5);
+								gain_data_array_Rx(6) <= LUT(6);
+								gain_data_array_Rx(7) <= LUT(7);
+								gain_data_array_Rx(8) <= LUT(8);
+								data_ready_Rx  <= '1';	-- Set a flag that gain values are ready and to be accpted by EQUALIZER
 							ELSE
-								data_ready <= '0'; --Ensure that flag is reset so that EQUALIZER waits for the data processed by HIF
+								data_ready_Rx <= '0'; --Ensure that flag is RESET_Rx so that EQUALIZER waits for the data processed by HIF
 							END IF;
 							enable := '0';  --When one byte of data received the reception is halted but again when a new start bit is encountered, the serial data reception starts
 							j <= 0;                                       
@@ -136,9 +136,9 @@ BEGIN
 					END IF;
 				END IF;
 			END IF;
-		ELSIF(RESET = '1') THEN
-			gain_data_array_rx <=(OTHERS =>"0111111111111");
-			data_ready  <= '1';
+		ELSIF(RESET_Rx = '1') THEN
+			gain_data_array_Rx <=(OTHERS =>"0111111111111");
+			data_ready_Rx  <= '1';
 		END IF;
 	END PROCESS;
 END Behavioral;
