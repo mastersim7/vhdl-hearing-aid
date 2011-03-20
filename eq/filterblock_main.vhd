@@ -47,19 +47,20 @@ CONSTANT CO:taps_type:=(( "111111111111000101100000","111111111110111111111110",
 
 -- serialfilter component 
 COMPONENT serial_filter IS 
-    GENERIC(
-            NUM_BITS_OUT : NATURAL := 37;
-            NUM_OF_COEFFS : NATURAL := 110);
-    PORT( 
-            clk     : IN STD_LOGIC;
-            reset   : IN STD_LOGIC;
-            CO      : IN coefficient_type;
-            CE      : IN STD_LOGIC;
-            sample1 : IN sample;
-            sample2 : IN sample;
-            OE      : OUT STD_LOGIC;
-            Q	  : OUT Multi_Result);
-				--  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+  GENERIC(
+        NUM_BITS_OUT : NATURAL := 37;
+        NUM_OF_COEFFS : NATURAL := 110);
+PORT( 
+        clk     : IN STD_LOGIC;
+        reset   : IN STD_LOGIC;
+        CO      : IN coefficient_type;
+        CE      : IN STD_LOGIC;
+        sample1 : IN sample;
+        sample2 : IN sample;
+        updated : IN STD_LOGIC;
+        OE      : OUT STD_LOGIC;
+        Q	    : OUT Multi_Result);
+    --  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END COMPONENT;
 
 
@@ -69,10 +70,11 @@ SIGNAL Q_FIR1,Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
 SIGNAL STATE ,NEXT_STATE : state_type_Filter_Bank;
 SIGNAL Q_sig: Multi_Result_array;
+SIGNAL startfilters: STD_LOGIC;
 BEGIN 
 -- component instantiation 
-FIR1: serial_filter PORT MAP(clk,reset,CO_FIR1,CE_FIR1,sample1,sample2,OE_FIR1,Q_FIR1);
-FIR2:  serial_filter PORT MAP(clk,reset,CO_FIR2,CE_FIR2,sample1,sample2,OE_FIR2,Q_FIR2);
+FIR1: serial_filter PORT MAP(clk,reset,CO_FIR1,CE,sample1,sample2,startfilters,OE_FIR1,Q_FIR1);
+FIR2:  serial_filter PORT MAP(clk,reset,CO_FIR2,CE,sample1,sample2,startfilters,OE_FIR2,Q_FIR2);
 
 PROCESS(clk, CE)
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
@@ -97,6 +99,7 @@ IF clk'EVENT AND clk = '1' THEN
               OE <= '0';
 	        IF UPDATED = '1' THEN
 	        RE <= '1'; 
+	        startfilters <='1';
 	        NEXT_STATE <= COMPUTE_DATA ; 
 	        END IF ;
         	
@@ -104,9 +107,11 @@ IF clk'EVENT AND clk = '1' THEN
         	-- same CE for the filters and the buffer will result in one value per CE moved from buffers to the filters 
         		IF count_filters /= (NUM_OF_BANDS/2)-1 then -- 4 filters right now are serially implemented can be changed
 	        		IF count /= NUM_OF_COEFFS then 
-	        		OE<='0'; -- move this ?
-        			CE_FIR1 <= CE;
-				CE_FIR2 <= CE; -- needs to be the same for buffer --check this /anand
+	        		OE<='0';
+	        		 -- move this ?
+        			--CE_FIR1 <= CE;
+				   --CE_FIR2 <= CE; -- needs to be the same for buffer --check this /anand
+           startfilters <='0';
         			CO_FIR1 <=CO(count_filters,count);
         			CO_FIR2 <=CO(count_filters+((NUM_OF_BANDS/2)),count); -- this start from 4 right/anand
        		 	count := count +1;

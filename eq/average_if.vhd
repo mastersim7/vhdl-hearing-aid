@@ -6,7 +6,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-USE ieee.std_logic_signed.ALL;
+--USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -56,7 +56,7 @@ BEGIN
                   IF m /= NUM_OF_BANDS THEN 
                 -- Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
                   
-						Gained_Samples_var(m) := Gained_Samples(m)+Gained_Samples_var(m);
+						Gained_Samples_var(m) := STD_LOGIC_VECTOR(SIGNED(Gained_Samples(m))+SIGNED(Gained_Samples_var(m)));
 						
 						m:=m+1;
                   ELSE

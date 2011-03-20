@@ -89,7 +89,7 @@ PACKAGE BODY EQ_functions IS
         VARIABLE output : SIGNED(input'LENGTH+coeff'LENGTH-1 DOWNTO 0);
     BEGIN
         output := SIGNED(input) * SIGNED(coeff);
-        output := SHIFT_LEFT(output, 1);
+        --output := SHIFT_LEFT(output, 1);
         RETURN STD_LOGIC_VECTOR(output);
     END eq_multiply;
 	 

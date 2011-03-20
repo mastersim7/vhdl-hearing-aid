@@ -22,7 +22,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-USE ieee.std_logic_signed.ALL;
+--USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -71,8 +71,8 @@ BEGIN
 
                 two_samples := eq_adder(sample1, sample2);
                 -- who chnaged from signed to unsigned why ?
-                 -- mac := SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO));  
-               mac:= (mac) + (eq_multiply(two_samples,CO));
+                 mac := STD_LOGIC_VECTOR(SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO)));  
+               --mac:= (mac) + (eq_multiply(two_samples,CO));
                 count:= count + 1;
             ELSE 
                 count := 0;

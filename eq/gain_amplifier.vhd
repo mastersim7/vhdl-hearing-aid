@@ -9,7 +9,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-USE ieee.std_logic_signed.ALL;
+--USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -50,7 +50,7 @@ BEGIN
             IF started = '1' THEN 
               IF i /= NUM_OF_GAINS THEN 
                  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
-                 SUMMED := SUMMED + GAIND_Q(i);
+                 SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
                  i := i+1;
               ELSE 
                  i:=0;
