@@ -20,7 +20,8 @@ ENTITY HIF_RS232_Receive_from_PC IS
 				   RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
 			  --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
 	     gain_data_array_Rx : OUT Gained_result_Array --Band Gain value with 13 bits	
-					--LED_OUT : OUT STD_LOGIC_VECTOR(7 downto 0)); 		
+					--LED_OUT : OUT STD_LOGIC_VECTOR(7 downto 0)
+					); 		
 END HIF_RS232_Receive_from_PC;
 
 ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
@@ -49,7 +50,7 @@ BEGIN
 						j <= j + 1;
 						IF ( j = n-2 ) THEN
 							gain_data <= receive( n-3 downto 0); -- Packed datas are first stored in the local cariable and then used for value conversion
-							LED_OUT <= receive( n-3 downto 0);
+--							LED_OUT <= receive( n-3 downto 0);
 							CASE gain_data IS 	-- Look Up Table begins here(as data are not decided so initially we set all the bit equal to high)
 								WHEN "00000001" => 
 												LUT(k) <="0111111111111"; 
