@@ -14,6 +14,7 @@ Package EQ_data_type IS
     SUBTYPE extended_sample IS  STD_LOGIC_VECTOR( 12 DOWNTO 0 );
     SUBTYPE Multi_Result IS STD_LOGIC_VECTOR(36 DOWNTO 0 ); -- from serial filter o/p
 	 SUBTYPE Gain_Multi IS STD_LOGIC_VECTOR(49 DOWNTO 0 );   -- after multiplied with gain 
+	 SUBTYPE Gain_Multi_extended IS STD_LOGIC_VECTOR(52 DOWNTO 0 );   -- after multiplied with gain 
 	 
     TYPE Multi_Result_array  IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(36 DOWNTO 0 );-- from serial filter o/p all values as array
     TYPE Gain_Multi_Result IS ARRAY (1 to 8) OF STD_LOGIC_VECTOR(49 DOWNTO 0 );-- after multiplied with gain values as array
