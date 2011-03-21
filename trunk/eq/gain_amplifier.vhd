@@ -36,7 +36,8 @@ BEGIN
 
 PROCESS(clk, CE)
     VARIABLE GAIND_Q :Gain_Multi_Result; 
-    VARIABLE SUMMED : Gain_Multi; -- 50 bits
+    VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
+    --as we r doing 8 addition 3 bit is enough to cover all overflow
     VARIABLE i : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -50,11 +51,11 @@ BEGIN
 	ELSE
 	    IF CE = '1' THEN --slower clock
             IF started = '1' THEN 
-              IF (i /= NUM_OF_GAINS+1) THEN  -- check this number is correct ???/anand
+              IF (i /= (NUM_OF_GAINS+1)) THEN  -- check this number is correct ???/anand
                --  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
                  GAIND_Q(i):= STD_LOGIC_VECTOR(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)));
                  SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
-                 i := i+1;
+                                  i := i+1;
               ELSE 
                  i:=1;
                 OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11));
