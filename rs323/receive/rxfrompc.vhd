@@ -18,7 +18,7 @@ ENTITY HIF_RS232_Receive_from_PC IS
 	PORT(     system_clk_Rx : IN STD_LOGIC;	--Main clock input
 		 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
 				   RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
-			  data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
+			  --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
 	     gain_data_array_Rx : OUT Gained_result_Array ); --Band Gain value with 13 bits			
 END HIF_RS232_Receive_from_PC;
 
@@ -126,9 +126,9 @@ BEGIN
 								gain_data_array_Rx(6) <= LUT(6);
 								gain_data_array_Rx(7) <= LUT(7);
 								gain_data_array_Rx(8) <= LUT(8);
-								data_ready_Rx  <= '1';	-- Set a flag that gain values are ready and to be accpted by EQUALIZER
+								--data_ready_Rx  <= '1';	-- Set a flag that gain values are ready and to be accpted by EQUALIZER
 							ELSE
-								data_ready_Rx <= '0'; --Ensure that flag is RESET_Rx so that EQUALIZER waits for the data processed by HIF
+								--data_ready_Rx <= '0'; --Ensure that flag is RESET_Rx so that EQUALIZER waits for the data processed by HIF
 							END IF;
 							enable := '0';  --When one byte of data received the reception is halted but again when a new start bit is encountered, the serial data reception starts
 							j <= 0;                                       
@@ -138,7 +138,7 @@ BEGIN
 			END IF;
 		ELSIF(RESET_Rx = '1') THEN
 			gain_data_array_Rx <=(OTHERS =>"0111111111111");
-			data_ready_Rx  <= '1';
+			--data_ready_Rx  <= '1';
 		END IF;
 	END PROCESS;
 END Behavioral;
