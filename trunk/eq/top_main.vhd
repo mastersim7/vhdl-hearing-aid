@@ -28,7 +28,7 @@ ENTITY sample_system IS
             -- Spartan3 ports
             clk     : IN  STD_LOGIC;                     -- FPGA master clock
             led     : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0 );-- LEDs
-            
+            reset   : IN STD_LOGIC;
             -- Interfacing ports
             ADC_DIN : IN  STD_LOGIC; -- Data Input from ADC
             ADC_CS  : OUT STD_LOGIC; -- Chip Select ADC
