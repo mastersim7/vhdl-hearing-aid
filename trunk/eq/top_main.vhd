@@ -51,8 +51,8 @@ ARCHITECTURE sample_system_arch OF sample_system IS
 
 -- Components for Rs232
 Component HIF_RS232_Receive_from_PC IS
-        GENERIC(n:INTEGER:=10;
-        m:INTEGER:=8);   --No.of.Bands
+        GENERIC(n:INTEGER;
+                m:INTEGER);   --No.of.Bands
         PORT(   system_clk_Rx : IN STD_LOGIC;	--Main clock input
                 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
                 RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
@@ -61,11 +61,13 @@ Component HIF_RS232_Receive_from_PC IS
 END COMPONENT;
 
 ENTITY HIF_RS232_Transmit_to_PC IS
-	GENERIC(n:INTEGER:=8); -- number of bits to be sent for each gain levels
+	GENERIC(n:INTEGER); -- number of bits to be sent for each gain levels
 	PORT(   System_clk_Tx : IN STD_LOGIC; --system clock input
                 RESET_Tx : IN STD_LOGIC; --system RESET_Tx input
-                OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
-                gain_array_output : IN Gained_result_Array_16; -- 8 blocks x 16 bits of data to be received from Equalizer
+                OE_Tx : IN STD_LOGIC;   --Flag sent by the Equalizer conveying that data filling into 
+                                        --'gain_array_output' is finished
+                gain_array_output : IN Gained_result_Array_16;
+                                        -- 8 blocks x 16 bits of data to be received from Equalizer
                 flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
                 Tx_to_PC : OUT STD_LOGIC -- Bit by Bit transmission to PC via RS232
 		);
@@ -108,6 +110,26 @@ COMPONENT dac IS
             LDAC : OUT STD_LOGIC);-- Latch DAC Input (active low)
 END COMPONENT;
 
+--Equalizer 
+COMPONENT eq_main IS
+    GENERIC(
+            NUM_BITS_OUT : NATURAL;
+            NUM_OF_SAMPLES : NATURAL;
+            NUM_OF_COEFFS : NATURAL;
+            NUM_OF_BANDS: NATURAL);
+    PORT( 
+            clk          : IN  STD_LOGIC; -- System clock (50 MHz)
+            reset        : IN  STD_LOGIC; -- reset
+            sample_in    : IN  sample;
+            WE           : IN  STD_LOGIC;
+            CE           : IN STD_LOGIC;
+            --updated: IN STD_LOGIC;
+            GAIN : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+            REQ     :IN STD_LOGIC; -- from interface 
+            OUTPUT_TO_CLASSD:OUT sample; 
+            OE      : OUT STD_LOGIC; -- to interface 
+            Q_SUM       : OUT Gained_result_Array_16);-- interface will take this 
+END COMPONENT;
 --COMPONENT SD IS
 --    PORT(
 --         input : in std_logic_vector(11 downto 0); 
@@ -153,11 +175,39 @@ dac_comp: dac   GENERIC MAP( CLOCK_SCALE => 32 )
                           SDI   => DAC_SDI, 
                           LDAC  => DAC_LDAC );
               
-sd_comp: sd     PORT MAP( input => sd_input,
-                          clk => clk,
-                          reset => '0',
-                          output => sd_output,
-                          sign => sd_sign );
+trasnmitter_cop : HIF_RS232_Transmit_to_PC
+                        PORT MAP( 
+                        -- port in comp  => Signal
+                          System_clk_Tx   => clk, 
+                          RESET_Tx => reset, 
+                          Tx_to_PC => Tx);
+
+Reciever_comp   : HIF_RS232_Receive_from_PC 
+                        PORT MAP( 
+                          System_clk_Rx         => clk, 
+                          reset_rx              => reset, 
+                          serial_data_inp_Rx    => Rx);
+                          
+
+Equalizer_comp : eq_main 
+         PORT MAP( 
+            clk  => clk, -- System clock (50 MHz)
+            reset=> reset,
+            sample_in => adc_output,
+            WE
+            CE
+            GAIN : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+            REQ     :IN STD_LOGIC; -- from interface 
+            OUTPUT_TO_CLASSD:OUT sample; 
+            OE      : OUT STD_LOGIC; -- to interface 
+            Q_SUM       : OUT Gained_result_Array_16);-- interface will take this 
+
+--sd_comp: sd     PORT MAP( input => sd_input,
+--                          clk => clk,
+--                          reset => '0',
+--                          output => sd_output,
+--                          sign => sd_sign );
+--
                           
 led <= adc_output( N-1 DOWNTO 4 );
 sd_sign_concd <= '0' & sd_sign & "0000000000";

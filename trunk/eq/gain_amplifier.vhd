@@ -1,3 +1,4 @@
+-- THIS FILE IS NOT TO BE EDITTED IF NOT ROBIN IS CONTACTED 
 -- gain_amplifier.vhd
 -- Author: Shwan Ciyako,Anandhavel Sakthivel
 -- Date: 2011-03-16
