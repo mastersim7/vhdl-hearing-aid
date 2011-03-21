@@ -146,11 +146,22 @@ SIGNAL dac_input		    : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 SIGNAL adc_output        : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
 
+SIGNAL CE_EQ_sig : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
+SIGNAL GAIN_From_IF_sig : Gain_Array;
+SIGNAL REQ_from_IF : STD_LOGIC;
+SIGNAL OUTPUT_TO_CLASSD : sample; 
+SIGNAL OE_TO_IF : STD_LOGIC; -- to interface 
+SIGNAL TO_IF_SUM : Gained_result_Array_16);-- interface will take this 
+
+
+
+
+
 --Sigma delta component
 --SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 --SIGNAL sd_sign           : STD_LOGIC;
 --SIGNAL sd_sign_concd		 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
---SIGNAL sd_input			 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+SIGNAL sd_input			 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 --------- Begin the architecture sample_system_arch ----------------------
 BEGIN
@@ -191,16 +202,17 @@ Reciever_comp   : HIF_RS232_Receive_from_PC
 
 Equalizer_comp : eq_main 
          PORT MAP( 
-            clk  => clk, -- System clock (50 MHz)
-            reset=> reset,
-            sample_in => adc_output,
-            WE
-            CE
-            GAIN : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
-            REQ     :IN STD_LOGIC; -- from interface 
-            OUTPUT_TO_CLASSD:OUT sample; 
-            OE      : OUT STD_LOGIC; -- to interface 
-            Q_SUM       : OUT Gained_result_Array_16);-- interface will take this 
+           		   clk  	=> clk, -- System clock (50 MHz)
+          		   reset	=> reset,
+         		   sample_in	=> sd_input,
+         		   WE 		=> adc_OE,
+         		   CE 		=>CE_EQ_sig,
+         		   GAIN 	=>GAIN_From_IF_sig,
+         		   REQ  	=>REQ_from_IF, 
+         		   OUTPUT_TO_CLASSD => to_SD, 
+         		   OE		=>OE_TO_IF, -- to interface 
+         		   Q_SUM	=>TO_IF_SUM);-- interface will take this 
+
 
 --sd_comp: sd     PORT MAP( input => sd_input,
 --                          clk => clk,
@@ -210,7 +222,7 @@ Equalizer_comp : eq_main
 --
                           
 led <= adc_output( N-1 DOWNTO 4 );
-sd_sign_concd <= '0' & sd_sign & "0000000000";
+--sd_sign_concd <= '0' & sd_sign & "0000000000";
 sd_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
 
 -- Process generating the different frequencies
