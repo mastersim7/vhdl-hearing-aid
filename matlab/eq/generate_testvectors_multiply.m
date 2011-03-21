@@ -37,11 +37,11 @@ for i = 1:num
     coeff_bin(i,:) = int2bin(coeff_int(i), coeff_n);
     
     % Generate the corresponding output
-    y_int(i) = sample_int(i) * coeff_int(i);
+    y_int(i) = sample_int(i) * coeff_int(i)*2;
     
     % when generating the result it is necessary to multiply with 2
     % this is equal to a shift left
-    y_frac(i) = (y_int(i)/y_max)*2; 
+    y_frac(i) = (y_int(i)/y_max); 
     y_bin(i,:) = int2bin(y_int(i), y_n);
 end
 

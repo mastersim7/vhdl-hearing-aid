@@ -2,6 +2,9 @@
 % Alexey Sidelnikov, Mathias Lundell
 % 2011-03-17
 
+% 2011-03-21
+% Added commands for exporting values to excel.
+
 sign = 1;          % want signed bit vectors from 'generate_random()'
 
 % Samples
@@ -117,19 +120,37 @@ output_frac = output_int/output_max;
 fid_samples = fopen('samples.tv', 'w');
 fid_coeff = fopen('coeff.tv', 'w');
 fid_output = fopen('output.tv', 'w');
-fid_output_37 = fopen('output_37.tv', 'w');
 % Writing values in files
 fprintf(fid_samples, '%c%c%c%c%c%c%c%c%c%c%c%c\n', samples_bin);
 fprintf(fid_coeff, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_bin);
 fprintf(fid_output, '%s', output_bin);
-fprintf(fid_output_37, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_x_summed_samples_bin);
 % Closing files
 fclose(fid_samples);
 fclose(fid_coeff);
 fclose(fid_output);
-fclose(fid_output_37);
-    
+
+
+% Export result to excel
+text = {'Samples', 'Coeff fraction', 'Y fraction', ...
+    'Test fraction', 'Sample integer', 'Coeff integer', ...
+    'Y integer', 'Test integer', '', 'Sample binary', 'Coeff binary', 'Y binary'};
+xlswrite('test_vectors_multiply.xls', text, 'Generated test vector values', 'A1');
+
+temp = sample_frac';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'A2');
+temp = coeff_frac';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'B2');
+temp = y_frac';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'C2');
+
+temp = sample_int';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'E2');
+temp = coeff_int';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'F2');
+temp = y_int';
+xlswrite('test_vectors_multiply.xls', temp, 'Generated test vector values', 'G2');
 % COMMENTS:
 %
 % 2) I'm also not sure about 40 bits for 'pre_output'.
-% /Alexey-04:30-110321
+% 3) Do we need to export results to excel?
+% /Alexey-04:30-110317
