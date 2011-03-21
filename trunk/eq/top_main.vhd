@@ -20,7 +20,7 @@ ENTITY sample_system IS
             -- ADC samples read with 119.9 kHz
             -- Output to DAC, 29.98 kHz
             CLK_SCALE_20khz : NATURAL := 1000;
-            CLK_SCALE_20khz : NATURAL := 1000;
+            CLK_SCALE_2mhz : NATURAL := 25;
             
             N : NATURAL := 12 ); -- Bit length of the data vectors
             
@@ -228,11 +228,12 @@ Equalizer_comp : eq_main
 led <= adc_output( N-1 DOWNTO 4 );
 --sd_sign_concd <= '0' & sd_sign & "0000000000";
 sd_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
-ce_eq_sig<='1';
+
 
 -- Process generating the different frequencies
 generate_clock_frequencies: PROCESS ( clk )
     VARIABLE cnt_20kHz  : NATURAL RANGE 0 TO CLK_SCALE_20kHz-1  := 0;
+    VARIABLE cnt_2MHz  : NATURAL RANGE 0 TO CLK_SCALE_2MHz-1  := 0;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- 20 kHz
@@ -245,7 +246,15 @@ BEGIN
             adc_start <= '1';
             dac_start <= '1';
             dac_input <= sd_sign_concd;
-        END IF;       
+        END IF;  
+             
+        IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
+           CE_EQ_sig <='0' ;
+           cnt_2mhz := cnt_2mhz + 1
+        ELSE 
+           cnt_2mhz := 0;
+           CE_EQ_sig <= '1';     
+        END IF;    
     END IF;
 END PROCESS generate_clock_frequencies;
 
