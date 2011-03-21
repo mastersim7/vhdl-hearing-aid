@@ -33,45 +33,61 @@ BEGIN
 PROCESS(clk, CE)
     VARIABLE Gained_Samples_var: Gained_result_Array_16;
     
-    VARIABLE i,m,mo : INTEGER;
+    VARIABLE i,m : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
 	   FOR k IN 1 TO 8 LOOP
           Q(k) <= (OTHERS => '0');
-                END LOOP;
+     END LOOP;
 	    i:=0;
+	   -- m:=1; -- array starts from 1
 	    OE<='0';
-    	    started <='0';
+ 	    started <='0';
 	ELSE
-           IF CE = '1' THEN --slower clock
+      IF CE = '1' THEN --slower clock
            
-	      IF started = '1' THEN 
+	    IF started = '1' THEN 
 	
-             IF (REQ and OE_GAINAMP) = '1' THEN 
+      --
+  
+      --IF REQ  = '1' THEN 
               
 
-              IF i /= NUM_OF_SAMPLES THEN 
+      IF OE_GAINAMP = '1' THEN 
+      IF i /= NUM_OF_SAMPLES THEN 
 				      OE<='0';
-                  IF m /= NUM_OF_BANDS THEN 
-                -- Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
-                  
-						Gained_Samples_var(m) := STD_LOGIC_VECTOR(SIGNED(Gained_Samples(m))+SIGNED(Gained_Samples_var(m)));
-						
-						m:=m+1;
-                  ELSE
-                  m:=0;
-                  i := i+1;
-                  end IF; --m
-              ELSE 
+				      
+              --IF m /= (NUM_OF_BANDS+1) THEN 
+             
+              FOR k IN 1 TO NUM_OF_BANDS LOOP
+                Gained_Samples_var(k) := STD_LOGIC_VECTOR(SIGNED(Gained_Samples(k))+SIGNED(Gained_Samples_var(k)));
+              END LOOP;
+             
+              -- Gained_Samples_var(m) := if_adder(Gained_Samples(m),Gained_Samples_var(m));
+               
+                --m:=m+1;
+            
+              --ELSE
+                --m:=1;
+                i := i+1;
+              --end IF; --m
+              
+      ELSE 
                  Q<=Gained_Samples_var;
+                 
+	             FOR k IN 1 TO 8 LOOP
+                 Gained_Samples_var(k) := (OTHERS => '0');
+                END LOOP;
                  OE<='1';
                  i := 0;
-                 started <='0';
-					 END IF;--i
-              END IF; --req
-      ELSE
-      started <=OE_GAINAMP ; 
+                 started <='0'; 
+        END IF;--i
+      
+        END IF; --OE_GSINSMP
+       ELSE
+      ---started <=OE_GAINAMP ;  this one should wait for req
+      started <= REQ;
       END IF; --started
           END IF; --CE
      END IF; --reset
