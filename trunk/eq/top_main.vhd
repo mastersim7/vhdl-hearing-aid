@@ -43,9 +43,7 @@ ENTITY top_main IS
             DAC_LDAC: OUT STD_LOGIC; 
             -- Serial interface 
             RX      : IN STD_LOGIC;
-            TX      : OUT STD_LOGIC;
-            
-            );-- Latch DAC
+            TX      : OUT STD_LOGIC);-- Latch DAC
          
 END ENTITY top_main;
 
@@ -54,8 +52,8 @@ ARCHITECTURE top_main_arch OF top_main IS
 
 -- Components for Rs232
 Component HIF_RS232_Receive_from_PC IS
-        GENERIC(n:INTEGER;
-                m:INTEGER);   --No.of.Bands
+        GENERIC(n:INTEGER:=10;
+                m:INTEGER:=8);   --No.of.Bands
         PORT(   system_clk_Rx : IN STD_LOGIC;	--Main clock input
                 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
                 RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
@@ -63,8 +61,8 @@ Component HIF_RS232_Receive_from_PC IS
 		gain_data_array_Rx : OUT Gained_result_Array ); --Band Gain value with 13 bits
 END COMPONENT;
 
-ENTITY HIF_RS232_Transmit_to_PC IS
-	GENERIC(n:INTEGER); -- number of bits to be sent for each gain levels
+COMPONENT HIF_RS232_Transmit_to_PC IS
+	GENERIC(n:INTEGER:=8); -- number of bits to be sent for each gain levels
 	PORT(   System_clk_Tx : IN STD_LOGIC; --system clock input
                 RESET_Tx : IN STD_LOGIC; --system RESET_Tx input
                 OE_Tx : IN STD_LOGIC;   --Flag sent by the Equalizer conveying that data filling into 
@@ -154,7 +152,7 @@ SIGNAL GAIN_From_IF_sig : Gain_Array;
 SIGNAL REQ_from_IF_sig : STD_LOGIC;
 SIGNAL OUTPUT_TO_CLASSD_sig : sample; 
 SIGNAL OE_TO_IF_sig : STD_LOGIC; -- to interface 
-SIGNAL TO_IF_SUM_sig : Gained_result_Array_16);-- interface will take this 
+SIGNAL TO_IF_SUM_sig : Gained_result_Array_16;-- interface will take this 
 
 
 
@@ -194,9 +192,9 @@ trasnmitter_cop : HIF_RS232_Transmit_to_PC
                         -- port in comp  => Signal
                           System_clk_Tx   	=> clk, 
                           RESET_Tx 		=> reset, 
-                          Tx_to_PC 		=> Tx.
+                          Tx_to_PC 		=> Tx,
                           flag_Tx 		=> REQ_from_IF_sig,
-                          OE_Tx			=> OE_TO_IF_sig;
+                          OE_Tx			=> OE_TO_IF_sig
                           );
 
 Reciever_comp   : HIF_RS232_Receive_from_PC 
