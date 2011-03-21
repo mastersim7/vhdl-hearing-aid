@@ -114,10 +114,10 @@ END COMPONENT;
 --Equalizer 
 COMPONENT eq_main IS
     GENERIC(
-            NUM_BITS_OUT : NATURAL;
-            NUM_OF_SAMPLES : NATURAL;
-            NUM_OF_COEFFS : NATURAL;
-            NUM_OF_BANDS: NATURAL);
+            NUM_BITS_OUT : NATURAL := 13;
+            NUM_OF_SAMPLES : NATURAL := 200;
+				NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
@@ -194,8 +194,9 @@ trasnmitter_cop : HIF_RS232_Transmit_to_PC
                           RESET_Tx 		=> reset, 
                           Tx_to_PC 		=> Tx,
                           flag_Tx 		=> REQ_from_IF_sig,
-                          OE_Tx			=> OE_TO_IF_sig
-                          );
+                          OE_Tx			=> OE_TO_IF_sig,
+                          gain_array_output =>TO_IF_SUM_sig
+								  );
 
 Reciever_comp   : HIF_RS232_Receive_from_PC 
                         PORT MAP( 
@@ -213,9 +214,9 @@ Equalizer_comp : eq_main
          		   CE 		=>CE_EQ_sig,
          		   GAIN 	=>GAIN_From_IF_sig,
          		   REQ  	=>REQ_from_IF_sig, 
-         		   OUTPUT_TO_CLASSD => to_SD, 
+         		   OUTPUT_TO_CLASSD => dac_input, --to_SD, 
          		   OE		=>OE_TO_IF_sig, -- to interface 
-         		   Q_SUM	=>TO_IF_SUM);-- interface will take this 
+         		   Q_SUM	=>TO_IF_SUM_sig);-- interface will take this 
 
 
 --sd_comp: sd     PORT MAP( input => sd_input,
@@ -245,12 +246,12 @@ BEGIN
             cnt_20kHz := 0;
             adc_start <= '1';
             dac_start <= '1';
-            dac_input <= sd_sign_concd;
+            --dac_input <= sd_sign_concd;
         END IF;  
              
         IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
            CE_EQ_sig <='0' ;
-           cnt_2mhz := cnt_2mhz + 1
+           cnt_2mhz := cnt_2mhz + 1;
         ELSE 
            cnt_2mhz := 0;
            CE_EQ_sig <= '1';     
