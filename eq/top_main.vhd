@@ -20,6 +20,7 @@ ENTITY sample_system IS
             -- ADC samples read with 119.9 kHz
             -- Output to DAC, 29.98 kHz
             CLK_SCALE_20khz : NATURAL := 1000;
+            CLK_SCALE_20khz : NATURAL := 1000;
             
             N : NATURAL := 12 ); -- Bit length of the data vectors
             
@@ -124,11 +125,11 @@ COMPONENT eq_main IS
             WE           : IN  STD_LOGIC;
             CE           : IN STD_LOGIC;
             --updated: IN STD_LOGIC;
-            GAIN : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
-            REQ     :IN STD_LOGIC; -- from interface 
+            GAIN 	 : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+            REQ     	 : IN STD_LOGIC; -- from interface 
             OUTPUT_TO_CLASSD:OUT sample; 
-            OE      : OUT STD_LOGIC; -- to interface 
-            Q_SUM       : OUT Gained_result_Array_16);-- interface will take this 
+            OE      	 : OUT STD_LOGIC; -- to interface 
+            Q_SUM        : OUT Gained_result_Array_16);-- interface will take this 
 END COMPONENT;
 --COMPONENT SD IS
 --    PORT(
@@ -146,12 +147,12 @@ SIGNAL dac_input		    : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 SIGNAL adc_output        : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
 
-SIGNAL CE_EQ_sig : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
+SIGNAL CE_EQ_sig : 	STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
 SIGNAL GAIN_From_IF_sig : Gain_Array;
-SIGNAL REQ_from_IF : STD_LOGIC;
-SIGNAL OUTPUT_TO_CLASSD : sample; 
-SIGNAL OE_TO_IF : STD_LOGIC; -- to interface 
-SIGNAL TO_IF_SUM : Gained_result_Array_16);-- interface will take this 
+SIGNAL REQ_from_IF_sig : STD_LOGIC;
+SIGNAL OUTPUT_TO_CLASSD_sig : sample; 
+SIGNAL OE_TO_IF_sig : STD_LOGIC; -- to interface 
+SIGNAL TO_IF_SUM_sig : Gained_result_Array_16);-- interface will take this 
 
 
 
@@ -189,9 +190,12 @@ dac_comp: dac   GENERIC MAP( CLOCK_SCALE => 32 )
 trasnmitter_cop : HIF_RS232_Transmit_to_PC
                         PORT MAP( 
                         -- port in comp  => Signal
-                          System_clk_Tx   => clk, 
-                          RESET_Tx => reset, 
-                          Tx_to_PC => Tx);
+                          System_clk_Tx   	=> clk, 
+                          RESET_Tx 		=> reset, 
+                          Tx_to_PC 		=> Tx.
+                          flag_Tx 		=> REQ_from_IF_sig,
+                          OE_Tx			=> OE_TO_IF_sig;
+                          );
 
 Reciever_comp   : HIF_RS232_Receive_from_PC 
                         PORT MAP( 
@@ -208,9 +212,9 @@ Equalizer_comp : eq_main
          		   WE 		=> adc_OE,
          		   CE 		=>CE_EQ_sig,
          		   GAIN 	=>GAIN_From_IF_sig,
-         		   REQ  	=>REQ_from_IF, 
+         		   REQ  	=>REQ_from_IF_sig, 
          		   OUTPUT_TO_CLASSD => to_SD, 
-         		   OE		=>OE_TO_IF, -- to interface 
+         		   OE		=>OE_TO_IF_sig, -- to interface 
          		   Q_SUM	=>TO_IF_SUM);-- interface will take this 
 
 
@@ -224,6 +228,7 @@ Equalizer_comp : eq_main
 led <= adc_output( N-1 DOWNTO 4 );
 --sd_sign_concd <= '0' & sd_sign & "0000000000";
 sd_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
+ce_eq_sig<='1';
 
 -- Process generating the different frequencies
 generate_clock_frequencies: PROCESS ( clk )
