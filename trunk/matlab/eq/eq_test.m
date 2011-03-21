@@ -117,17 +117,19 @@ output_frac = output_int/output_max;
 fid_samples = fopen('samples.tv', 'w');
 fid_coeff = fopen('coeff.tv', 'w');
 fid_output = fopen('output.tv', 'w');
+fid_output_37 = fopen('output_37.tv', 'w');
 % Writing values in files
 fprintf(fid_samples, '%c%c%c%c%c%c%c%c%c%c%c%c\n', samples_bin);
 fprintf(fid_coeff, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_bin);
 fprintf(fid_output, '%s', output_bin);
+fprintf(fid_output_37, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_x_summed_samples_bin);
 % Closing files
 fclose(fid_samples);
 fclose(fid_coeff);
 fclose(fid_output);
+fclose(fid_output_37);
     
 % COMMENTS:
 %
 % 2) I'm also not sure about 40 bits for 'pre_output'.
-% 3) Do we need to export results to excel?
-% /Alexey-04:30-110317
+% /Alexey-04:30-110321
