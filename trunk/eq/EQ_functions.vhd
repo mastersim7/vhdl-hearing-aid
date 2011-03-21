@@ -10,6 +10,11 @@
 -- Comments:
 -- Function eq_adder behaviourally tested using 1000 test vectors.
 -- Function eq_multiply behaviourally tested using 1000 test vectors.
+
+-- 2011-03-21
+-- Changed back so the multiplications are done with shift_left in order
+-- to keep the format s.ffffffffffffffffffffffffffffffffffffff
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -89,7 +94,7 @@ PACKAGE BODY EQ_functions IS
         VARIABLE output : SIGNED(input'LENGTH+coeff'LENGTH-1 DOWNTO 0);
     BEGIN
         output := SIGNED(input) * SIGNED(coeff);
-        --output := SHIFT_LEFT(output, 1);
+        output := SHIFT_LEFT(output, 1);
         RETURN STD_LOGIC_VECTOR(output);
     END eq_multiply;
 	 
@@ -98,7 +103,7 @@ PACKAGE BODY EQ_functions IS
         VARIABLE output_gain : SIGNED(Multi_Result'LENGTH+extended_sample'LENGTH-1 DOWNTO 0);
     BEGIN
         output_gain := SIGNED(RAW_OUTPUT) * SIGNED(GAIN);
-        --output_gain := SHIFT_LEFT(output_gain, 1);
+        output_gain := SHIFT_LEFT(output_gain, 1);
         RETURN STD_LOGIC_VECTOR(output_gain);
     END eq_gain_multiply;
 END EQ_functions;
