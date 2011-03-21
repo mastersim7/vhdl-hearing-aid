@@ -108,13 +108,13 @@ COMPONENT dac IS
             LDAC : OUT STD_LOGIC);-- Latch DAC Input (active low)
 END COMPONENT;
 
-COMPONENT SD IS
-    PORT(
-         input : in std_logic_vector(11 downto 0); 
-         clk,reset :in std_logic; 
-         output : out std_logic_vector(11 downto 0);
-         sign: out std_logic);
-END COMPONENT;
+--COMPONENT SD IS
+--    PORT(
+--         input : in std_logic_vector(11 downto 0); 
+--         clk,reset :in std_logic; 
+--         output : out std_logic_vector(11 downto 0);
+--         sign: out std_logic);
+--END COMPONENT;
 
 SIGNAL adc_start         : STD_LOGIC := '0'; -- Start A2D conversion
 SIGNAL adc_OE            : STD_LOGIC := '0'; -- ADC finished
@@ -123,10 +123,12 @@ SIGNAL dac_start         : STD_LOGIC := '0'; -- Start D2A conversion
 SIGNAL dac_input		    : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 SIGNAL adc_output        : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
-SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-SIGNAL sd_sign           : STD_LOGIC;
-SIGNAL sd_sign_concd		 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-SIGNAL sd_input			 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+
+--Sigma delta component
+--SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+--SIGNAL sd_sign           : STD_LOGIC;
+--SIGNAL sd_sign_concd		 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+--SIGNAL sd_input			 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 --------- Begin the architecture sample_system_arch ----------------------
 BEGIN
@@ -153,9 +155,9 @@ dac_comp: dac   GENERIC MAP( CLOCK_SCALE => 32 )
               
 sd_comp: sd     PORT MAP( input => sd_input,
                           clk => clk,
-								  reset => '0',
-								  output => sd_output,
-								  sign => sd_sign );
+                          reset => '0',
+                          output => sd_output,
+                          sign => sd_sign );
                           
 led <= adc_output( N-1 DOWNTO 4 );
 sd_sign_concd <= '0' & sd_sign & "0000000000";
@@ -170,12 +172,12 @@ BEGIN
         IF cnt_20kHz < CLK_SCALE_20kHz-1 THEN
             cnt_20kHz := cnt_20kHz + 1;
             adc_start <= '0';
-				dac_start <= '0';
+            dac_start <= '0';
         ELSE
             cnt_20kHz := 0;
             adc_start <= '1';
-				dac_start <= '1';
-				dac_input <= sd_sign_concd;
+            dac_start <= '1';
+            dac_input <= sd_sign_concd;
         END IF;       
     END IF;
 END PROCESS generate_clock_frequencies;
