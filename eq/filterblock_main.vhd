@@ -88,6 +88,7 @@ IF clk'EVENT AND clk = '1' THEN
         IF reset ='1' THEN 
                 FOR k IN 1 TO 8 LOOP
                 Q(k) <= (OTHERS => '0');
+					 Q_sig(k) <= (OTHERS => '0');
                 END LOOP;
 					 count := 0;
             OE    <= '0';

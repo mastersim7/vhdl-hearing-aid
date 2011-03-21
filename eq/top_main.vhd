@@ -57,8 +57,8 @@ Component HIF_RS232_Receive_from_PC IS
         PORT(   system_clk_Rx : IN STD_LOGIC;	--Main clock input
                 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
                 RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
-		data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
-		gain_data_array_Rx : OUT Gained_result_Array ); --Band Gain value with 13 bits
+		--data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
+		gain_data_array_Rx : OUT Gain_Array ); --Band Gain value with 13 bits
 END COMPONENT;
 
 COMPONENT HIF_RS232_Transmit_to_PC IS
@@ -202,7 +202,8 @@ Reciever_comp   : HIF_RS232_Receive_from_PC
                         PORT MAP( 
                           System_clk_Rx         => clk, 
                           reset_rx              => reset, 
-                          serial_data_inp_Rx    => Rx);
+                          serial_data_inp_Rx    => Rx,
+								  gain_data_array_Rx => GAIN_From_IF_sig);
                           
 
 Equalizer_comp : eq_main 
