@@ -70,7 +70,7 @@ BEGIN
 					END IF;
 				END IF;
 			ELSIF(RESET_Tx='1') THEN -- When sytstem RESET is encountered RESET_Tx all the counters and flags
-					flag_Tx <= '0';
+					flag_Tx <= '1';
 					j <= 0;
 					i <= 0;
 					k <= 1;
