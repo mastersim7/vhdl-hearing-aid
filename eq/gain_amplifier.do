@@ -8,10 +8,6 @@ run 300
 force reset 1 
 run 300
 force reset 0 
-force fb_oe 1 
-run 300 
-force fb_oe 0
-
 force GAIN(1) 0111111111111
 force GAIN(2) 0111111111111
 force GAIN(3) 0111111111111
@@ -28,5 +24,10 @@ force raw_output(5) 0001100001111111111110111111111111100
 force raw_output(6) 0011111110000111111111111011111111111
 force raw_output(7) 0111001111111111110111111111111000001
 force raw_output(8) 0010011111111111101111111111110011111
+force FB_OE 1 
+run 300 
+force fb_oe 0
+
+
 run 900
 run 9000

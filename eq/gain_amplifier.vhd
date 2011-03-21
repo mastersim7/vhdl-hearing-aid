@@ -42,24 +42,27 @@ BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
 	    OUTPUT_TO_CLASSD<= (others=>'0');
-	    i:=0;
+	    SUMMED := (others=>'0'); --initialised  to zero/anand
+	    i:=1;-- i should be 1 as array start from 1 (to 8)/anand 
 	    OE<='0';
 	    started <='0';
+	    
 	ELSE
 	    IF CE = '1' THEN --slower clock
             IF started = '1' THEN 
-              IF i /= NUM_OF_GAINS THEN 
+              IF (i /= NUM_OF_GAINS+1) THEN  -- check this number is correct ???/anand
                --  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
                  GAIND_Q(i):= STD_LOGIC_VECTOR(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)));
                  SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
                  i := i+1;
               ELSE 
-                 i:=0;
-                 OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11));
+                 i:=1;
+                OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11));
+                 --OUTPUT_TO_CLASSD <= SUMMED(49 DOWNTO 38);
                 FOR m IN 1 TO 8 LOOP
                  GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
                 END LOOP;
-
+                 SUMMED := (others=>'0'); --initialised  to zero/anand
                  OE<='1';
               END IF;-- i
             ELSE 
