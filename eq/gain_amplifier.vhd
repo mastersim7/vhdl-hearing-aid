@@ -61,7 +61,7 @@ BEGIN
               IF (i /= (NUM_OF_GAINS+1)) THEN  -- check this number is correct ???/anand
                 OE <= '0';
                    --  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
-                 GAIND_Q(i):= SHIFT_LEFT(STD_LOGIC_VECTOR(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i))),1);
+                 GAIND_Q(i):= (STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
                  SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
                                   i := i+1;
               ELSE 

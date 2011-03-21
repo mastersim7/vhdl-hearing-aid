@@ -8,8 +8,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE work.EQ_data_type.ALL;
+USE work.EQ_functions.ALL;
 
-ENTITY sample_system IS 
+ENTITY top_main IS 
     GENERIC (
             -- The system master clock is of 50 MHz giving a period of 20ns.
             -- Scaling the master clock to get a restart
@@ -45,9 +47,9 @@ ENTITY sample_system IS
             
             );-- Latch DAC
          
-END ENTITY sample_system;
+END ENTITY top_main;
 
-ARCHITECTURE sample_system_arch OF sample_system IS
+ARCHITECTURE top_main_arch OF top_main IS
 
 
 -- Components for Rs232
@@ -259,4 +261,4 @@ BEGIN
 END PROCESS generate_clock_frequencies;
 
 
-END ARCHITECTURE sample_system_arch;
+END ARCHITECTURE top_main_arch;
