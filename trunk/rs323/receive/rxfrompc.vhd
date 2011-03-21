@@ -19,7 +19,8 @@ ENTITY HIF_RS232_Receive_from_PC IS
 		 serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
 				   RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
 			  --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
-	     gain_data_array_Rx : OUT Gained_result_Array ); --Band Gain value with 13 bits			
+	     gain_data_array_Rx : OUT Gained_result_Array --Band Gain value with 13 bits	
+					--LED_OUT : OUT STD_LOGIC_VECTOR(7 downto 0)); 		
 END HIF_RS232_Receive_from_PC;
 
 ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
@@ -30,13 +31,14 @@ ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
 	SIGNAL startbit :STD_LOGIC;
 	SIGNAL gain_data:STD_LOGIC_VECTOR(7 DOWNTO 0);
 	SIGNAL LUT 		: Gained_result_Array ;	--Array for LUT to convert internally the gain values from 8 bits to 13 bits
-							
+	--SIGNAL gain_data_array_Rx 		: Gained_result_Array ;						
 BEGIN
 	startbit <= serial_data_inp_Rx; --Receive bits from PC serially, serial_data_inp_Rx is mapped with receive pin of RS232 using UCF file
 	PROCESS(system_clk_Rx,RESET_Rx)
 		VARIABLE enable:STD_LOGIC;
 	BEGIN
-		IF(rising_edge(system_clk_Rx) AND RESET_Rx = '0') THEN
+		IF(rising_edge(system_clk_Rx)) THEN
+		  IF(RESET_Rx = '0') THEN
       		IF( (startbit = '0' or enable = '1')) THEN  --Check to start new reception or complete one comple byte transfer
 				enable := '1';
 				i <= i+1;
@@ -47,6 +49,7 @@ BEGIN
 						j <= j + 1;
 						IF ( j = n-2 ) THEN
 							gain_data <= receive( n-3 downto 0); -- Packed datas are first stored in the local cariable and then used for value conversion
+							LED_OUT <= receive( n-3 downto 0);
 							CASE gain_data IS 	-- Look Up Table begins here(as data are not decided so initially we set all the bit equal to high)
 								WHEN "00000001" => 
 												LUT(k) <="0111111111111"; 
@@ -139,6 +142,7 @@ BEGIN
 		ELSIF(RESET_Rx = '1') THEN
 			gain_data_array_Rx <=(OTHERS =>"0111111111111");
 			--data_ready_Rx  <= '1';
+		END IF;
 		END IF;
 	END PROCESS;
 END Behavioral;
