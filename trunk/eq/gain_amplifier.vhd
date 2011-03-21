@@ -6,6 +6,10 @@
 --
 -- It is still in the implementation phase. 
 -- This component will give one output every 8 CEs 
+--
+--Verified by Robin Andersson 2011-03-21
+--However, the input wordlength is needlessly large
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
