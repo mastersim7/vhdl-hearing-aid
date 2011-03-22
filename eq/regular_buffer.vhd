@@ -2,7 +2,7 @@
 -- version 1.0
 -- Mathias Lundell
 -- 2011-03-04
--- 
+-- Changed by others later...
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -10,13 +10,13 @@ USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
 ENTITY regular_buffer IS
-    GENERIC ( N        : NATURAL := 12;    -- Bit length of the vectors
+    GENERIC ( N           : NATURAL := 12;    -- Bit length of the vectors
               NUM_OF_TAPS : NATURAL := 220 );  -- Number of taps
     
     PORT (  clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
-            sample_in    : IN sample;
-            CE		 : IN STD_LOGIC;
+            sample_in    : IN  sample;
+            CE		     : IN  STD_LOGIC;
             RE           : IN  STD_LOGIC;
             WE           : IN  STD_LOGIC;
             UPDATED      : OUT STD_LOGIC;
@@ -50,10 +50,10 @@ BEGIN
                             samples(m) := samples(m-1);
                         END LOOP;
                         samples(0) := sample_in;
-                        UPDATED<= '1';
+                        UPDATED <= '1';
 
                     WHEN "10" =>
-                        UPDATED<= '0';
+                        UPDATED <= '0';
                         -- Read samples
                         sample_out_1 <= samples(counter);
                         sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
