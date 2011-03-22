@@ -78,6 +78,14 @@ BEGIN
 FIR1: serial_filter PORT MAP(clk,reset,CO_FIR1,CE,sample1,sample2,startfilters,OE_FIR1,Q_FIR1);
 FIR2:  serial_filter PORT MAP(clk,reset,CO_FIR2,CE,sample1,sample2,startfilters,OE_FIR2,Q_FIR2);
 
+---------- Process updating the current state -----------
+update_state: PROCESS ( clk )
+BEGIN
+    IF clk'EVENT and clk = '1' THEN
+        state <= next_state;
+    END IF;
+END PROCESS update_state;
+
 PROCESS(clk, CE)
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
     VARIABLE count_filters : NATURAL RANGE 0 TO NUM_OF_BANDS;

@@ -48,7 +48,7 @@ ENTITY top_main IS
             DAC_CS  : OUT STD_LOGIC; -- Chip Select DAC
             DAC_SCK : OUT STD_LOGIC; -- Serial Clock DAC
             DAC_SDI : OUT STD_LOGIC; -- Serial Data to DAC
-            DAC_LDAC: OUT STD_LOGIC; 
+            DAC_LDAC: OUT STD_LOGIC 
             -- Serial interface 
             -- RX      : IN STD_LOGIC;
             -- TX      : OUT STD_LOGIC
@@ -93,7 +93,7 @@ ARCHITECTURE top_main_arch OF top_main IS
 -- Component communicating with the ADC
 COMPONENT adc IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 32 );
+            CLOCK_SCALE  : NATURAL := 16 );
     PORT (
             -- Spartan3 ports
             clk  : IN  STD_LOGIC;            -- FPGA master clock
@@ -111,7 +111,7 @@ END COMPONENT;
 -- Component communicating with the DAC
 COMPONENT dac IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 8 );
+            CLOCK_SCALE  : NATURAL := 16 );
               
               
     PORT(
@@ -128,27 +128,27 @@ COMPONENT dac IS
 END COMPONENT;
 
 --Equalizer 
-COMPONENT eq_main IS
-   GENERIC(
-            NUM_BITS_OUT  : NATURAL := 13;
-            NUM_OF_SAMPLES: NATURAL := 200;
-            NUM_OF_COEFFS : NATURAL := 110;
-            NUM_OF_BANDS  : NATURAL := 8);
-    PORT( 
-            clk         : IN STD_LOGIC; -- System clock (50 MHz)
-            reset       : IN STD_LOGIC; -- reset
-            sample_in   : IN sample;
-            WE          : IN STD_LOGIC;
-            CE          : IN STD_LOGIC;
-            --updated: IN STD_LOGIC;
-          --GAIN        : IN Gain_Array; --needs to be resetted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
-          --REQ         : IN STD_LOGIC; -- from interface 
-            
-            OUTPUT_TO_CLASSD: OUT sample; 
-            OE              : OUT STD_LOGIC -- to interface 
-            --Q_SUM           : OUT Gained_result_Array_16
-				);-- interface will take this 
-END COMPONENT;
+--COMPONENT eq_main IS
+--   GENERIC(
+--            NUM_BITS_OUT  : NATURAL := 13;
+--            NUM_OF_SAMPLES: NATURAL := 200;
+--            NUM_OF_COEFFS : NATURAL := 110;
+--            NUM_OF_BANDS  : NATURAL := 8);
+--    PORT( 
+--            clk         : IN STD_LOGIC; -- System clock (50 MHz)
+--            reset       : IN STD_LOGIC; -- reset
+--            sample_in   : IN sample;
+--            WE          : IN STD_LOGIC;
+--            CE          : IN STD_LOGIC;
+--            --updated: IN STD_LOGIC;
+--          --GAIN        : IN Gain_Array; --needs to be resetted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+--          --REQ         : IN STD_LOGIC; -- from interface 
+--            
+--            OUTPUT_TO_CLASSD: OUT sample; 
+--            OE              : OUT STD_LOGIC -- to interface 
+--            --Q_SUM           : OUT Gained_result_Array_16
+--				);-- interface will take this 
+--END COMPONENT;
 
 -- Sigma Delta component
 --COMPONENT SD IS
@@ -160,6 +160,12 @@ END COMPONENT;
 --         output   : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0);
 --         sign     : OUT STD_LOGIC);
 --END COMPONENT;
+
+
+-- temp should be deleted
+
+SIGNAL dac_start2  : STD_LOGIC := '0';
+SIGNAL intermediate_buffer       : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 -- ADC signals
 SIGNAL adc_start  : STD_LOGIC := '0'; -- Start A2D conversion
@@ -191,7 +197,7 @@ BEGIN
 
 -------------------- Bind the components --------------------------------
 adc_comp: adc   
-    GENERIC MAP( CLOCK_SCALE => 32 )
+    GENERIC MAP( CLOCK_SCALE => 48 )
     PORT MAP( 
               clk   => clk, 
               start => adc_start, 
@@ -203,11 +209,11 @@ adc_comp: adc
               DOUT  => ADC_DOUT );
                                 
 dac_comp: dac   
-    GENERIC MAP( CLOCK_SCALE => 32 )
+    GENERIC MAP( CLOCK_SCALE => 48 )
     PORT MAP( 
               clk   => clk, 
               start => dac_start, 
-              din   => dac_input, 
+              din   => adc_output, 
               CS    => DAC_CS, 
               SCK   => DAC_SCK, 
               SDI   => DAC_SDI, 
@@ -231,19 +237,19 @@ dac_comp: dac
               -- gain_data_array_Rx    => GAIN_From_IF_sig);
                           
 
-Equalizer_comp : eq_main 
-    PORT MAP( 
-              clk  	           => clk, -- System clock (50 MHz)
-              reset	           => reset,
-              sample_in        => eq_input, -- Changed from sd_input to adc_output
-              WE 		       => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
-              CE 		       => CE_EQ_sig,
-              --GAIN 	           => GAIN_From_IF_sig,
-              --REQ  	           => REQ_from_IF_sig, 
-              OUTPUT_TO_CLASSD => dac_input,       -- to sigma delta when testing finished
-              OE		       => dac_start    -- to interface 
-             -- Q_SUM	           => TO_IF_SUM_sig
-				 );  -- interface will take this 
+--Equalizer_comp : eq_main 
+--    PORT MAP( 
+--              clk  	           => clk, -- System clock (50 MHz)
+--              reset	           => reset,
+--              sample_in        => eq_input, -- Changed from sd_input to adc_output
+--              WE 		       => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
+--              CE 		       => CE_EQ_sig,
+--              --GAIN 	           => GAIN_From_IF_sig,
+--              --REQ  	           => REQ_from_IF_sig, 
+--              OUTPUT_TO_CLASSD => dac_input,       -- to sigma delta when testing finished
+--              OE		       => dac_start2    -- to interface 
+--             -- Q_SUM	           => TO_IF_SUM_sig
+--				 );  -- interface will take this 
 
 
 --sd_comp: sd     
@@ -262,18 +268,27 @@ eq_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
 generate_clock_frequencies: PROCESS ( clk )
     VARIABLE cnt_20kHz  : NATURAL RANGE 0 TO CLK_SCALE_20kHz-1  := 0;
     VARIABLE cnt_2MHz   : NATURAL RANGE 0 TO CLK_SCALE_2MHz-1  := 0;
+	 VARIABLE TEMP       : STD_LOGIC_VECTOR( 11 DOWNTO 0 );
 BEGIN
-    IF clk'EVENT AND clk = '1' THEN
+    
+	 IF clk'EVENT AND clk = '1' THEN
         -- 20 kHz
-        IF cnt_20kHz < CLK_SCALE_20kHz-1 THEN
+        
+		  
+		  IF cnt_20kHz < CLK_SCALE_20kHz-1 THEN
             cnt_20kHz := cnt_20kHz + 1;
             adc_start <= '0';
-            --dac_start <= '0';
+            dac_start <= '0';
         ELSE
             cnt_20kHz := 0;
             adc_start <= '1';
-            --dac_start <= '1';
+            dac_start <= '1';
         END IF;  
+		
+   --  IF adc_OE='1' then
+		--  TEMP:= adc_output;
+	   --intermediate_buffer <= TEMP;
+		--END IF;
            
         IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
            CE_EQ_sig <= '0';
@@ -283,6 +298,9 @@ BEGIN
            CE_EQ_sig <= '1';     
         END IF;    
     END IF;
+	 --TEMP:= adc_output;
+	   --intermediate_buffer <= TEMP;
+	 -- adc_output <= TEMP; 
 END PROCESS generate_clock_frequencies;
 
 
