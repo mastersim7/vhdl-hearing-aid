@@ -128,8 +128,8 @@ IF clk'EVENT AND clk = '1' THEN
         			--CE_FIR1 <= CE;
 				   --CE_FIR2 <= CE; -- needs to be the same for buffer --check this /anand
              startfilters <='0';
-        			  CO_FIR1 <=CO(count_filters,count);
-        			  CO_FIR2 <=CO(count_filters+((NUM_OF_BANDS/2)),count); -- this start from 4 right/anand
+        			  CO_FIR1 <=CO(count_filters,count+1);
+        			  CO_FIR2 <=CO(count_filters+((NUM_OF_BANDS/2)),count+1); -- this start from 4 right/anand
      			     count := count +1;
        		 	 ELSE 
        		 	  count := 0;
