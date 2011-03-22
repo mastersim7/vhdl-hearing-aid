@@ -13,7 +13,7 @@ force clk 0 0ns, 1 10ns -repeat 20ns
 force re 0 0
 force we 0 0
 force reset 0 0
-force sample_in 0000000000000
+force sample_in 000000000000
 force ce 1 0
 run 20ns
 force reset 1

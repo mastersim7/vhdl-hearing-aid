@@ -5,6 +5,10 @@
 
 --  Using ADC and DAC, and EQ and IF inbetween this file will be the top for the FPGA testing
 
+-- 2011-03-22
+-- Changed indentations and spaces in order to make the code uniform.
+-- Added signal eq_input and connected it from ADC to Equalizer instead of sd_input. Still making
+-- it bipolar in between.
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -21,7 +25,7 @@ ENTITY top_main IS
             -- ADC samples with 39.97 kHz
             -- ADC samples read with 119.9 kHz
             -- Output to DAC, 29.98 kHz
-            CLK_SCALE_20khz : NATURAL := 1000;
+            CLK_SCALE_20khz : NATURAL := 2500;
             CLK_SCALE_2mhz : NATURAL := 25;
             
             N : NATURAL := 12 ); -- Bit length of the data vectors
@@ -52,26 +56,33 @@ ARCHITECTURE top_main_arch OF top_main IS
 
 -- Components for Rs232
 Component HIF_RS232_Receive_from_PC IS
-        GENERIC(n:INTEGER:=10;
-                m:INTEGER:=8);   --No.of.Bands
-        PORT(   system_clk_Rx : IN STD_LOGIC;	--Main clock input
-                serial_data_inp_Rx : IN STD_LOGIC; 	--Serial data input(bit by bit)
-                RESET_Rx : IN STD_LOGIC;	--System RESET_Rx
-		--data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
-		gain_data_array_Rx : OUT Gain_Array ); --Band Gain value with 13 bits
+    GENERIC(
+            n : INTEGER := 10;
+            m : INTEGER := 8); --Number of bands
+                
+    PORT(   
+            system_clk_Rx      : IN STD_LOGIC; --Main clock input
+            serial_data_inp_Rx : IN STD_LOGIC; --Serial data input(bit by bit)
+            RESET_Rx           : IN STD_LOGIC; --System RESET_Rx
+            --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
+            gain_data_array_Rx : OUT Gain_Array ); --Band Gain value with 13 bits
 END COMPONENT;
 
 COMPONENT HIF_RS232_Transmit_to_PC IS
-	GENERIC(n:INTEGER:=8); -- number of bits to be sent for each gain levels
-	PORT(   System_clk_Tx : IN STD_LOGIC; --system clock input
-                RESET_Tx : IN STD_LOGIC; --system RESET_Tx input
-                OE_Tx : IN STD_LOGIC;   --Flag sent by the Equalizer conveying that data filling into 
-                                        --'gain_array_output' is finished
-                gain_array_output : IN Gained_result_Array_16;
-                                        -- 8 blocks x 16 bits of data to be received from Equalizer
-                flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
-                Tx_to_PC : OUT STD_LOGIC -- Bit by Bit transmission to PC via RS232
-		);
+	GENERIC(
+            n : INTEGER := 8 ); -- Number of bits to be sent for each gain levels
+	PORT(   
+            System_clk_Tx     : IN STD_LOGIC; --System clock input
+            RESET_Tx          : IN STD_LOGIC; --System RESET_Tx input
+            
+            -- 8 blocks x 16 bits of data to be received from Equalizer
+            gain_array_output : IN Gained_result_Array_16;
+            
+            --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+            OE_Tx             : IN STD_LOGIC;
+                                   
+            flag_Tx  : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
+            Tx_to_PC : OUT STD_LOGIC);-- Bit by Bit transmission to PC via RS232
 END COMPONENT;
 
 -- Component communicating with the ADC
@@ -116,7 +127,7 @@ COMPONENT eq_main IS
     GENERIC(
             NUM_BITS_OUT : NATURAL := 13;
             NUM_OF_SAMPLES : NATURAL := 200;
-				NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_COEFFS : NATURAL := 110;
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
@@ -131,111 +142,118 @@ COMPONENT eq_main IS
             OE      	 : OUT STD_LOGIC; -- to interface 
             Q_SUM        : OUT Gained_result_Array_16);-- interface will take this 
 END COMPONENT;
+
+-- Sigma Delta component
 --COMPONENT SD IS
---    PORT(
---         input : in std_logic_vector(11 downto 0); 
---         clk,reset :in std_logic; 
---         output : out std_logic_vector(11 downto 0);
---         sign: out std_logic);
+--  GENERIC( 
+            N : NATURAL := 12 );
+--  PORT(
+--         input    : IN STD_LOGIC_VECTOR(N-1 DOWNTO 0); 
+--         clk,reset: IN STD_LOGIC; 
+--         output   : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0);
+--         sign     : OUT STD_LOGIC);
 --END COMPONENT;
 
-SIGNAL adc_start         : STD_LOGIC := '0'; -- Start A2D conversion
-SIGNAL adc_OE            : STD_LOGIC := '0'; -- ADC finished
+-- ADC signals
+SIGNAL adc_start  : STD_LOGIC := '0'; -- Start A2D conversion
+SIGNAL adc_OE     : STD_LOGIC := '0'; -- ADC finished
+SIGNAL adc_output : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
 
-SIGNAL dac_start         : STD_LOGIC := '0'; -- Start D2A conversion
-SIGNAL dac_input		    : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+-- DAC signals
+SIGNAL dac_start  : STD_LOGIC := '0'; -- Start D2A conversion
+SIGNAL dac_input  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
-SIGNAL adc_output        : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
-
-SIGNAL CE_EQ_sig : 	STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
-SIGNAL GAIN_From_IF_sig : Gain_Array;
-SIGNAL REQ_from_IF_sig : STD_LOGIC;
-SIGNAL OUTPUT_TO_CLASSD_sig : sample; 
-SIGNAL OE_TO_IF_sig : STD_LOGIC; -- to interface 
-SIGNAL TO_IF_SUM_sig : Gained_result_Array_16;-- interface will take this 
-
-
-
+-- Equalizer and interface signals
+SIGNAL eq_input             : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+SIGNAL CE_EQ_sig            : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
+SIGNAL REQ_from_IF_sig      : STD_LOGIC;
+SIGNAL GAIN_From_IF_sig     : Gain_Array;
+SIGNAL OE_TO_IF_sig         : STD_LOGIC; -- to interface 
+SIGNAL OUTPUT_TO_CLASSD_sig : sample;
+SIGNAL TO_IF_SUM_sig        : Gained_result_Array_16;-- interface will take this 
 
 
---Sigma delta component
+-- Sigma delta signals
 --SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 --SIGNAL sd_sign           : STD_LOGIC;
 --SIGNAL sd_sign_concd		 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-SIGNAL sd_input			 : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+--SIGNAL sd_input : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 
 --------- Begin the architecture sample_system_arch ----------------------
 BEGIN
 
 -------------------- Bind the components --------------------------------
-adc_comp: adc   GENERIC MAP( CLOCK_SCALE => 32 )
-                PORT MAP( clk   => clk, 
-                          start => adc_start, 
-                          OE    => adc_OE, 
-                          Q     => adc_output, 
-                          DIN   => ADC_DIN, 
-                          CS    => ADC_CS, 
-                          SCK   => ADC_SCK, 
-                          DOUT  => ADC_DOUT );
+adc_comp: adc   
+    GENERIC MAP( CLOCK_SCALE => 32 )
+    PORT MAP( 
+              clk   => clk, 
+              start => adc_start, 
+              OE    => adc_OE, 
+              Q     => adc_output, 
+              DIN   => ADC_DIN, 
+              CS    => ADC_CS, 
+              SCK   => ADC_SCK, 
+              DOUT  => ADC_DOUT );
                                 
-dac_comp: dac   GENERIC MAP( CLOCK_SCALE => 32 )
-                PORT MAP( clk   => clk, 
-                          start => dac_start, 
-                          din   => dac_input, 
-                          CS    => DAC_CS, 
-                          SCK   => DAC_SCK, 
-                          SDI   => DAC_SDI, 
-                          LDAC  => DAC_LDAC );
+dac_comp: dac   
+    GENERIC MAP( CLOCK_SCALE => 32 )
+    PORT MAP( 
+              clk   => clk, 
+              start => dac_start, 
+              din   => dac_input, 
+              CS    => DAC_CS, 
+              SCK   => DAC_SCK, 
+              SDI   => DAC_SDI, 
+              LDAC  => DAC_LDAC );
               
-trasnmitter_cop : HIF_RS232_Transmit_to_PC
-                        PORT MAP( 
-                        -- port in comp  => Signal
-                          System_clk_Tx   	=> clk, 
-                          RESET_Tx 		=> reset, 
-                          Tx_to_PC 		=> Tx,
-                          flag_Tx 		=> REQ_from_IF_sig,
-                          OE_Tx			=> OE_TO_IF_sig,
-                          gain_array_output =>TO_IF_SUM_sig
-								  );
+transmitter_comp : HIF_RS232_Transmit_to_PC
+    PORT MAP( 
+              -- port in comp  => Signal
+              System_clk_Tx   	=> clk, 
+              RESET_Tx 		    => reset, 
+              Tx_to_PC 		    => Tx,
+              flag_Tx 		    => REQ_from_IF_sig,
+              OE_Tx			    => OE_TO_IF_sig,
+              gain_array_output =>TO_IF_SUM_sig);
 
-Reciever_comp   : HIF_RS232_Receive_from_PC 
-                        PORT MAP( 
-                          System_clk_Rx         => clk, 
-                          reset_rx              => reset, 
-                          serial_data_inp_Rx    => Rx,
-								  gain_data_array_Rx => GAIN_From_IF_sig);
+Receiver_comp   : HIF_RS232_Receive_from_PC 
+    PORT MAP( 
+              System_clk_Rx         => clk, 
+              reset_rx              => reset, 
+              serial_data_inp_Rx    => Rx,
+              gain_data_array_Rx    => GAIN_From_IF_sig);
                           
 
 Equalizer_comp : eq_main 
-         PORT MAP( 
-           		   clk  	=> clk, -- System clock (50 MHz)
-          		   reset	=> reset,
-         		   sample_in	=> sd_input,
-         		   WE 		=> adc_OE,
-         		   CE 		=>CE_EQ_sig,
-         		   GAIN 	=>GAIN_From_IF_sig,
-         		   REQ  	=>REQ_from_IF_sig, 
-         		   OUTPUT_TO_CLASSD => dac_input, --to_SD, 
-         		   OE		=>OE_TO_IF_sig, -- to interface 
-         		   Q_SUM	=>TO_IF_SUM_sig);-- interface will take this 
+    PORT MAP( 
+              clk  	           => clk, -- System clock (50 MHz)
+              reset	           => reset,
+              sample_in        => eq_input, -- Changed from sd_input to adc_output
+              WE 		       => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
+              CE 		       => CE_EQ_sig,
+              GAIN 	           => GAIN_From_IF_sig,
+              REQ  	           => REQ_from_IF_sig, 
+              OUTPUT_TO_CLASSD => dac_input,       -- to sigma delta when testing finished
+              OE		       => OE_TO_IF_sig,    -- to interface 
+              Q_SUM	           => TO_IF_SUM_sig);  -- interface will take this 
 
 
---sd_comp: sd     PORT MAP( input => sd_input,
+--sd_comp: sd     
+--    PORT MAP( input => sd_input,
 --                          clk => clk,
 --                          reset => '0',
 --                          output => sd_output,
 --                          sign => sd_sign );
 --
                           
-led <= adc_output( N-1 DOWNTO 4 );
---sd_sign_concd <= '0' & sd_sign & "0000000000";
-sd_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
+led      <= adc_output( N-1 DOWNTO 4 );
+eq_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
 
 
 -- Process generating the different frequencies
 generate_clock_frequencies: PROCESS ( clk )
     VARIABLE cnt_20kHz  : NATURAL RANGE 0 TO CLK_SCALE_20kHz-1  := 0;
-    VARIABLE cnt_2MHz  : NATURAL RANGE 0 TO CLK_SCALE_2MHz-1  := 0;
+    VARIABLE cnt_2MHz   : NATURAL RANGE 0 TO CLK_SCALE_2MHz-1  := 0;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- 20 kHz
@@ -247,11 +265,10 @@ BEGIN
             cnt_20kHz := 0;
             adc_start <= '1';
             dac_start <= '1';
-            --dac_input <= sd_sign_concd;
         END IF;  
-             
+           
         IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
-           CE_EQ_sig <='0' ;
+           CE_EQ_sig <= '0';
            cnt_2mhz := cnt_2mhz + 1;
         ELSE 
            cnt_2mhz := 0;
