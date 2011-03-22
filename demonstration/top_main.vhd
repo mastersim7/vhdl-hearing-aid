@@ -58,35 +58,35 @@ ARCHITECTURE top_main_arch OF top_main IS
 
 
 -- Components for Rs232
-Component HIF_RS232_Receive_from_PC IS
-    GENERIC(
-            n : INTEGER := 10;
-            m : INTEGER := 8); --Number of bands
-                
-    PORT(   
-            system_clk_Rx      : IN STD_LOGIC; --Main clock input
-            serial_data_inp_Rx : IN STD_LOGIC; --Serial data input(bit by bit)
-            RESET_Rx           : IN STD_LOGIC; --System RESET_Rx
-            --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
-            gain_data_array_Rx : OUT Gain_Array ); --Band Gain value with 13 bits
-END COMPONENT;
+--Component HIF_RS232_Receive_from_PC IS
+--    GENERIC(
+--            n : INTEGER := 10;
+--            m : INTEGER := 8); --Number of bands
+--                
+--    PORT(   
+--            system_clk_Rx      : IN STD_LOGIC; --Main clock input
+--            serial_data_inp_Rx : IN STD_LOGIC; --Serial data input(bit by bit)
+--            RESET_Rx           : IN STD_LOGIC; --System RESET_Rx
+--            --data_ready_Rx : OUT STD_LOGIC;	--Flag to indicate equalizer that, gain datas are ready to send from HIF
+--            gain_data_array_Rx : OUT Gain_Array ); --Band Gain value with 13 bits
+--END COMPONENT;
 
-COMPONENT HIF_RS232_Transmit_to_PC IS
-	GENERIC(
-            n : INTEGER := 8 ); -- Number of bits to be sent for each gain levels
-	PORT(   
-            System_clk_Tx     : IN STD_LOGIC; --System clock input
-            RESET_Tx          : IN STD_LOGIC; --System RESET_Tx input
-            
-            -- 8 blocks x 16 bits of data to be received from Equalizer
-            gain_array_output : IN Gained_result_Array_16;
-            
-            --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
-            OE_Tx             : IN STD_LOGIC;
-                                   
-            flag_Tx  : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
-            Tx_to_PC : OUT STD_LOGIC);-- Bit by Bit transmission to PC via RS232
-END COMPONENT;
+--COMPONENT HIF_RS232_Transmit_to_PC IS
+--	GENERIC(
+--            n : INTEGER := 8 ); -- Number of bits to be sent for each gain levels
+--	PORT(   
+--            System_clk_Tx     : IN STD_LOGIC; --System clock input
+--            RESET_Tx          : IN STD_LOGIC; --System RESET_Tx input
+--            
+--            -- 8 blocks x 16 bits of data to be received from Equalizer
+--            gain_array_output : IN Gained_result_Array_16;
+--            
+--            --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+--            OE_Tx             : IN STD_LOGIC;
+--                                   
+--            flag_Tx  : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
+--            Tx_to_PC : OUT STD_LOGIC);-- Bit by Bit transmission to PC via RS232
+--END COMPONENT;
 
 -- Component communicating with the ADC
 COMPONENT adc IS
@@ -127,29 +127,31 @@ END COMPONENT;
 
 --Equalizer 
 COMPONENT eq_main IS
-    GENERIC(
-            NUM_BITS_OUT : NATURAL := 13;
-            NUM_OF_SAMPLES : NATURAL := 200;
+   GENERIC(
+            NUM_BITS_OUT  : NATURAL := 13;
+            NUM_OF_SAMPLES: NATURAL := 200;
             NUM_OF_COEFFS : NATURAL := 110;
-            NUM_OF_BANDS: NATURAL := 8);
+            NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
-            clk          : IN  STD_LOGIC; -- System clock (50 MHz)
-            reset        : IN  STD_LOGIC; -- reset
-            sample_in    : IN  sample;
-            WE           : IN  STD_LOGIC;
-            CE           : IN STD_LOGIC;
-            updated: IN STD_LOGIC;
-            GAIN 	 : IN Gain_Array; --needs to be retted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
-            --REQ     	 : IN STD_LOGIC; -- from interface 
-            OUTPUT_TO_CLASSD:OUT sample; 
-            --OE      	 : OUT STD_LOGIC; -- to interface 
-            Q_SUM        : OUT Gained_result_Array_16);-- interface will take this 
+            clk         : IN STD_LOGIC; -- System clock (50 MHz)
+            reset       : IN STD_LOGIC; -- reset
+            sample_in   : IN sample;
+            WE          : IN STD_LOGIC;
+            CE          : IN STD_LOGIC;
+            --updated: IN STD_LOGIC;
+          --GAIN        : IN Gain_Array; --needs to be resetted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+          --REQ         : IN STD_LOGIC; -- from interface 
+            
+            OUTPUT_TO_CLASSD: OUT sample; 
+            OE              : OUT STD_LOGIC -- to interface 
+            --Q_SUM           : OUT Gained_result_Array_16
+				);-- interface will take this 
 END COMPONENT;
 
 -- Sigma Delta component
 --COMPONENT SD IS
 --  GENERIC( 
-            N : NATURAL := 12 );
+--            N : NATURAL := 12 );
 --  PORT(
 --         input    : IN STD_LOGIC_VECTOR(N-1 DOWNTO 0); 
 --         clk,reset: IN STD_LOGIC; 
@@ -237,8 +239,9 @@ Equalizer_comp : eq_main
               --GAIN 	           => GAIN_From_IF_sig,
               --REQ  	           => REQ_from_IF_sig, 
               OUTPUT_TO_CLASSD => dac_input,       -- to sigma delta when testing finished
-              --OE		       => OE_TO_IF_sig,    -- to interface 
-              Q_SUM	           => TO_IF_SUM_sig);  -- interface will take this 
+              OE		       => OE_TO_IF_sig    -- to interface 
+             -- Q_SUM	           => TO_IF_SUM_sig
+				 );  -- interface will take this 
 
 
 --sd_comp: sd     

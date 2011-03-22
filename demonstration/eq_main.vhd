@@ -24,12 +24,13 @@ ENTITY eq_main IS
             WE          : IN STD_LOGIC;
             CE          : IN STD_LOGIC;
             --updated: IN STD_LOGIC;
-            GAIN        : IN Gain_Array; --needs to be resetted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
-            REQ         : IN STD_LOGIC; -- from interface 
+          --GAIN        : IN Gain_Array; --needs to be resetted to 1 for all bands from the iF   8 1 of 12 0 -- interface will give it
+          --REQ         : IN STD_LOGIC; -- from interface 
             
             OUTPUT_TO_CLASSD: OUT sample; 
-            OE              : OUT STD_LOGIC; -- to interface 
-            Q_SUM           : OUT Gained_result_Array_16);-- interface will take this 
+            OE              : OUT STD_LOGIC -- to interface 
+            --Q_SUM           : OUT Gained_result_Array_16
+				);-- interface will take this 
 END eq_main;
 
 ARCHITECTURE  eq_main_arch OF eq_main IS 
@@ -78,28 +79,28 @@ COMPONENT gain_amplifier IS
             CE      : IN STD_LOGIC;
             reset   : IN STD_LOGIC;
             FB_OE   : IN STD_LOGIC;
-            RAW_OUTPUT : IN Multi_Result_array ;--array (7 downto 0) of extended_sample; --13 bits
-            GAIN : IN Gain_Array;
+            RAW_OUTPUT : IN Multi_Result_array ;-- 1 to 8 of 36 to 0 
+            --GAIN    : IN Gain_Array;
             OE      : OUT STD_LOGIC; 
-            OUTPUT_TO_CLASSD: OUT sample;--output to class d
-            GAIND_Q_OUT: OUT  Gained_result_Array_16);
+            OUTPUT_TO_CLASSD: OUT sample);--output to class d
+            --GAIND_Q_OUT: OUT  Gained_result_Array_16);
 END COMPONENT;
 
-COMPONENT average_if IS
-     GENERIC(
-            NUM_BITS_OUT : NATURAL := 16;
-            NUM_OF_SAMPLES : NATURAL := 200;
-            NUM_OF_BANDS: NATURAL := 8);
-    PORT( 
-            clk     : IN STD_LOGIC;
-            reset   :IN STD_LOGIC;
-            CE      : IN STD_LOGIC;
-            OE_GAINAMP : IN STD_LOGIC;
-            REQ     :IN STD_LOGIC;
-            Gained_Samples: IN Gained_result_Array_16; --an 8 array of 16 bit vectors
-            OE      : OUT STD_LOGIC; 
-            Q       : OUT Gained_result_Array_16);
-END COMPONENT;
+--COMPONENT average_if IS
+--     GENERIC(
+--            NUM_BITS_OUT : NATURAL := 16;
+--            NUM_OF_SAMPLES : NATURAL := 200;
+--            NUM_OF_BANDS: NATURAL := 8);
+--    PORT( 
+--            clk     : IN STD_LOGIC;
+--            reset   :IN STD_LOGIC;
+--            CE      : IN STD_LOGIC;
+--            OE_GAINAMP : IN STD_LOGIC;
+--            REQ     :IN STD_LOGIC;
+--            Gained_Samples: IN Gained_result_Array_16; --an 8 array of 16 bit vectors
+--            OE      : OUT STD_LOGIC; 
+--            Q       : OUT Gained_result_Array_16);
+--END COMPONENT;
 
 -- between adc and regular buffer 
 
@@ -118,9 +119,9 @@ signal UPDATED_sig:STD_LOGIC;
 signal Q_FI_Block_Main:multi_result_array;
 
 -- between gain_amplifier and  average if 
-signal Gained_Samples_out :Gained_result_Array_16;
+--signal Gained_Samples_out :Gained_result_Array_16;-- where we using this
 signal OE_FromGAIN_sig: std_logic;
-signal GAIND_Q_OUT_sig: Gained_result_Array_16;
+--signal GAIND_Q_OUT_sig: Gained_result_Array_16;
 begin
 
 --Instantiation
@@ -155,21 +156,23 @@ GAIN_AMPLIFIER_BLOCK :gain_amplifier
             reset => reset,
             FB_OE => OE_FI_Block_Main_sig,
             RAW_OUTPUT => Q_FI_Block_Main,
-            GAIN => GAIN,
-            OE => OE_FromGAIN_sig,
-            OUTPUT_TO_CLASSD => OUTPUT_TO_CLASSD,
-            GAIND_Q_OUT => GAIND_Q_OUT_sig);
+            --GAIN => GAIN,
+           -- OE => OE_FromGAIN_sig, 
+            OE => OE, -- connecting this to entity oe signal so that it can be used for DAC or SIGMA DELTA
+				OUTPUT_TO_CLASSD => OUTPUT_TO_CLASSD
+            --GAIND_Q_OUT => GAIND_Q_OUT_sig)
+				);
 
-AVERAGE_INTERFACE : average_if 
-    PORT MAP (
-            clk => clk,
-            reset => reset,
-            CE => CE,
-            OE_GAINAMP => OE_FromGAIN_sig,
-            REQ => REQ,
-            Gained_Samples => GAIND_Q_OUT_sig,
-            OE => OE,
-            Q => Q_SUM);
+--AVERAGE_INTERFACE : average_if 
+--    PORT MAP (
+--            clk => clk,
+--            reset => reset,
+--            CE => CE,
+--            OE_GAINAMP => OE_FromGAIN_sig,
+--            REQ => REQ,
+--            Gained_Samples => GAIND_Q_OUT_sig,
+--            OE => OE,
+--            Q => Q_SUM);
 end;
 
 
