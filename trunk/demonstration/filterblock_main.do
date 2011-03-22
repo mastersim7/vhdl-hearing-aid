@@ -10,9 +10,6 @@ run 300
 force reset 0 
 force sample1 011111111111
 force sample2 011111111111
-
-force updated 1
 run 900
-
-force we 0 
-run 900000
+force updated 1
+run 300
