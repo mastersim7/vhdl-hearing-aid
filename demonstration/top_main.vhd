@@ -12,6 +12,7 @@
 
 -- Started removing interface parts for demonstration purposes.
 
+-- Connected gain_amplifier output enable with dac_start
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -49,8 +50,9 @@ ENTITY top_main IS
             DAC_SDI : OUT STD_LOGIC; -- Serial Data to DAC
             DAC_LDAC: OUT STD_LOGIC; 
             -- Serial interface 
-            RX      : IN STD_LOGIC;
-            TX      : OUT STD_LOGIC);-- Latch DAC
+            -- RX      : IN STD_LOGIC;
+            -- TX      : OUT STD_LOGIC
+            );-- Latch DAC
          
 END ENTITY top_main;
 
@@ -239,7 +241,7 @@ Equalizer_comp : eq_main
               --GAIN 	           => GAIN_From_IF_sig,
               --REQ  	           => REQ_from_IF_sig, 
               OUTPUT_TO_CLASSD => dac_input,       -- to sigma delta when testing finished
-              OE		       => OE_TO_IF_sig    -- to interface 
+              OE		       => dac_start    -- to interface 
              -- Q_SUM	           => TO_IF_SUM_sig
 				 );  -- interface will take this 
 
@@ -266,11 +268,11 @@ BEGIN
         IF cnt_20kHz < CLK_SCALE_20kHz-1 THEN
             cnt_20kHz := cnt_20kHz + 1;
             adc_start <= '0';
-            dac_start <= '0';
+            --dac_start <= '0';
         ELSE
             cnt_20kHz := 0;
             adc_start <= '1';
-            dac_start <= '1';
+            --dac_start <= '1';
         END IF;  
            
         IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
