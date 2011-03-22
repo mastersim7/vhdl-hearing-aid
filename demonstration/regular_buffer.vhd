@@ -3,6 +3,9 @@
 -- Mathias Lundell
 -- 2011-03-04
 -- Changed by others later...
+
+--Anand
+-- uncommented state 11 (rewe)
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -64,21 +67,21 @@ BEGIN
                             counter := 0;
                         END IF;
 								
-                   -- WHEN "11" =>
-                  --      sample_out_1 <= samples(counter);
-                  --      sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
+                    WHEN "11" =>
+                        sample_out_1 <= samples(counter);
+                        sample_out_2 <= samples(NUM_OF_TAPS - 1 - counter);
                         
-                  --      IF counter < NUM_OF_TAPS/2-1 THEN
-                    --        counter := counter + 1;
-                   --     ELSE
-                    --        counter := 0;
-                  --      END IF;
+                        IF counter < NUM_OF_TAPS/2-1 THEN
+                            counter := counter + 1;
+                        ELSE
+                            counter := 0;
+                        END IF;
                         
                         -- Update the stored samples (propagate samples downward in stack)
-                   --     FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
-                   --         samples(m+1) := samples(m);
-                    --    END LOOP;
-                     --   samples(0) := sample_in;
+                        FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
+                            samples(m+1) := samples(m);
+                        END LOOP;
+                        samples(0) := sample_in;
 								
                     WHEN OTHERS =>
                         NULL;
