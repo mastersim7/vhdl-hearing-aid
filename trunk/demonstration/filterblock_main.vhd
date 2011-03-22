@@ -3,6 +3,12 @@
 -- Author: Shwan Ciyako,Anandhavel Sakthivel
 -- It is still in the implementation phase. 
 -- This files adds needed components together to make a filterbank, you are welcome to make changes but make shure to update the whole chain of files that will be affected
+--DEMO VERSIOM
+-- NO CHANGES ARE ALLOWED IF NOT ANAND IS CONTATED EVEN IF IT IS 6 AM !! 
+-- The code is woring fine now by using the updated as trigger to start and oe as the ouput , OE is 
+-- updated to one for one cycle as the same time as the Q is putted out, remember it might happen that you catch OE and update your input with the old values 
+-- and you need to make sure that some thing like WAIT DATA STate here is implmented to sample this output one clock after the OE goes high. 
+-- GOOD LUCK
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -11,10 +17,10 @@ USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
 ENTITY filterblock_main IS
-	  GENERIC(
+      GENERIC(
             NUM_BITS_OUT : NATURAL := 13;
             NUM_OF_SAMPLES : NATURAL := 200;
-				    NUM_OF_COEFFS : NATURAL := 110;
+                    NUM_OF_COEFFS : NATURAL := 110;
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
@@ -23,7 +29,7 @@ ENTITY filterblock_main IS
             sample1 : IN sample;
             sample2 : IN sample;
             updated: IN STD_LOGIC;  -- works as STARTED here no need to add more signals
-		        RE      : OUT STD_LOGIC;
+                RE      : OUT STD_LOGIC;
             OE      : OUT STD_LOGIC; 
             Q       : OUT Multi_Result_array);
 END filterblock_main;
@@ -59,17 +65,17 @@ PORT(
         sample2 : IN sample;
         updated : IN STD_LOGIC;
         OE      : OUT STD_LOGIC;
-        Q	    : OUT Multi_Result);
+        Q        : OUT Multi_Result);
     --  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END COMPONENT;
 
 
 -- signals 
-SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC;
+SIGNAL OE_FIR1,OE_FIR2: STD_LOGIC; --CE_FIR1,CE_FIR2,
 SIGNAL Q_FIR1,Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
 
-TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
+TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA, WAIT_DATA, OUTPUT_DATA);
 SIGNAL STATE : state_type_Filter_Bank;
 SIGNAL Q_sig: Multi_Result_array;
 SIGNAL startfilters: STD_LOGIC;
@@ -100,10 +106,10 @@ IF clk'EVENT AND clk = '1' THEN
         IF reset ='1' THEN 
                 FOR k IN 1 TO 8 LOOP
                 Q(k) <= (OTHERS => '0');
-					      Q_sig(k) <= (OTHERS => '0');
+                          Q_sig(k) <= (OTHERS => '0');
                 END LOOP;
-					      count := 0;
-					      count_filters:=1;
+                          count := 0;
+                          count_filters:=1;
                 OE    <= '0';
                 STATE <= WAIT_SAMPLE ;
 
@@ -113,43 +119,63 @@ IF clk'EVENT AND clk = '1' THEN
         
           WHEN WAIT_SAMPLE => 
                 OE <= '0';
-	              IF UPDATED = '1' THEN
-	                 RE <= '1'; 
-	                 startfilters <='1';
-	                 STATE <= COMPUTE_DATA ; 
+                
+                  IF UPDATED = '1' THEN
+                     RE <= '1'; 
+                     startfilters <='1';
+                     STATE <= COMPUTE_DATA ; 
                 END IF ; --updated
-        	
-        WHEN COMPUTE_DATA =>
-        	-- same CE for the filters and the buffer will result in one value per CE moved from buffers to the filters 
-        		IF count_filters /= (NUM_OF_BANDS/2)+1 then -- 4 filters right now are serially implemented can be changed
-	        		IF count /= NUM_OF_COEFFS then 
-	        		 OE<='0';
-	        		 -- move this ?
-        			--CE_FIR1 <= CE;
-				   --CE_FIR2 <= CE; -- needs to be the same for buffer --check this /anand
-             startfilters <='0';
-        			  CO_FIR1 <=CO(count_filters,count+1);
-        			  CO_FIR2 <=CO(count_filters+((NUM_OF_BANDS/2)),count+1); -- this start from 4 right/anand
-     			     count := count +1;
-       		 	 ELSE 
-       		 	  count := 0;
-        			 END IF; -- count
-
-      			 IF OE_FIR1 = '1' THEN 
-	           		Q_sig(count_filters) <= Q_FIR1;
-        			    Q_sig(count_filters+(NUM_OF_BANDS/2)) <= Q_FIR2;
-        		END IF; -- one line in the array gets uodated per clk
-
-        			count_filters := count_filters + 1 ;
-        		ELSE -- update the output after 4 cycles ie the 8 filters are done
-        		  Q<= Q_sig;  
-      		 	  OE <='1';
-      		 	  count := 0;
-	        		count_filters := 1;
-	        		STATE <= WAIT_SAMPLE;
-        		END IF ;-- count_filters
-        		
-        	END CASE;
+            
+          WHEN COMPUTE_DATA =>
+            -- same CE for the filters and the buffer will result in one value per CE moved from buffers to the filters 
+           
+                 IF count_filters < ((NUM_OF_BANDS/2)+1) then -- 4 filters right now are serially implemented can be changed
+            
+                    IF count < NUM_OF_COEFFS then 
+                     OE<='0';
+                     -- move this ?
+                 startfilters <='0';
+                       CO_FIR1 <= CO(count_filters,count+1);
+                       CO_FIR2 <= CO(count_filters+((NUM_OF_BANDS/2)),count+1); -- this start from 4 right/anand
+                       count := count +1;
+                       ELSE 
+                       count := 0;
+                       state <= WAIT_DATA;
+                   -- this is a test 
+                       --Q_sig(count_filters) <= Q_FIR1;
+                       --Q_sig(count_filters+(NUM_OF_BANDS/2)) <= Q_FIR2;
+                       
+                       END IF; -- count
+                     ELSE 
+                       state <= OUTPUT_DATA;
+            END IF; 
+  
+            WHEN WAIT_DATA => 
+			IF OE_FIR1 = '1' then
+					Q_sig(count_filters) <= Q_FIR1;
+                    Q_sig(count_filters+(NUM_OF_BANDS/2)) <= Q_FIR2;
+					IF count_filters < ((NUM_OF_BANDS/2)) then		
+					startfilters <='1';
+                    STATE <= COMPUTE_DATA;
+					count_filters := count_filters + 1 ;
+					ELSE 
+					STATE <= OUTPUT_DATA;
+					END IF;
+					
+			ELSE 
+			state <= WAIT_DATA;
+			END IF;
+            WHEN OUTPUT_DATA =>
+             --  convert to state ELSE -- update the output after 4 cycles ie the 8 filters are done
+                   Q<= Q_sig;  
+                     OE <='1';
+                     count := 0;
+                     count_filters := 1;
+                     startfilters <='0';
+                     STATE <= WAIT_SAMPLE;
+                
+                
+            END CASE;
         
         
         END IF; --reset 
