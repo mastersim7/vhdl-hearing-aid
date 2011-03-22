@@ -44,7 +44,7 @@ CONSTANT ADC_MESSAGE_LENGTH : NATURAL    := 13;
 
 -- Internal signal for clock handling
 SIGNAL   clk_enable         : STD_LOGIC  := '0';-- clock enable for output
-
+SIGNAL Q_REG : STD_LOGIC_VECTOR( 11 DOWNTO 0 );
 -- Begin the architecture dac_arch
 BEGIN 
 
@@ -142,10 +142,10 @@ BEGIN
 
                     -- Save the digital in MSBF format
                     ELSIF cnt < Q'LENGTH THEN
-                        Q(Q'LENGTH - cnt) <= DIN;
+                        Q_REG(Q'LENGTH - cnt) <= DIN;
                         cnt := cnt + 1;
                     ELSE
-                        Q(0) <= DIN;
+                        Q_REG(0) <= DIN;
                         IF MSBF = '1' THEN
                             CS <= '1';
                             next_state <= IDLE;
@@ -159,7 +159,7 @@ BEGIN
                 -- State saving the digital value in LSB first format
                 WHEN READ_DATA_LSB =>
                     IF cnt < Q'LENGTH THEN
-                        Q(cnt) <= DIN;
+                        Q_REG(cnt) <= DIN;
                         cnt := cnt + 1;
                         IF cnt = Q'LENGTH THEN
                            CS <= '1';
@@ -174,6 +174,7 @@ BEGIN
         IF finished = '1' THEN
             finished := '0';
             OE <= '1';
+				Q<= Q_REG;
         ELSE
             OE <= '0';
         END IF;
