@@ -2,7 +2,7 @@
 %greatest = (2^ magnitude-1) -1
 %n = 111;
 % Coefficients
-coeff_num = 10; % number of randomly generated coefficients
+coeff_num = 110; % number of randomly generated coefficients
 coeff_int = 0;
 coeff_frac = 0.0;
 coeff_bin = '';  
@@ -14,6 +14,9 @@ for m=1:8
         y = b{m}(i) * coeff_max;
         y=round(y)
         l{i,m} = int2bin(y, 24)
+        
+        % testing 
+        
     end;
 end;
 
