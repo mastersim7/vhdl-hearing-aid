@@ -65,7 +65,7 @@ BEGIN
 	    IF CE = '1' THEN --slower clock
             IF started = '1' THEN 
               IF (i /= (NUM_OF_GAINS+1)) THEN  -- check this number is correct ???/anand
-                OE <= '0';
+                 OE <= '0'; -- can be deleted just in case
                  GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
                  SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
                                   i := i+1;
@@ -78,8 +78,10 @@ BEGIN
                 -- END LOOP;
                  SUMMED := (others=>'0'); --initialised  to zero/anand
                  OE<='1';
+                 started <= '0';
               END IF;-- i
             ELSE 
+              OE<='0';
             started <= FB_OE ;
             END IF; -- STARTED 
           END IF; --CE
