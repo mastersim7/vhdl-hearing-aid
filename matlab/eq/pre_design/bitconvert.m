@@ -9,24 +9,13 @@ coeff_bin = '';
 coeff_n = 24;    % Coefficients should be 24 bits
 coeff_max = 2^(coeff_n-1)-1;
 
-
-
-
-
-
-
-for m=1:8 ,
-for i=1:coeff_num ,
-    y = b{m}(i) * coeff_max;
-    y=round(y);
-    
-    l{m,i} = int2bin(int32(y))
-    %(mod((y),2^24),24);
+for m=1:8
+    for i=1:coeff_num
+        y = b{m}(i) * coeff_max;
+        y=round(y)
+        l{i,m} = int2bin(y, 24)
+    end;
 end;
-end;
-
-
-
 
 %now let's write them to a text file 
 fid=fopen('coeff.txt','wt');
