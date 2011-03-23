@@ -111,6 +111,7 @@ BEGIN
                     CS  <= '1'; -- no input
                     cnt := 0;
                     finished := '0';
+                    OE <='0';
                     
                     -- Go to next state                                                                                           
                     IF started = '1' THEN

@@ -112,6 +112,7 @@ IF clk'EVENT AND clk = '1' THEN
                           count_filters:=1;
                 OE    <= '0';
                 STATE <= WAIT_SAMPLE ;
+                 RE<= '0';
 
         ELSIF CE = '1' THEN -- slow clock
         
@@ -173,6 +174,7 @@ IF clk'EVENT AND clk = '1' THEN
                      count_filters := 1;
                      startfilters <='0';
                      STATE <= WAIT_SAMPLE;
+                     RE<= '0';
                 
                 
             END CASE;
