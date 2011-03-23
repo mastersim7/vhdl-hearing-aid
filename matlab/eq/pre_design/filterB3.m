@@ -10,9 +10,9 @@
 % FIR Window Bandpass filter designed using the FIR1 function.
 
 % All frequency values are in Hz.
-Fs = 22300;  % Sampling Frequency
+Fs = 51200;  % Sampling Frequency
 
-N    = 219;      % Order220
+N    = 79;      % Order220
 
 
 FcB11=	1 % First Cutoff Frequency
