@@ -92,7 +92,7 @@ FILTER_BLOCK_MAIN: filterblock_main
             sample1 => sample_filter1,
             sample2 => sample_filter2,
             updated => update_filters, 
-            Q       => Q,
+            Q       => output_from_filters,
             done    => done,
             next_sample => next_sample,
             sample_nr => sample_nr);
