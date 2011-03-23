@@ -29,9 +29,6 @@ ARCHITECTURE  eq_main_arch OF eq_main IS
 
 
 COMPONENT regular_buffer IS
-     GENERIC ( N        : NATURAL := 12;    -- Bit length of the vectors
-              NUM_OF_TAPS : NATURAL := 220 );  -- Number of taps
-    
     PORT ( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
