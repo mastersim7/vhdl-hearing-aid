@@ -16,13 +16,13 @@ ENTITY eq_main IS
             NUM_BITS_OUT  : NATURAL := 13;
             NUM_OF_SAMPLES: NATURAL := 200;
             NUM_OF_COEFFS : NATURAL := 110;
-            NUM_OF_BANDS  : NATURAL := 8);
+            NUM_OF_BANDS  : NATURAL := 6);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
             sample_in    : IN  sample;
             new_input_ready : IN STD_LOGIC;
-            Q : OUT Multi_result_Array);-- interface will take this 
+            Q : OUT STD_LOGIC_VECTOR(36 DOWNTO 0));-- interface will take this 
 END eq_main;
 
 ARCHITECTURE  eq_main_arch OF eq_main IS 
@@ -48,7 +48,7 @@ COMPONENT filterblock_main IS
 	 GENERIC(
             NUM_BITS_OUT : NATURAL := 13;
             NUM_OF_SAMPLES : NATURAL := 200;
-			NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_COEFFS : NATURAL := 110;
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
@@ -56,7 +56,7 @@ COMPONENT filterblock_main IS
             sample1 : IN sample;
             sample2 : IN sample;
             updated : IN STD_LOGIC;
-            Q       : OUT Multi_Result_array;
+            Q       : OUT STD_LOGIC_VECTOR(36 DOWNTO 0);
             done    : OUT STD_LOGIC;
             next_sample : OUT STD_LOGIC;
             sample_nr : OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
@@ -67,7 +67,7 @@ SIGNAL update_filters : STD_LOGIC;
 SIGNAL done : STD_LOGIC;
 SIGNAL sample_nr : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 SIGNAL next_sample : STD_LOGIC;
-SIGNAL output_from_filters : Multi_result_Array;
+SIGNAL output_from_filters : STD_LOGIC_VECTOR(36 DOWNTO 0);
 
 BEGIN
 

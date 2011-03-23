@@ -22,7 +22,7 @@ ENTITY filterblock_main IS
             sample1 : IN sample;
             sample2 : IN sample;
             updated : IN STD_LOGIC; 
-            Q       : OUT Multi_Result_array;
+            Q       : OUT STD_LOGIC_VECTOR(36 DOWNTO 0);
             done    : OUT STD_LOGIC;
             next_sample : OUT STD_LOGIC;
             sample_nr : OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
@@ -67,7 +67,7 @@ SIGNAL Q_FIR1, Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
 
 TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
-SIGNAL STATE, NEXT_STATE : state_type_Filter_Bank;
+SIGNAL state : state_type_Filter_Bank;
 SIGNAL start_filter : STD_LOGIC;
 
 BEGIN 
@@ -95,6 +95,7 @@ PROCESS(clk)
     VARIABLE count_filters : NATURAL RANGE 0 TO NUM_OF_BANDS+1;
     TYPE state_type IS (IDLE, READ_SAMPLE, UPDATE_FILTER, UPDATE_OUTPUT);
     VARIABLE state : state_type;
+	 VARIABLE Q_sig : Multi_result_Array;
 BEGIN
 
 IF clk'EVENT AND clk = '1' THEN
@@ -103,14 +104,14 @@ IF clk'EVENT AND clk = '1' THEN
         count_filters := 0;
         done <= '0';
         state := IDLE;
-        Q(0) <= (OTHERS => '0');
-        Q(1) <= (OTHERS => '0');
-        Q(2) <= (OTHERS => '0');
-        Q(3) <= (OTHERS => '0');
-        Q(4) <= (OTHERS => '0');
-        Q(5) <= (OTHERS => '0');
-        Q(6) <= (OTHERS => '0');
-        Q(7) <= (OTHERS => '0');
+        Q_sig(0) := (OTHERS => '0');
+        Q_sig(1) := (OTHERS => '0');
+        Q_sig(2) := (OTHERS => '0');
+        Q_sig(3) := (OTHERS => '0');
+        Q_sig(4) := (OTHERS => '0');
+        Q_sig(5) := (OTHERS => '0');
+        Q_sig(6) := (OTHERS => '0');
+        Q_sig(7) := (OTHERS => '0');
     ELSE
         IF updated = '1' THEN
             state := READ_SAMPLE;
@@ -143,14 +144,15 @@ IF clk'EVENT AND clk = '1' THEN
                     END IF;
                     
                 WHEN UPDATE_OUTPUT =>
-                    Q(count_filters) <= Q_FIR1;
-                    Q(count_filters+1) <= Q_FIR2;
+                    Q_sig(count_filters) := Q_FIR1;
+                    Q_sig(count_filters+1) := Q_FIR2;
                     IF count_filters < NUM_OF_BANDS-2 THEN
                         count_filters := count_filters + 2; -- since we calculate 2 filters at the time
                         state := READ_SAMPLE;
                     ELSE
                         done <= '1';
                         count_filters := 0;
+								Q <= Q_sig(5);
                         state := IDLE;
                     END IF;
             END CASE;

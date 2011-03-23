@@ -29,6 +29,8 @@ BEGIN
         TYPE buffer_type IS ARRAY (0 TO NUM_OF_TAPS-1) OF STD_LOGIC_VECTOR(N-1 DOWNTO 0);
         VARIABLE samples : buffer_type;
         VARIABLE nr_int : INTEGER RANGE 0 TO NUM_OF_TAPS;
+		  VARIABLE index_new : NATURAL RANGE 0 TO NUM_OF_TAPS;
+		  VARIABLE indes_old : NATURAL RANGE 0 TO NUM_OF_TAPS;
     BEGIN   
         IF clk'EVENT AND clk = '1' THEN
             IF reset = '1' THEN
@@ -36,17 +38,12 @@ BEGIN
                 FOR m IN 0 TO NUM_OF_TAPS-1 LOOP
                     samples(m) := (OTHERS => '0');
                 END LOOP;
-                sample_out_1 <= samples(samples'LEFT);
-                sample_out_2 <= samples(samples'RIGHT);
-                updated <= '0';
+                index_new <= 0;
+                index_old <= '0';
             ELSIF WE = '1' THEN
-                -- Update the stored samples (propagate samples downward in stack)
-                FOR m IN NUM_OF_TAPS-1 DOWNTO 1 LOOP
-                    samples(m) := samples(m-1);
-                END LOOP;
-                samples(0) := sample_in;
-                updated <= '1';
-
+                samples(index_new) <= sample_in;
+					 index_new := (index_new mod (NUM_TAPS-1)) + 1;
+					 index_old := (index_old rem (NUM_TAPS-1)) - 1;
             ELSIF RE = '1' THEN
                 updated <= '0';
                 nr_int := TO_INTEGER(UNSIGNED(nr));
