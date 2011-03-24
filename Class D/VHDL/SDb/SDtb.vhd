@@ -2,14 +2,16 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity sdtb is
+    generic ( N : integer:= 12);  
 end entity;
 
 architecture arch_sdtb of sdtb is
 
 component sd is
-  port ( input :in std_logic_vector(11 downto 0); 
+  generic ( N : integer:= 12);
+  port ( input :in std_logic_vector(N-1 downto 0); 
          clk :in std_logic; 
-         output,add1,add2,latch1 : out std_logic_vector(11 downto 0);
+         output,add1,add2,latch1 : out std_logic_vector(N-1 downto 0);
          sign: out std_logic);
 end component;
 
@@ -124,9 +126,9 @@ constant sin: vals := (
 
 
 
-signal input: std_logic_vector(11 downto 0);
+signal input: std_logic_vector(N-1 downto 0);
 signal clk,sign : std_logic:='0'; 
-signal output,add1,add2,latch1 : std_logic_vector(11 downto 0);
+signal output,add1,add2,latch1 : std_logic_vector(N-1 downto 0);
 
 signal index : integer range 0 to 99:=0;
 
@@ -134,15 +136,15 @@ begin
 
   clk<= not clk after 100 ns;
   
-  S0: SD port map(input, clk, output,add1,add2,latch1, sign);
+  S0: SD generic map (N=>N) port map(input, clk, output,add1,add2,latch1, sign);
   
   p0: process
-    VARIABLE temp : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    VARIABLE temp : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
   begin 
 
     for i in 0 to 100 loop
       temp := sin(index);
-      input <= not temp(12-1) & temp(12-2 downto 0); 
+      input <= not temp(N-1) & temp(N-2 downto 0); 
       index<=index+1;
       wait for 1600 ns;
     end loop;
