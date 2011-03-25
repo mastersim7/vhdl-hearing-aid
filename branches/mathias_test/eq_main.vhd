@@ -13,15 +13,15 @@ USE work.EQ_functions.ALL;
 
 ENTITY eq_main IS
 	GENERIC(
-            NUM_BITS_OUT  : NATURAL := 13;
-            NUM_OF_SAMPLES: NATURAL := 200;
-            NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_SAMPLES: NATURAL := 80;
+            NUM_OF_COEFFS : NATURAL := 40;
             NUM_OF_BANDS  : NATURAL := 6);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
             sample_in    : IN  sample;
             new_input_ready : IN STD_LOGIC;
+            OE : OUT STD_LOGIC;
             Q : OUT STD_LOGIC_VECTOR(36 DOWNTO 0));-- interface will take this 
 END eq_main;
 
@@ -29,6 +29,8 @@ ARCHITECTURE  eq_main_arch OF eq_main IS
 
 
 COMPONENT regular_buffer IS
+    GENERIC ( N              : NATURAL := 12;    -- Bit length of the vectors
+              NUM_OF_SAMPLES : NATURAL := 80 );  -- Number of taps
     PORT ( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
@@ -44,8 +46,8 @@ END COMPONENT;
 COMPONENT filterblock_main IS
 	 GENERIC(
             NUM_BITS_OUT : NATURAL := 13;
-            NUM_OF_SAMPLES : NATURAL := 200;
-            NUM_OF_COEFFS : NATURAL := 110;
+            NUM_OF_SAMPLES : NATURAL := 80;
+            NUM_OF_COEFFS : NATURAL := 40;
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
@@ -70,6 +72,9 @@ BEGIN
 
 --Instantiation
 buffer_comp: regular_buffer 
+    GENERIC MAP( N => 12,
+                 NUM_OF_SAMPLES => NUM_OF_SAMPLES)
+        
     PORT MAP(
             clk          => clk, -- System clock (50 MHz)
             reset        => reset, -- reset
@@ -93,7 +98,9 @@ FILTER_BLOCK_MAIN: filterblock_main
             done    => done,
             next_sample => next_sample,
             sample_nr => sample_nr);
-	           
+ 
+OE <= done;
+ 
 process(clk)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN

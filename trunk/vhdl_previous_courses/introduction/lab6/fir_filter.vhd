@@ -9,11 +9,11 @@ ENTITY fir_filter IS
     GENERIC ( N : NATURAL := 12 ); -- width of samples and filter coefficients
                 
     PORT (  clk     : IN  STD_LOGIC;
-				x       : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );     -- sample
+			x       : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );     -- sample
             reset   : IN  STD_LOGIC;                            -- reset
             start   : IN  STD_LOGIC;                            -- start filter
             
-				OE      : OUT STD_LOGIC;
+			OE      : OUT STD_LOGIC;
             y       : OUT STD_LOGIC_VECTOR( N-1   DOWNTO 0 ));  -- result
 END ENTITY;
 
@@ -65,23 +65,23 @@ BEGIN
             
         -- Do the calculations (samples must have been provided)
         ELSIF clk'EVENT AND clk = '1' THEN
-			   IF start = '1' THEN
-					 -- Update samples, first in first out
-					 xk(0) <= x;
-					 FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
-						  xk(m+1) <= xk(m);
-					 END LOOP;
+            IF start = '1' THEN
+                -- Update samples, first in first out
+				xk(0) <= x;
+				FOR m IN 0 TO NUM_OF_TAPS-2 LOOP
+                    xk(m+1) <= xk(m);
+				END LOOP;
 					
-					 -- Calculate the output
-					 a := SHIFT_LEFT( (SIGNED(tk(0)) * SIGNED(x)), 1 );
-					 FOR i IN 1 TO NUM_OF_TAPS-1 LOOP
-						  a := a + SHIFT_LEFT( (SIGNED(tk(i)) * SIGNED(xk(i-1))), 1 );
-					 END LOOP;
-					 y <= STD_LOGIC_VECTOR( a(2*N-1 downto N) );
-					 OE <= '1';
-				ELSE
-				    OE <= '0';
-				END IF;
+				-- Calculate the output
+				a := SHIFT_LEFT( (SIGNED(tk(0)) * SIGNED(x)), 1 );
+				FOR i IN 1 TO NUM_OF_TAPS-1 LOOP
+                    a := a + SHIFT_LEFT( (SIGNED(tk(i)) * SIGNED(xk(i-1))), 1 );
+				END LOOP;
+				y <= STD_LOGIC_VECTOR( a(2*N-1 downto N) );
+				OE <= '1';
+			ELSE
+                OE <= '0';
+			END IF;
         END IF;
     END PROCESS;
 

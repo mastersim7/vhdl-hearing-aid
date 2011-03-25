@@ -68,7 +68,9 @@ END COMPONENT;
 SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC;
 SIGNAL Q_FIR1,Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
-SIGNAL STATE ,NEXT_STATE : state_type_Filter_Bank;
+
+TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
+SIGNAL STATE, NEXT_STATE : state_type_Filter_Bank;
 SIGNAL Q_sig: Multi_Result_array;
 SIGNAL startfilters: STD_LOGIC;
 BEGIN 

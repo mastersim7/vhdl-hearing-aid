@@ -132,7 +132,7 @@ BUFFER_REGULAR: regular_buffer
             CE => CE,
             RE => RE_FI_Block_Main_sig,
             WE => WE,
-            OE => UPDATED_sig,
+            UPDATED => UPDATED_sig,
             sample_out_1 => sample_out_1_sig,
             sample_out_2 => sample_out_2_sig);
 
@@ -167,7 +167,7 @@ AVERAGE_INTERFACE : average_if
             CE => CE,
             OE_GAINAMP => OE_FromGAIN_sig,
             REQ => REQ,
-            GAIND_Q_OUT_sig,
+            Gained_Samples => GAIND_Q_OUT_sig,
             OE => OE,
             Q => Q_SUM);
 end;
