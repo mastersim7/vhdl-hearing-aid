@@ -7,7 +7,7 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 Package EQ_data_type IS 
     SUBTYPE coefficient_type IS STD_LOGIC_VECTOR(23 DOWNTO 0);
-    TYPE taps_type IS ARRAY (0 to 7, 0 TO 109) OF coefficient_type;
+    TYPE taps_type IS ARRAY (0 to 7, 0 TO 39) OF coefficient_type;
     TYPE AVERAGE_SIG_LEV_type IS ARRAY (7 DOWNTO 0) OF STD_LOGIC_VECTOR( 15 downto 0 ); --not sure
     TYPE gain_type IS ARRAY (0 to 7) OF STD_LOGIC_VECTOR( 11 downto 0 );
     SUBTYPE sample IS  STD_LOGIC_VECTOR( 11 DOWNTO 0 );
