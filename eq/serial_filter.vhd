@@ -37,30 +37,55 @@ ENTITY serial_filter IS
             CE      : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
-            Q	    : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+            updated : IN STD_LOGIC;
+            OE      : OUT STD_LOGIC;
+            Q	    : OUT Multi_Result);
+				--  Q       : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
 END ENTITY;
 
-ARCHITECTURE serial_filter_arch OF serial_filter IS   
+ARCHITECTURE serial_filter_arch OF serial_filter IS
+-- FILTER COEEFS WILL BE ADDED HERE    
+signal started :STD_LOGIC;
 BEGIN
 
-PROCESS(clk)
-    VARIABLE two_samples : STD_LOGIC_VECTOR(12 DOWNTO 0); 
+PROCESS(clk, CE)
+    VARIABLE two_samples : extended_sample; 
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
     VARIABLE mac,temp : STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0);
+     
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         -- Synchronous reset
         IF reset ='1' THEN 
             mac := (OTHERS => '0');
-            temp := (OTHERS => '0');
             Q   <= (OTHERS => '0');
+            count := 0;
+            OE    <= '0';
+            started <= '0';
         -- CE high, calculate a result. Output updated when all coefficients used
-        ELSIF CE = '1' THEN
-            two_samples := eq_adder(sample1, sample2);
-            temp := STD_LOGIC_VECTOR(SHIFT_LEFT((SIGNED(two_samples)*SIGNED(CO)), 1));
-            mac := STD_LOGIC_VECTOR(SIGNED(mac) + SIGNED(temp));
-            Q <= mac;
-        END IF;
+        ELSIF CE = '1' THEN  
+            IF started = '1' THEN  
+            
+            IF count /= NUM_OF_COEFFS THEN 
+                -- Add two samples together, multiply with coefficient, accumulate result
+
+                two_samples := eq_adder(sample1, sample2);
+                -- who chnaged from signed to unsigned why ?
+                 mac := STD_LOGIC_VECTOR(SIGNED(mac) + SIGNED(eq_multiply(two_samples,CO)));  
+               --mac:= (mac) + (eq_multiply(two_samples,CO));
+                count:= count + 1;
+            ELSE 
+                count := 0;
+                Q     <= mac;
+                OE    <= '1';
+                started <= '0';
+            END IF; --count
+            ELSE 
+            started <= updated;
+            OE <= '0';
+            END IF ; --started
+        -- OE should go low after a single CE clock cycle.
+        END IF; --ce and reset
     END IF;
 END PROCESS;
 END ARCHITECTURE serial_filter_arch;
