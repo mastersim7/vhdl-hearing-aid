@@ -1,0 +1,51 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_Std.all;
+use work.sine_package.all;
+
+
+entity SD_tb is
+    port ( out_sign : out std_logic );
+end;
+
+architecture behav_SD_tb of SD_tb is
+    component SD
+    port (  input :in std_logic_vector(11 downto 0); 
+            clk,reset :in std_logic; 
+            output : out std_logic_vector(11 downto 0);
+            sign: out std_logic);  
+    end component;
+    
+    component sine_wave
+    port( clock, reset, enable: in std_logic;
+          wave_out: out sine_vector_type);
+    end component;
+
+    signal wave_out : std_logic_vector(11 downto 0); 
+    signal clk,reset : std_logic := '0'; 
+    signal output : std_logic_vector(11 downto 0);
+    signal sign : std_logic;
+    signal enable : std_logic := '1';
+begin
+    clk <= not clk after 10 ns;
+    
+    sw : sine_wave port map( clk, reset, enable, wave_out );
+    sd_comp : SD port map( wave_out,clk,reset,output,sign );
+    
+    out_sign <= sign;
+    
+    tb: process
+    begin
+        enable <= '0';
+        reset <= '1';
+        wait for 100 ns;
+        reset <= '0';
+        enable <= '1';
+        wait for 20 ns;
+        
+        -- Test bench stimulus
+        wait for 1 ms;
+        enable <= '0';
+    end process;
+
+ end architecture;
