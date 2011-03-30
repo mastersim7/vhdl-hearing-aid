@@ -2,8 +2,13 @@
 -- Author: Shwan Ciyako,Anandhavel Sakthivel
 -- It is still in the implementation phase. 
 
--- 2011-03-22
+-- 2011-03-30, Mathias Lundell
+-- Renamed port new_input_ready to new_sample_ready in order
+-- to improve readability.
+
+-- 2011-03-22, Mathias Lundell
 -- Changed some of the formatting
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -20,9 +25,9 @@ ENTITY eq_main IS
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
             sample_in    : IN  sample;
-            new_input_ready : IN STD_LOGIC;
+            new_sample_ready : IN STD_LOGIC;
             OE : OUT STD_LOGIC;
-            Q : OUT STD_LOGIC_VECTOR(36 DOWNTO 0));-- interface will take this 
+            Q : OUT Multi_result_array);-- interface will take this 
 END eq_main;
 
 ARCHITECTURE  eq_main_arch OF eq_main IS 
@@ -51,11 +56,10 @@ COMPONENT filterblock_main IS
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
-            reset   : IN STD_LOGIC;
             sample1 : IN sample;
             sample2 : IN sample;
             updated : IN STD_LOGIC;
-            Q       : OUT STD_LOGIC_VECTOR(36 DOWNTO 0);
+            Q       : OUT Multi_result_array;
             done    : OUT STD_LOGIC;
             next_sample : OUT STD_LOGIC;
             sample_nr : OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
@@ -66,7 +70,7 @@ SIGNAL update_filters : STD_LOGIC;
 SIGNAL done : STD_LOGIC;
 SIGNAL sample_nr : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 SIGNAL next_sample : STD_LOGIC;
-SIGNAL output_from_filters : STD_LOGIC_VECTOR(36 DOWNTO 0);
+SIGNAL output_from_filters : Multi_result_array;
 
 BEGIN
 
@@ -81,7 +85,7 @@ buffer_comp: regular_buffer
             sample_in    => sample_in,
             nr           => sample_nr,
             RE           => next_sample,
-            WE           => new_input_ready,
+            WE           => new_sample_ready,
             updated      => update_filters,
             sample_out_1 => sample_filter1,
             sample_out_2 => sample_filter2
@@ -90,7 +94,6 @@ buffer_comp: regular_buffer
 FILTER_BLOCK_MAIN: filterblock_main 
     PORT MAP( 
             clk     => clk,
-            reset   => reset,
             sample1 => sample_filter1,
             sample2 => sample_filter2,
             updated => update_filters, 

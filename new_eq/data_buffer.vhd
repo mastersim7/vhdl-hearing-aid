@@ -13,10 +13,10 @@ ENTITY data_buffer IS
             reset     : IN  STD_LOGIC; -- reset
             sample_in : IN  STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
             RE        : IN  STD_LOGIC;
-				WE			 : IN  STD_LOGIC;
+				    WE			 : IN  STD_LOGIC;
             OE        : OUT STD_LOGIC;
             sample_out_1 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-				sample_out_2 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 ));
+				    sample_out_2 : OUT STD_LOGIC_VECTOR( N-1 DOWNTO 0 ));
             
 END ENTITY;
 
