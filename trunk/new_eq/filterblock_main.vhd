@@ -3,6 +3,10 @@
 -- Author: Shwan Ciyako,Anandhavel Sakthivel
 -- It is still in the implementation phase. 
 -- This files adds needed components together to make a filterbank, you are welcome to make changes but make shure to update the whole chain of files that will be affected
+
+-- 2011-03-30, Mathias Lundell
+-- Works essentially in the same way. There is still a simulation error which
+-- I believe is constrained to simulation and not implementation on fpga.
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -18,11 +22,10 @@ ENTITY filterblock_main IS
             NUM_OF_BANDS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
-            reset   : IN STD_LOGIC;
-            sample1 : IN sample;
+            sample1 : IN sample;            
             sample2 : IN sample;
             updated : IN STD_LOGIC; 
-            Q       : OUT STD_LOGIC_VECTOR(36 DOWNTO 0);
+            Q       : OUT Multi_Result_array;
             done    : OUT STD_LOGIC;
             next_sample : OUT STD_LOGIC;
             sample_nr : OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
@@ -48,7 +51,6 @@ CONSTANT CO:taps_type:=(("000000000001111000001110","000000000001111010100100","
 -- serialfilter component 
 COMPONENT serial_filter IS 
   GENERIC(
-        NUM_BITS_OUT : NATURAL := 37;
         NUM_OF_COEFFS : NATURAL := 110);
     PORT( 
         clk     : IN STD_LOGIC;
@@ -57,24 +59,20 @@ COMPONENT serial_filter IS
         CE      : IN STD_LOGIC;
         sample1 : IN sample;
         sample2 : IN sample;
-        Q	    : OUT STD_LOGIC_VECTOR(NUM_BITS_OUT-1 DOWNTO 0));
+        Q	      : OUT Multi_Result);
 END COMPONENT;
-
 
 -- signals 
 SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC;
 SIGNAL Q_FIR1, Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
 
-TYPE state_type_Filter_Bank IS ( WAIT_SAMPLE, COMPUTE_DATA);
-SIGNAL state : state_type_Filter_Bank;
 SIGNAL start_filter : STD_LOGIC;
 
 BEGIN 
 -- component instantiation 
 FIR1:  serial_filter 
     GENERIC MAP (
-        NUM_BITS_OUT => 37,
         NUM_OF_COEFFS => NUM_OF_COEFFS)
     PORT MAP(
         clk => clk,
@@ -87,7 +85,6 @@ FIR1:  serial_filter
     
 FIR2:  serial_filter
     GENERIC MAP (
-        NUM_BITS_OUT => 37,
         NUM_OF_COEFFS => NUM_OF_COEFFS)
     PORT MAP(
         clk => clk,
@@ -98,40 +95,25 @@ FIR2:  serial_filter
         sample2 => sample2,
         Q => Q_FIR2);
 
-PROCESS(clk)
+PROCESS(clk, updated)
     VARIABLE count : NATURAL RANGE 0 TO NUM_OF_COEFFS;
     VARIABLE count_filters : NATURAL RANGE 0 TO NUM_OF_BANDS+1;
     TYPE state_type IS (IDLE, READ_SAMPLE, UPDATE_FILTER, UPDATE_OUTPUT);
     VARIABLE state : state_type;
-	 VARIABLE Q_sig : Multi_result_Array;
+    VARIABLE Q_sig : Multi_Result_array;
 BEGIN
 
 IF clk'EVENT AND clk = '1' THEN
-    IF reset = '1' THEN
+    IF updated = '1' THEN
+        state := READ_SAMPLE;
         count := 0;
         count_filters := 0;
+        start_filter <= '0';
         done <= '0';
-        state := IDLE;
-        Q_sig(0) := (OTHERS => '0');
-        Q_sig(1) := (OTHERS => '0');
-        Q_sig(2) := (OTHERS => '0');
-        Q_sig(3) := (OTHERS => '0');
-        Q_sig(4) := (OTHERS => '0');
-        Q_sig(5) := (OTHERS => '0');
-        Q_sig(6) := (OTHERS => '0');
-        Q_sig(7) := (OTHERS => '0');
     ELSE
-        IF updated = '1' THEN
-            state := READ_SAMPLE;
-            count := 0;
-            count_filters := 0;
-            start_filter <= '0';
-            done <= '0';
-        ELSE
             CASE (state) IS
                 WHEN IDLE =>
                     done <= '0';
-                    
                 WHEN READ_SAMPLE =>
                     next_sample <= '1';
                     start_filter <= '0';
@@ -154,19 +136,19 @@ IF clk'EVENT AND clk = '1' THEN
                 WHEN UPDATE_OUTPUT =>
                     Q_sig(count_filters) := Q_FIR1;
                     Q_sig(count_filters+1) := Q_FIR2;
+                    start_filter <= '0';
                     IF count_filters < NUM_OF_BANDS-2 THEN
                         count_filters := count_filters + 2; -- since we calculate 2 filters at the time
                         state := READ_SAMPLE;
                     ELSE
                         done <= '1';
                         count_filters := 0;
-								        Q <= Q_sig(5);
+								        Q <= Q_sig;
                         state := IDLE;
                     END IF;
             END CASE;
         END IF;
-    END IF;
 END IF; --clk
-End process;
+END PROCESS;
 
 END ARCHITECTURE;
