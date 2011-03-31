@@ -65,9 +65,9 @@ BEGIN
                  			      END LOOP;
 				        END IF;--i
 			        END IF; --OE_GSINSMP
-		       ELSE --STARTED
-		       started <= REQ;
-		       END IF; --started
+		        ELSE --STARTED
+		        	started <= REQ;
+		        END IF; --started
 		END IF; --CE
         END IF; --reset
     END IF; --cl
