@@ -52,7 +52,8 @@ BEGIN
 					IF i /= NUM_OF_SAMPLES THEN
 					      OE<='0';
 					      FOR k IN 1 TO NUM_OF_BANDS LOOP -- parallel of 8 additions ?
-				              	Gained_Samples_var(k) := STD_LOGIC_VECTOR(SIGNED(Gained_Samples(k))+SIGNED(Gained_Samples_var(k)));
+				              	-- Gained_Samples_var(k) := STD_LOGIC_VECTOR(SIGNED(Gained_Samples(k))+SIGNED(Gained_Samples_var(k)));
+                             Gained_Samples_var(k) := STD_LOGIC_VECTOR(UNSIGNED(Gained_Samples_var(k))+UNSIGNED(NOT( Gained_Samples(k)(Gained_Samples(k)'LEFT)) & Gained_Samples(k)(Gained_Samples(k)'LEFT -1 downto 0))); -- please check the saturatiion
 				              END LOOP;
 				              i := i+1;
 				        ELSE
