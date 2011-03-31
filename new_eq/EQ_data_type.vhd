@@ -1,4 +1,3 @@
-
 -- Author: Shwan Ciyako, Anandhavel Sakthivel, Mathias Lundell
 -- Date: 2011-02-10
 
@@ -24,6 +23,8 @@ Package EQ_data_type IS
     TYPE Gain_Array is ARRAY(0 to 7) OF STD_LOGIC_VECTOR( 12 downto 0 );
     
 	  TYPE Gained_result_Array_16 is ARRAY(0 to 7) OF STD_LOGIC_VECTOR( 15 downto 0 );
+    TYPE Gained_result_Array_8 is ARRAY(0 to 7) OF STD_LOGIC_VECTOR( 7 downto 0 );
+     
     --TYPE state_type_eq IS (IDLE, COMPUTE_DATA, GAIN_DATA,SUM_DATA); -- not used?
     --CONSTANT TAPS_CONST: taps_type;
 end EQ_data_type;
