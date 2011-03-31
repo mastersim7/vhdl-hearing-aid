@@ -22,7 +22,7 @@ USE work.EQ_functions.ALL;
 
 ENTITY gain_amplifier IS
     GENERIC(
-            NUM_BITS_OUT : NATURAL := 13; --mathias is this number ok?
+            NUM_BITS_OUT : NATURAL := 13;
             NUM_OF_GAINS : NATURAL := 8;
             NUM_OF_FILTERS: NATURAL := 8);
     PORT( 
@@ -38,7 +38,7 @@ ENTITY gain_amplifier IS
 END;
 
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
-SIGNAL started : STD_LOGIC;
+	SIGNAL started : STD_LOGIC;
 BEGIN
 
 PROCESS(clk, CE)
@@ -53,32 +53,31 @@ BEGIN
 	    SUMMED := (others=>'0'); --initialised  to zero/anand
 	    i:=1;-- i should be 1 as array start from 1 (to 8)/anand 
 	    OE<='0';
-	    started <='0';
+	    started <='0'; -- we wait for a enable signal to stert
 	    
 	ELSE
+	
 	    IF CE = '1' THEN --slower clock
-            IF started = '1' THEN 
-              IF (i /= (NUM_OF_GAINS+1)) THEN  -- check this number is correct ???/anand
-                OE <= '0';
-                   --  GAIND_Q(i) := eq_gain_multiply(RAW_OUTPUT(i),GAIN(i));
-                 GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
-                 SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
-                                  i := i+1;
-              ELSE 
-                 i:=1;
-                OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11));
-                 --OUTPUT_TO_CLASSD <= SUMMED(49 DOWNTO 38);
-                FOR m IN 1 TO 8 LOOP
-                 GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
-                END LOOP;
-                 SUMMED := (others=>'0'); --initialised  to zero/anand
-                 OE<='1';
-              END IF;-- i
-            ELSE 
-            started <= FB_OE ;
-            END IF; -- STARTED 
-          END IF; --CE
-     END IF; --reset
+	            IF started = '1' THEN 
+        	    	IF (i /= (NUM_OF_GAINS+1)) THEN
+                		OE <= '0';
+		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+                		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+                                i := i+1;
+	                ELSE
+		                i:=1; -- ready restart
+		                OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
+                	        FOR m IN 1 TO 8 LOOP -- update the output for the interface at once
+               				GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
+		                END LOOP;
+		                SUMMED := (others=>'0'); --initialised  to zero/anand
+                	 	OE<='1';
+	                END IF;-- i
+          	    ELSE --Started 
+		        started <= FB_OE ;-- sleep until the Fiters output gets updated
+	            END IF; -- STARTED 
+            END IF; --CE
+        END IF; --reset
     END IF; --clk
 END process;
 END ARCHITECTURE;
