@@ -21,9 +21,9 @@ USE work.EQ_data_type.ALL;
 ENTITY HIF_RS232_Transmit_to_PC IS
 	GENERIC(n:INTEGER := 8); -- number of bits to be sent for each gain levels
 	PORT(system_clk_Tx : IN STD_LOGIC; --system clock inout
-			    RESET_Tx : IN STD_LOGIC; --system RESET_Tx inout
+			    RESET_Tx : IN STD_LOGIC; --system RESET_Tx input
 				    OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
-	 gain_array_output : IN Gained_result_Array_16; -- 8 blocks x 8 bits of data to be received from Equalizer
+	 gain_array_output : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
 	   	     flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
 			    Tx_to_PC : OUT STD_LOGIC -- Bit by Bit transmission to PC via RS232
 		);
