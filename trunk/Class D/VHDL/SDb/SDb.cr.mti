@@ -1,23 +1,16 @@
-C:/altera/90/modelsim_ase/project/SDtb.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/SDtb.vhd
+D:/Skola/SDb/Full_adder.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/Full_adder.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package standard
 -- Loading package std_logic_1164
--- Compiling entity sdtb
--- Compiling architecture arch_sdtb of sdtb
+-- Compiling entity full_adder
+-- Compiling architecture arch_full_adder of full_adder
 
-} {} {}} D:/Skola/SDb/SDtb2.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/SDtb2.vhd
+} {} {}} D:/Skola/SDb/invertb.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/invertb.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package standard
 -- Loading package std_logic_1164
--- Compiling entity sdtb2
--- Compiling architecture arch_sdtb2 of sdtb2
-
-} {} {}} C:/altera/90/modelsim_ase/project/SD.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/SD.vhd
-Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
--- Loading package standard
--- Loading package std_logic_1164
--- Compiling entity sd
--- Compiling architecture arch_sd of sd
+-- Compiling entity invert_b
+-- Compiling architecture arch_invert_b of invert_b
 
 } {} {}} C:/Users/Robin/Dropbox/ALU/ripple_addsub.vhd {1 {vcom -work work -2002 -explicit C:/Users/Robin/Dropbox/ALU/ripple_addsub.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
@@ -26,19 +19,19 @@ Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Compiling entity ripple_addsub
 -- Compiling architecture arch_ripple_addsub of ripple_addsub
 
-} {} {}} C:/Users/Robin/Dropbox/ALU/invertb.vhd {1 {vcom -work work -2002 -explicit C:/Users/Robin/Dropbox/ALU/invertb.vhd
+} {} {}} C:/altera/90/modelsim_ase/project/SD.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/SD.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package standard
 -- Loading package std_logic_1164
--- Compiling entity invert_b
--- Compiling architecture arch_invert_b of invert_b
+-- Compiling entity sd
+-- Compiling architecture arch_sd of sd
 
-} {} {}} C:/Users/Robin/Dropbox/ALU/Full_adder.vhd {1 {vcom -work work -2002 -explicit C:/Users/Robin/Dropbox/ALU/Full_adder.vhd
+} {} {}} D:/Skola/SDb/SDtb.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/SDtb.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package standard
 -- Loading package std_logic_1164
--- Compiling entity full_adder
--- Compiling architecture arch_full_adder of full_adder
+-- Compiling entity sdtb
+-- Compiling architecture arch_sdtb of sdtb
 
 } {} {}} C:/altera/90/modelsim_ase/project/Adder.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/Adder.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
@@ -48,13 +41,6 @@ Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Compiling entity adder
 -- Compiling architecture arch_adder of adder
 
-} {} {}} C:/altera/90/modelsim_ase/project/Latch.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/Latch.vhd
-Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
--- Loading package standard
--- Loading package std_logic_1164
--- Compiling entity latch
--- Compiling architecture arch_latch of latch
-
 } {} {}} C:/altera/90/modelsim_ase/project/Subtr.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/Subtr.vhd
 Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package standard
@@ -62,5 +48,54 @@ Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
 -- Loading package numeric_std
 -- Compiling entity subtr
 -- Compiling architecture arch_subtr of subtr
+
+} {} {}} C:/Users/Robin/Dropbox/ALU/Full_adder.vhd {1 {vcom -work work -2002 -explicit C:/Users/Robin/Dropbox/ALU/Full_adder.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity full_adder
+-- Compiling architecture arch_full_adder of full_adder
+
+} {} {}} C:/altera/90/modelsim_ase/project/Latch.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/Latch.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity latch
+-- Compiling architecture arch_latch of latch
+
+} {} {}} D:/Skola/SDb/SD2.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/SD2.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity sd2
+-- Compiling architecture arch_sd2 of sd2
+
+} {} {}} C:/altera/90/modelsim_ase/project/SDtb.vhd {1 {vcom -work work -2002 -explicit C:/altera/90/modelsim_ase/project/SDtb.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity sdtb
+-- Compiling architecture arch_sdtb of sdtb
+
+} {} {}} D:/Skola/SDb/Latch.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/Latch.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity latch
+-- Compiling architecture arch_latch of latch
+
+} {} {}} D:/Skola/SDb/SD.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/SD.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity sd
+-- Compiling architecture arch_sd of sd
+
+} {} {}} D:/Skola/SDb/SDtb2.vhd {1 {vcom -work work -2002 -explicit D:/Skola/SDb/SDtb2.vhd
+Model Technology ModelSim ALTERA vcom 6.4a Compiler 2008.08 Oct 22 2008
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity sdtb2
+-- Compiling architecture arch_sdtb2 of sdtb2
 
 } {} {}}

@@ -46,8 +46,8 @@ begin
     A3: ripple_addsub port map(gain2, latchout2, '1', '0', addout4);
     L2: latch port map(latchin2, clk, latchout2);
     
-    feed<="100000000000" WHEN latchout2(N-1)='1' ELSE
-          "011111111111";
+    feed <=('1' & (N-2 downto 0 =>'0')) WHEN latchout2(N-1)='1' ELSE
+           ('0' & (N-2 downto 0 =>'1'));
     latchin1<=addout2 WHEN addout2(N-1)='0' OR addout2(N-1)='1' ELSE
              "000000000000";
     latchin2<=addout4 WHEN addout4(N-1)='0' OR addout4(N-1)='1' ELSE
@@ -57,6 +57,6 @@ begin
         output<=addout4;
         add1<=gain1;
         add2<=gain2;
-        latch1<=latchout2;
+        latch1<=feed;
 
   end architecture;
