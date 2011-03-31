@@ -12,7 +12,6 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 --USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
-USE work.EQ_functions.ALL;
 
 ENTITY serial_filter IS
     GENERIC(
