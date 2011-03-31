@@ -6,7 +6,6 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE ieee.std_logic_signed.all;
 USE work.EQ_data_type.ALL;
-USE work.EQ_functions.ALL;
 USE std.textio.ALL;
 USE ieee.std_logic_textio.ALL;
 
