@@ -23,7 +23,7 @@ ENTITY average_if IS
             REQ     :IN STD_LOGIC;
             Gained_Samples: IN Gained_result_Array_16; --an 8-array of 16 bit vectors
             OE      : OUT STD_LOGIC; 
-            Q       : OUT Gained_result_Array_16);
+            Q       : OUT Gained_result_Array_8); -- changed down to 8 bits/amit
 END;
 
 
@@ -56,13 +56,13 @@ BEGIN
 				              END LOOP;
 				              i := i+1;
 				        ELSE
-				              Q<=Gained_Samples_var; -- the entire array gets updated per one clock
-                 			      OE<='1';
-                 			      i := 0;
-                 			      started <='0';  -- turn off this component until next req
-                 			      FOR k IN 1 TO 8 LOOP -- zero the temp variable
-                 			      	Gained_Samples_var(k) := (OTHERS => '0');
-                 			      END LOOP;
+				              Q<=Gained_Samples_var(Gained_SAmple_var'LEFT downto Gained_SAmple_var'LEFT - 7); -- the entire array of 8 bits gets updated per one clock
+                 		  OE<='1';
+                 		  i := 0;
+                 		  started <='0';  -- turn off this component until next req
+                 		  FOR k IN 1 TO 8 LOOP -- zero the temp variable
+                 			    Gained_Samples_var(k) := (OTHERS => '0');
+                 		  END LOOP;
 				        END IF;--i
 			        END IF; --OE_GSINSMP
 		        ELSE --STARTED
