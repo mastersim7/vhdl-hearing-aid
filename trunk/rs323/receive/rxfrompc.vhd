@@ -29,6 +29,11 @@ ARCHITECTURE Behavioral OF HIF_RS232_Receive_from_PC IS
         SIGNAL LUT :        Gained_result_Array ;--LUT to convert internally the gain values from 8 bits to 13 bits valeus
 
 BEGIN
+SCALE :     PROCESS(clk)
+            BEGIN 
+END 
+            
+          
     startbit <= RX; --Receive bits from PC serially
     PROCESS(clk,reset)
             VARIABLE enable:        STD_LOGIC;
