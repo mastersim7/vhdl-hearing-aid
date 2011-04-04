@@ -13,7 +13,7 @@
 --Changes made : Bug fix in baud rate clock dividing                              |
 ----------------------------------------------------------------------------------|
 --Author : Amit Kulkarni                                                          |
---Date : 2011-03-23                                                               |
+--Date : 2011-04-04                                                               |
 --Changes made : Inserted the RS232_enable signal                                 |
 ----------------------------------------------------------------------------------|
 LIBRARY IEEE;
