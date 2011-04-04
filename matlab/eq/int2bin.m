@@ -31,7 +31,8 @@ elseif v < 0
             break;
         end
     end
-
+    
+    % Invert all bits left of first 1
     for i = 1:length(bv)
         if i < index
             if bv(i) == '0'
