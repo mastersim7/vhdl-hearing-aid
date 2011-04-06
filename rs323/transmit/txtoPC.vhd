@@ -88,7 +88,7 @@ ARCHITECTURE Behavioral OF HIF_RS232_Transmit_to_PC IS
                                 IF(k = 8) THEN --If all blocks are transmitted then,   
                                     flag_Tx <= '1'; -- turn on the handshake for equalizer
                                     OE_Tx_loc <= '0'; --and then wait for a enable signal from equalizer
-												            k := 0;  --reset the block index to the start of the block
+                                    k := 0;  --reset the block index to the start of the block
                                 END IF;			
                             END IF;
                         ELSIF ( state = 2 ) THEN
