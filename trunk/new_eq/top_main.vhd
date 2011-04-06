@@ -89,7 +89,7 @@ constant temp_gains : Gain_Array := ( "0111111111111" ,"0111111111111","01111111
 -- END COMPONENT;
 
 -- Component communicating with the ADC
-COMPONENT dummy_adc IS
+COMPONENT adc IS
     GENERIC ( 
             CLOCK_SCALE  : NATURAL := 32 );
     PORT (
@@ -199,7 +199,7 @@ SIGNAL trashed : Gained_result_Array_16;
 BEGIN
 
 -------------------- Bind the components --------------------------------
-adc_comp: dummy_adc   
+adc_comp: adc   
     GENERIC MAP( CLOCK_SCALE => 32 )
     PORT MAP( 
               clk   => clk, 
