@@ -86,7 +86,7 @@ ARCHITECTURE top_main_arch OF top_main IS
 -- END COMPONENT;
 
 -- Component communicating with the ADC
-COMPONENT adc IS
+COMPONENT dummy_adc IS
     GENERIC ( 
             CLOCK_SCALE  : NATURAL := 32 );
     PORT (
@@ -178,7 +178,7 @@ SIGNAL INTER_Q_sig          : Multi_result_array;
 BEGIN
 
 -------------------- Bind the components --------------------------------
-adc_comp: adc   
+adc_comp: dummy_adc   
     GENERIC MAP( CLOCK_SCALE => 32 )
     PORT MAP( 
               clk   => clk, 
