@@ -142,7 +142,7 @@ IF clk'EVENT AND clk = '1' THEN
                     ELSE
                         done <= '1';
                         count_filters := 0;
-								        Q <= Q_sig;
+						Q <= Q_sig;
                         state := IDLE;
                     END IF;
             END CASE;
