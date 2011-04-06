@@ -101,13 +101,15 @@ FILTER_BLOCK_MAIN: filterblock_main
             next_sample => next_sample,
             sample_nr => sample_nr);
  
-OE <= done;
+ -- intermidate connections will miss a clk moved to the process
+           
  
 process(clk)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         IF done = '1' THEN
             Q <= output_from_filters;
+            OE <= done;
         END IF;
     END IF;
 END PROCESS;
