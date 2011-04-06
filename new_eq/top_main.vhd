@@ -249,18 +249,19 @@ Equalizer_comp : eq_main
               OE		       => OE_FILTERS,    -- to interface 
               Q			   => INTER_Q_sig);
 
+dac_input<= NOT INTER_Q_sig(6)(36) & INTER_Q_sig(6)(35 downto 26);
 
-Amplifier_COMP :  gain_amplifier
-   
-    PORT MAP( 
-            clk      => clk,
-            reset   => reset,
-            FB_OE   => OE_FILTERS,
-            RAW_OUTPUT =>INTER_Q_sig,-- 1 to 8 of 36 to 0 
-            GAIN    =>temp_GAINS,
-            OE      =>OE_AMP, 
-            OUTPUT_TO_CLASSD =>dac_input, --output to class d
-            GAIND_Q_OUT => trashed);
+--Amplifier_COMP :  gain_amplifier
+--   
+--    PORT MAP( 
+--            clk      => clk,
+--            reset   => reset,
+--            FB_OE   => OE_FILTERS,
+--            RAW_OUTPUT =>INTER_Q_sig,-- 1 to 8 of 36 to 0 
+--            GAIN    =>temp_GAINS,
+--            OE      =>OE_AMP, 
+--            OUTPUT_TO_CLASSD =>dac_input, --output to class d
+--            GAIND_Q_OUT => trashed);
 
 --sd_comp: sd     
 --    PORT MAP( input => sd_input,
@@ -291,13 +292,13 @@ BEGIN
             dac_start <= '1';
         END IF;  
            
-        IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
-           CE_EQ_sig <= '0';
-           cnt_2mhz := cnt_2mhz + 1;
-        ELSE 
-           cnt_2mhz := 0;
-           CE_EQ_sig <= '1';     
-        END IF;    
+--       -- IF cnt_2mhz < CLK_SCALE_2mhz-1 THEN 
+--          - CE_EQ_sig <= '0';
+--           cnt_2mhz := cnt_2mhz + 1;
+--        ELSE 
+--           cnt_2mhz := 0;
+--           CE_EQ_sig <= '1';     
+--        END IF;    
     END IF;
 END PROCESS generate_clock_frequencies;
 
