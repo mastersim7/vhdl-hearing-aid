@@ -62,7 +62,7 @@ COMPONENT serial_filter IS
 END COMPONENT;
 
 -- signals 
-SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC;
+--SIGNAL CE_FIR1,OE_FIR1,CE_FIR2,OE_FIR2: STD_LOGIC; Not used ?? /shwan
 SIGNAL Q_FIR1, Q_FIR2 :  Multi_Result;
 SIGNAL CO_FIR1,CO_FIR2 : coefficient_type;
 
