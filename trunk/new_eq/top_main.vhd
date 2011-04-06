@@ -53,6 +53,9 @@ END ENTITY top_main;
 
 ARCHITECTURE top_main_arch OF top_main IS
 
+-- constants 
+constant temp_gains : Gain_Array := ( "0111111111111" ,"0111111111111","0111111111111","0111111111111","0111111111111","0111111111111","0111111111111" ,
+"0111111111111");
 
 -- Components for Rs232
 -- Component HIF_RS232_Receive_from_PC IS
@@ -137,6 +140,22 @@ GENERIC(
             Q : OUT Multi_result_array);-- interface will take this 
 END COMPONENT;
 
+COMPONENT gain_amplifier IS
+    GENERIC(
+            NUM_BITS_OUT : NATURAL := 13;
+            NUM_OF_GAINS : NATURAL := 8;
+            NUM_OF_FILTERS: NATURAL := 8);
+    PORT( 
+            clk     : IN STD_LOGIC;
+            reset   : IN STD_LOGIC;
+            FB_OE   : IN STD_LOGIC;
+            RAW_OUTPUT : IN Multi_Result_array ;-- 1 to 8 of 36 to 0 
+            GAIN    : IN Gain_Array;
+            OE      : OUT STD_LOGIC; 
+            OUTPUT_TO_CLASSD: OUT sample;--output to class d
+            GAIND_Q_OUT: OUT  Gained_result_Array_16);
+END COMPONENT;
+
 -- Sigma Delta component
 --COMPONENT SD IS
 --  GENERIC( 
@@ -162,11 +181,13 @@ SIGNAL eq_input             : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 SIGNAL CE_EQ_sig            : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
 SIGNAL REQ_from_IF_sig      : STD_LOGIC;
 SIGNAL GAIN_From_IF_sig     : Gain_Array;
-SIGNAL OE_TO_IF_sig         : STD_LOGIC; -- to interface 
+SIGNAL OE_FILTERS         : STD_LOGIC; -- to interface 
 SIGNAL OUTPUT_TO_CLASSD_sig : sample;
 SIGNAL TO_IF_SUM_sig        : Gained_result_Array_16;-- interface will take this 
 SIGNAL INTER_Q_sig          : Multi_result_array;
-
+-- 
+SIGNAL OE_AMP      : STD_LOGIC:='0';
+SIGNAL trashed : Gained_result_Array_16;
 
 -- Sigma delta signals
 --SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
@@ -208,7 +229,7 @@ dac_comp: dac
               -- RESET_Tx 		    => reset, 
               -- Tx_to_PC 		    => Tx,
               -- flag_Tx 		    => REQ_from_IF_sig,
-              -- OE_Tx			    => OE_TO_IF_sig,
+              -- OE_Tx			    => OE_FILTERS,
               -- gain_array_output =>TO_IF_SUM_sig);
 
 -- Receiver_comp   : HIF_RS232_Receive_from_PC 
@@ -225,9 +246,21 @@ Equalizer_comp : eq_main
               reset	           => reset,
               sample_in        => eq_input, -- Changed from sd_input to adc_output
               new_sample_ready => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
-              OE		       => OE_TO_IF_sig,    -- to interface 
+              OE		       => OE_FILTERS,    -- to interface 
               Q			   => INTER_Q_sig);
 
+
+Amplifier_COMP :  gain_amplifier
+   
+    PORT MAP( 
+            clk      => clk,
+            reset   => reset,
+            FB_OE   => OE_FILTERS,
+            RAW_OUTPUT =>INTER_Q_sig,-- 1 to 8 of 36 to 0 
+            GAIN    =>temp_GAINS,
+            OE      =>OE_AMP, 
+            OUTPUT_TO_CLASSD =>dac_input, --output to class d
+            GAIND_Q_OUT => trashed);
 
 --sd_comp: sd     
 --    PORT MAP( input => sd_input,
@@ -237,9 +270,9 @@ Equalizer_comp : eq_main
 --                          sign => sd_sign );
 --
                           
-led      <= adc_output( N-1 DOWNTO 4 );
+led      <= eq_input( N-1 DOWNTO 4 ); --shows the input to buffer
 eq_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
-dac_input <= INTER_Q_sig(6)(36 downto 25);
+--dac_input <= INTER_Q_sig(6)(36 downto 25);
 
 -- Process generating the different frequencies
 generate_clock_frequencies: PROCESS ( clk )

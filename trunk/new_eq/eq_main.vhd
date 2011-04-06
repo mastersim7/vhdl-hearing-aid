@@ -8,7 +8,7 @@
 
 -- 2011-03-22, Mathias Lundell
 -- Changed some of the formatting
-
+-- 2011-04-06 moved OE to be clocked here and sync with Q
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;

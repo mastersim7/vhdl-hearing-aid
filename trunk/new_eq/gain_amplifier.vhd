@@ -13,6 +13,8 @@
 --Verified by Robin Andersson 2011-03-21
 --However, the input wordlength is needlessly large
 
+-- removed CE no need in asic or FPGA right now /Shwan
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -27,10 +29,10 @@ ENTITY gain_amplifier IS
             NUM_OF_FILTERS: NATURAL := 8);
     PORT( 
             clk     : IN STD_LOGIC;
-            CE      : IN STD_LOGIC;
+           -- CE      : IN STD_LOGIC;
             reset   : IN STD_LOGIC;
             FB_OE   : IN STD_LOGIC;
-            RAW_OUTPUT : IN Multi_Result_array ;-- 1 to 8 of 36 to 0 
+            RAW_OUTPUT : IN Multi_Result_array ;-- 0 to 8 of 36 to 0 
             GAIN    : IN Gain_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
@@ -41,7 +43,7 @@ ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
 	SIGNAL started : STD_LOGIC;
 BEGIN
 
-PROCESS(clk, CE)
+PROCESS(clk)
     VARIABLE GAIND_Q :Gain_Multi_Result; 
     VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
     --as we r doing 8 addition 3 bit is enough to cover all overflow
@@ -57,17 +59,17 @@ BEGIN
 	    
 	ELSE
 	
-	    IF CE = '1' THEN --slower clock
+	  --  IF CE = '1' THEN --slower clock
 	            IF started = '1' THEN 
-        	    	IF (i /= (NUM_OF_GAINS+1)) THEN
-                		OE <= '0';
+        	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
+                        OE <= '0';
 		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
                 		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
-                                i := i+1;
+                        i := i+1;
 	                ELSE
 		                i:=1; -- ready restart
 		                OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
-                	        FOR m IN 1 TO 8 LOOP -- update the output for the interface at once
+                	        FOR m IN 0 TO 7 LOOP -- update the output for the interface at once
                				GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
 		                END LOOP;
 		                SUMMED := (others=>'0'); --initialised  to zero/anand
@@ -76,7 +78,7 @@ BEGIN
           	    ELSE --Started 
 		        started <= FB_OE ;-- sleep until the Fiters output gets updated
 	            END IF; -- STARTED 
-            END IF; --CE
+          --  END IF; --CE
         END IF; --reset
     END IF; --clk
 END process;
