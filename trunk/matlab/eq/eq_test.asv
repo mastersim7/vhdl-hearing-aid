@@ -14,7 +14,7 @@ clc;
 sign = 1;  % want signed bit vectors from 'generate_random()'
 
 % Set filter number first!!
-filter = 1;
+filter = 8;
 switch filter
     case 1
         cells = 'A2:A41'; %for reading coefficients from file
@@ -40,7 +40,6 @@ switch filter
     case 8
         cells = 'H2:H41'; %for reading coefficients from file
         tvfile = 'pre_output_mac_8.tv';
-    otherwise msgbox('We have only 8 filters, you know...', 'Error :-(');
 end;
   
 % Samples
