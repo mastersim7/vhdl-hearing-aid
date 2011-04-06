@@ -2,13 +2,13 @@
 
 #PACE: Start of PACE I/O Pin Assignments
 #System clock
-NET "system_clk"  LOC = "T9"  ;
+NET "system_clk_Tx"  LOC = "T9"  ;
 #NET "CLK_soc"  LOC = "D9"  ;
 #Push buttons
-#NET "btn<0>"  LOC = "M13"  ;
+NET "RESET_Tx"  LOC = "M13"  ;
 #NET "btn<1>"  LOC = "M14"  ;
 #NET "btn<2>"  LOC = "L13"  ;
-#NET "btn<3>"  LOC = "L14"  ;
+NET "OE_Tx"  LOC = "L14"  ;
 #Slide switches
 #NET "swt<0>"  LOC = "F12"  ;
 #NET "swt<1>"  LOC = "G12"  ;
@@ -19,7 +19,7 @@ NET "system_clk"  LOC = "T9"  ;
 #NET "swt<6>"  LOC = "K14"  ;
 #NET "swt<7>"  LOC = "K13"  ;
 #LEDs
-#NET "led<0>"  LOC = "K12"  ;
+NET "flag_Tx"  LOC = "K12"  ;
 #NET "led<1>"  LOC = "P14"  ;
 #NET "led<2>"  LOC = "L12"  ;
 #NET "led<3>"  LOC = "N14"  ;
@@ -42,7 +42,7 @@ NET "system_clk"  LOC = "T9"  ;
 #NET "ssg<7>"  LOC = "P16"  ;
 #RS-232
 #NET "TXD"  LOC = "T13"  ;
-NET "y"  LOC = "R13"  ;
+NET "Tx_to_PC"  LOC = "R13"  ;
 #NET "RXD_A"  LOC = "N10"  ;
 #NET "TXD_A"  LOC = "T14"  ;
 #PS2 port
