@@ -5,6 +5,7 @@ samples_int = 0;
 samples_frac = 0.0;
 samples_bin = ''; 
 samples_max = (2^(samples_n-1))-1;
+sign = 1;
 
 % Generate array of samples:
 for i = 1 : samples_num

@@ -18,7 +18,7 @@ architecture eq_main_tb_arch of eq_main_tb is
     -- Declarations
     -----------------------------------------------------------------------------
 
-    constant Size   : integer := 1000;
+    constant Size   : integer := 80;
     constant num_bits_sample : natural := 12;
     constant num_bits_result : natural := 37;
     
@@ -98,7 +98,7 @@ architecture eq_main_tb_arch of eq_main_tb is
     GENERIC(
             NUM_OF_SAMPLES: NATURAL := 80;
             NUM_OF_COEFFS : NATURAL := 40;
-            NUM_OF_BANDS  : NATURAL := 6);
+            NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
@@ -165,7 +165,7 @@ BEGIN
         else
             assert false
                 report "Test bench finished"
-                severity note;
+                severity failure;
         end if;
     end process;
     
@@ -183,11 +183,11 @@ BEGIN
             
             if eq_OE = '1' then
                 -- Check first filter
-                assert resultMEM0(i-1) = eq_Q(i-1)
+                assert resultMEM0(i-1) = eq_Q(0)
                     report "Error, output doesn't match expected from resultMEM0." &
-                            " Sample in:" & to_string(sampleMEM(i)) &
-                            " Expected output:" & to_string(resultMEM0(i)) &
-                            " Output:" & to_string(eq_Q(i-1))
+                            " Sample in:" & to_string(sampleMEM(i-1)) &
+                            " Expected output:" & to_string(resultMEM0(i-1)) &
+                            " Output:" & to_string(eq_Q(0))
                     severity error;
             end if;
         end if;

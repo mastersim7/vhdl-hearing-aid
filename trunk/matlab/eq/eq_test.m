@@ -3,7 +3,6 @@
 
 % 2011-04-01
 % Reads coefficients for a single filter from an excel-file.
-% See OBS lower in document
 
 % 2011-03-21
 % Added commands for exporting values to excel.
