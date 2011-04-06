@@ -10,9 +10,6 @@ USE std.textio.ALL;
 USE ieee.std_logic_textio.ALL;
 
 entity eq_main_tb is
-    PORT( a_sig : OUT sample;
-          b_sig : OUT sample;
-          y_sig : OUT STD_LOGIC_VECTOR(12 DOWNTO 0));
 end;
 
 architecture eq_main_tb_arch of eq_main_tb is
@@ -25,7 +22,7 @@ architecture eq_main_tb_arch of eq_main_tb is
     constant num_bits_sample : natural := 12;
     constant num_bits_result : natural := 37;
     
-    type sample_array is §array (Size-1 downto 0) of sample;
+    type sample_array is array (Size-1 downto 0) of sample;
     type result_array is array (Size-1 downto 0) of Multi_Result;
     
     -----------------------------------------------------------------------------
@@ -114,15 +111,15 @@ architecture eq_main_tb_arch of eq_main_tb is
     -----------------------------------------------------------------------------
     -- Test bench signals/constants
     -----------------------------------------------------------------------------
-    CONSTANT sampleMEM : sample_array := loadSample(string'("sample.tv"));
-    CONSTANT resultMEM0 : result_array := loadResult(string'("result0.tv"));
-    CONSTANT resultMEM1 : result_array := loadResult(string'("result1.tv"));
-    CONSTANT resultMEM2 : result_array := loadResult(string'("result2.tv"));
-    CONSTANT resultMEM3 : result_array := loadResult(string'("result3.tv"));
-    CONSTANT resultMEM4 : result_array := loadResult(string'("result4.tv"));
-    CONSTANT resultMEM5 : result_array := loadResult(string'("result5.tv"));
-    CONSTANT resultMEM6 : result_array := loadResult(string'("result6.tv"));
-    CONSTANT resultMEM7 : result_array := loadResult(string'("result7.tv"));
+    CONSTANT sampleMEM : sample_array := loadSample(string'("samples.tv"));
+    CONSTANT resultMEM0 : result_array := loadResult(string'("pre_output_mac_1.tv"));
+    CONSTANT resultMEM1 : result_array := loadResult(string'("pre_output_mac_2.tv"));
+    CONSTANT resultMEM2 : result_array := loadResult(string'("pre_output_mac_3.tv"));
+    CONSTANT resultMEM3 : result_array := loadResult(string'("pre_output_mac_4.tv"));
+    CONSTANT resultMEM4 : result_array := loadResult(string'("pre_output_mac_5.tv"));
+    CONSTANT resultMEM5 : result_array := loadResult(string'("pre_output_mac_6.tv"));
+    CONSTANT resultMEM6 : result_array := loadResult(string'("pre_output_mac_7.tv"));
+    CONSTANT resultMEM7 : result_array := loadResult(string'("pre_output_mac_8.tv"));
     
 
 

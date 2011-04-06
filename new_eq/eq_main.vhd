@@ -103,13 +103,14 @@ FILTER_BLOCK_MAIN: filterblock_main
  
  -- intermidate connections will miss a clk moved to the process
            
- 
 process(clk)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
         IF done = '1' THEN
             Q <= output_from_filters;
-            OE <= done;
+            OE <= '1';
+        ELSE
+            OE <= '0';
         END IF;
     END IF;
 END PROCESS;
