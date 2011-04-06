@@ -3,7 +3,6 @@
 
 % 2011-04-01
 % Reads coefficients for a single filter from an excel-file.
-% See OBS lower in document
 
 % 2011-03-21
 % Added commands for exporting values to excel.
@@ -13,35 +12,6 @@
 clc;
 sign = 1;  % want signed bit vectors from 'generate_random()'
 
-% Set filter number first!!
-filter = 8;
-switch filter
-    case 1
-        cells = 'A2:A41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_1.tv';
-    case 2
-        cells = 'B2:B41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_2.tv';
-    case 3
-        cells = 'C2:C41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_3.tv';
-    case 4
-        cells = 'D2:D41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_4.tv';
-    case 5
-        cells = 'E2:E41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_5.tv';
-    case 6
-        cells = 'F2:F41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_6.tv';
-    case 7
-        cells = 'G2:G41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_7.tv';
-    case 8
-        cells = 'H2:H41'; %for reading coefficients from file
-        tvfile = 'pre_output_mac_8.tv';
-end;
-  
 % Samples
 samples_n = 12;    % number of bits in samples
 samples_num = 80; % number of randomly generated samples
@@ -73,7 +43,7 @@ coeff_x_summed_samples_n = 37; % Result should be 37 bits
 coeff_x_summed_samples_max = 2^(coeff_x_summed_samples_n-1)-1;
 
 % Output values
-pre_output_n = 37;  % result of adding all the results of multiplications: multi_result
+pre_output_n = 40;  % result of adding all the results of multiplications, should be 40 bits   
 pre_output_int = 0; % Is the result of adding all the results of multiplication
 pre_output_bin = '';
 pre_output_max = 2^(pre_output_n-1)-1;
@@ -83,12 +53,9 @@ output_int = 0;
 output_bin = '';
 output_max = 2^(output_n-1)-1;
 
-% Generate array of samples
-% Read coefficients instead of generating from file samples.xls which is produced by 'samples_generator.m'
-[num, samples_bin_cell, raw] = xlsread('samples.xls', 'Sheet1', 'A1:A80');
+% Generate array of samples:
 for i = 1 : samples_num
-    samples_int(i) = bin2int(char(samples_bin_cell(i)));
-   %samples_int(i) = generate_random(samples_n, sign);
+    samples_int(i) = generate_random(samples_n, sign);
     samples_frac(i) = samples_int(i)/samples_max;
     samples_bin(i,:) = int2bin(samples_int(i), samples_n);
 end
@@ -102,7 +69,7 @@ end
 
 % Generate array of coefficients:
 % Read coefficients from file...
-[num, coeff_bin_cell, raw] = xlsread('Coeffs.xls', 'Sheet1', cells);
+[num, coeff_bin_cell, raw] = xlsread('Coeffs.xls', 'Sheet1', 'A2:A41');
 for i = 1 : coeff_num
     coeff_int(i) = bin2int(char(coeff_bin_cell(i)));
     %coeff_int(i) = generate_random(coeff_n, sign);
@@ -122,16 +89,6 @@ end
 
 % Add all the results of multiplications together:
 pre_output_int = sum(coeff_x_summed_samples_int);
-pre_output_mac = zeros(length(coeff_x_summed_samples_int), 1);
-pre_output_mac_bin = '';
-for i = 1:length(coeff_x_summed_samples_int)
-	if i == 1 
-		pre_output_mac(i) = coeff_x_summed_samples_int(1);
-	else
-		pre_output_mac(i) = pre_output_mac(i-1) + coeff_x_summed_samples_int(i);
-	end;
-	pre_output_mac_bin(i,:) = int2bin(pre_output_mac(i), pre_output_n);
-end;
 pre_output_bin = int2bin(pre_output_int, pre_output_n);
 pre_output_frac = pre_output_int/pre_output_max;
 
@@ -156,64 +113,49 @@ output_frac = output_int/output_max;
 fid_samples = fopen('samples.tv', 'w');
 fid_coeff = fopen('coeff.tv', 'w');
 fid_output = fopen('output.tv', 'w');
-fid_pre_output = fopen('pre_output.tv', 'w');
-% file for mac values:
-fid_pre_output_mac = fopen(tvfile, 'w');
 
 % Writing values in files
-fprintf(fid_samples, '%c%c%c%c%c%c%c%c%c%c%c%c\n', samples_bin');
-fprintf(fid_coeff, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_bin');
-fprintf(fid_output, '%s', output_bin');
-fprintf(fid_pre_output, '%s', pre_output_bin');
-
-% Writing mac values
-fprintf(fid_pre_output_mac, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', pre_output_mac_bin');
+fprintf(fid_samples, '%c%c%c%c%c%c%c%c%c%c%c%c\n', samples_bin);
+fprintf(fid_coeff, '%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n', coeff_bin);
+fprintf(fid_output, '%s', output_bin);
 
 % Closing files
 fclose(fid_samples);
 fclose(fid_coeff);
 fclose(fid_output);
-fclose(fid_pre_output);
-fclose(fid_pre_output_mac);
 
 % Export result to excel
-% text = {'Samples', 'Coeff fraction', 'coeff_x_summed_samples_frac', ...
-%     'pre_output_frac', ... 
-%     'Sample integer', 'Coeff integer', 'coeff_x_summed_samples_int', ...
-%     'pre_output_int', ...
-%     'Sample binary', 'Coeff binary', 'coeff_x_summed_samples_bin', ...
-%     'pre_output_bin'};
-% xlswrite('eq_test.xls', text, 'Sheet1', 'A1');
-% 
-% temp = samples_frac';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'A2');
-% temp = coeff_frac';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'B2');
-% temp = coeff_x_summed_samples_frac';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'C2');
-% temp = pre_output_frac';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'D2');
-% 
-% temp = samples_int';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'E2');
-% temp = coeff_int';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'F2');
-% temp = coeff_x_summed_samples_int';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'G2');
-% temp = pre_output_int';
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'H2');
-% 
-% temp = cellstr(samples_bin);
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'I2');
-% temp = cellstr(coeff_bin);
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'J2');
-% temp = cellstr(coeff_x_summed_samples_bin);
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'K2');
-% temp = cellstr(pre_output_bin);
-% xlswrite('eq_test.xls', temp, 'Sheet1', 'L2');
+text = {'Samples', 'Coeff fraction', 'coeff_x_summed_samples_frac', ...
+    'pre_output_frac', ... 
+    'Sample integer', 'Coeff integer', 'coeff_x_summed_samples_int', ...
+    'pre_output_int', ...
+    'Sample binary', 'Coeff binary', 'coeff_x_summed_samples_bin', ...
+    'pre_output_bin'};
+xlswrite('eq_test.xls', text, 'Sheet1', 'A1');
 
-% Temporarily lines, write coefficients so we can copy paste 
-% them easily to vhdl-file.
-fid_coeff = fopen('coefficients.txt', 'w');
-fprintf(fid_coeff, '"%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",', coeff_bin');
-fclose(fid_coeff);
+temp = samples_frac';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'A2');
+temp = coeff_frac';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'B2');
+temp = coeff_x_summed_samples_frac';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'C2');
+temp = pre_output_frac';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'D2');
+
+temp = samples_int';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'E2');
+temp = coeff_int';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'F2');
+temp = coeff_x_summed_samples_int';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'G2');
+temp = pre_output_int';
+xlswrite('eq_test.xls', temp, 'Sheet1', 'H2');
+
+temp = cellstr(samples_bin);
+xlswrite('eq_test.xls', temp, 'Sheet1', 'I2');
+temp = cellstr(coeff_bin);
+xlswrite('eq_test.xls', temp, 'Sheet1', 'J2');
+temp = cellstr(coeff_x_summed_samples_bin);
+xlswrite('eq_test.xls', temp, 'Sheet1', 'K2');
+temp = cellstr(pre_output_bin);
+xlswrite('eq_test.xls', temp, 'Sheet1', 'L2');

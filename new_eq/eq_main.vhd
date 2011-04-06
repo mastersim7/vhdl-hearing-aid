@@ -19,7 +19,7 @@ ENTITY eq_main IS
 	GENERIC(
             NUM_OF_SAMPLES: NATURAL := 80;
             NUM_OF_COEFFS : NATURAL := 40;
-            NUM_OF_BANDS  : NATURAL := 6);
+            NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
@@ -29,7 +29,7 @@ ENTITY eq_main IS
             Q : OUT Multi_result_array);-- interface will take this 
 END eq_main;
 
-ARCHITECTURE  eq_main_arch OF eq_main IS 
+ARCHITECTURE eq_main_arch OF eq_main IS 
 
 
 COMPONENT regular_buffer IS
