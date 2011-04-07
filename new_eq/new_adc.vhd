@@ -7,7 +7,7 @@ USE ieee.numeric_std.ALL;
 
 ENTITY new_adc IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 32 ); -- Downscaling of the clock (4 is barely ok)
+            CLOCK_SCALE  : NATURAL ); -- Downscaling of the clock (4 is barely ok)
               
               
     PORT (
@@ -121,11 +121,12 @@ BEGIN
                     IF started = '1' THEN
                         started := '0';
                         state <= SEND_DATA;
+						CS <= '0';
                     END IF;
                 
                 -- State handling which data being sent to 
                 WHEN SEND_DATA =>
-                    CS <= '0'; -- start sending flag
+                    --CS <= '0'; -- start sending flag
                     -- Send config bits to ADC
                     IF cnt /= CONFIG_BITS'LENGTH THEN
                         DOUT <= CONFIG_BITS( cnt );

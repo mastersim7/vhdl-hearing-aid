@@ -10,7 +10,7 @@ USE ieee.numeric_std.ALL;
 
 ENTITY new_dac IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 8 ); -- Downscaling of the clock (4 is barely ok)
+            CLOCK_SCALE  : NATURAL ); -- Downscaling of the clock (4 is barely ok)
               
               
     PORT (
@@ -56,7 +56,7 @@ SIGNAL   dout         : STD_LOGIC_VECTOR( NUM_DATA_BITS+NUM_CFG_BITS - 1 DOWNTO 
 -- Begin the architecture dac_arch
 BEGIN 
 -- combinatorial signals 
-LDAC <= '1'; -- dac output latest sample
+
 
 
 
@@ -156,7 +156,7 @@ BEGIN
                 WHEN IDLE =>
                     CS   <= '1'; -- no input
                     cnt  := 0;
-                    
+                    LDAC <= '1'; -- dac output latest sample
                     -- Sample and go to next state
                     IF started = '1' THEN
                         started := '0'; -- reset the started signal

@@ -89,9 +89,9 @@ constant temp_gains : Gain_Array := ( "0111111111111" ,"0111111111111","01111111
 -- END COMPONENT;
 
 -- Component communicating with the ADC
-COMPONENT adc IS
+COMPONENT new_adc IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 32 );
+            CLOCK_SCALE  : NATURAL );
     PORT (
             -- Spartan3 ports
             clk  : IN  STD_LOGIC;            -- FPGA master clock
@@ -107,9 +107,9 @@ COMPONENT adc IS
 END COMPONENT;
 
 -- Component communicating with the DAC
-COMPONENT dac IS
+COMPONENT new_dac IS
     GENERIC ( 
-            CLOCK_SCALE  : NATURAL := 8 );
+            CLOCK_SCALE  : NATURAL );
               
               
     PORT(
@@ -199,7 +199,7 @@ SIGNAL trashed : Gained_result_Array_16;
 BEGIN
 
 -------------------- Bind the components --------------------------------
-adc_comp: adc   
+adc_comp: new_adc   
     GENERIC MAP( CLOCK_SCALE => 32 )
     PORT MAP( 
               clk   => clk, 
@@ -211,7 +211,7 @@ adc_comp: adc
               SCK   => ADC_SCK, 
               DOUT  => ADC_DOUT );
                                 
-dac_comp: dac   
+dac_comp: new_dac   
     GENERIC MAP( CLOCK_SCALE => 32 )
     PORT MAP( 
               clk   => clk, 
@@ -249,7 +249,7 @@ Equalizer_comp : eq_main
               OE		       => OE_FILTERS,    -- to interface 
               Q			   => INTER_Q_sig);
 
-dac_input<= NOT INTER_Q_sig(6)(36) & INTER_Q_sig(6)(35 downto 26);
+dac_input<= NOT INTER_Q_sig(2)(36) & INTER_Q_sig(2)(35 downto 26);
 
 --Amplifier_COMP :  gain_amplifier
 --   
