@@ -12,13 +12,11 @@
 --
 --Verified by Robin Andersson 2011-03-21
 --However, the input wordlength is needlessly large
-
 -- removed CE no need in asic or FPGA right now /Shwan
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
---USE ieee.std_logic_signed.ALL;
 USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
@@ -45,8 +43,9 @@ BEGIN
 
 PROCESS(clk)
     VARIABLE GAIND_Q :Gain_Multi_Result; 
-    VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
-    --as we r doing 8 addition 3 bit is enough to cover all overflow
+    --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
+    VARIABLE SUMMED : STD_LOGIC_VECTOR(36 DOWNTO 0); 
+	--as we r doing 8 addition 3 bit is enough to cover all overflow
     VARIABLE i : INTEGER;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -63,12 +62,13 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
-                		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+		               -- GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+                		--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+						SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
                         i := i+1;
 	                ELSE
 		                i:=1; -- ready restart
-		                OUTPUT_TO_CLASSD <= SUMMED(SUMMED'LEFT DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
+		                OUTPUT_TO_CLASSD <= NOT(SUMMED((SUMMED'LEFT))) & SUMMED((SUMMED'LEFT-1) DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
                 	        FOR m IN 0 TO 7 LOOP -- update the output for the interface at once
                				GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
 		                END LOOP;

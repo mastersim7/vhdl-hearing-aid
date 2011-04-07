@@ -126,7 +126,7 @@ BEGIN
                 
                 -- State handling which data being sent to 
                 WHEN SEND_DATA =>
-                    --CS <= '0'; -- start sending flag
+                    CS <= '0'; -- start sending flag
                     -- Send config bits to ADC
                     IF cnt /= CONFIG_BITS'LENGTH THEN
                         DOUT <= CONFIG_BITS( cnt );
