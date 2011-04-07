@@ -67,30 +67,55 @@ LDAC <= '1'; -- dac output latest sample
 -- 'n_sck' is the signal connected to 'SCK', which is the serial clock 
 -- input of the DAC. SCK get a rising edge after half the time between the 
 -- 'clock_enable's.
-scale_clk: PROCESS ( clk )
-    VARIABLE cnt : NATURAL RANGE 0 TO CLOCK_SCALE-1 := 0;
-    
-BEGIN
-
-    IF rising_edge( clk ) THEN
-        IF cnt = 0 THEN
-            SCK <= '0';
-            clk_enable <= '1';
-        ELSIF cnt = (CLOCK_SCALE/2) THEN
-            SCK <= '1';
-            clk_enable <= '0';
-        END IF;
---        IF cnt /= CLOCK_SCALE-1 THEN
---            cnt := cnt + 1;
---           clk_enable <= '0';
---        ELSE
+--scale_clk: PROCESS ( clk )
+--    VARIABLE cnt : NATURAL RANGE 0 TO CLOCK_SCALE := 0;
+--BEGIN
+--    IF clk'EVENT AND clk = '1' THEN
+--        -- SCK (external)
+--        IF cnt = 0 THEN
+--            SCK <= '0';
 --            clk_enable <= '1';
---            cnt := 0;
+--            cnt := cnt+1;
+--        ELSIF cnt = (CLOCK_SCALE/2) THEN
+--            SCK <= '1';
+--            clk_enable <= '0';
+--            cnt := cnt+1;
+--        ELSIF cnt =  CLOCK_SCALE-1 THEN
+--           clk_enable <= '0';
+--           cnt:=0;
+--        ELSE 
+--          clk_enable <= '0';
+--         cnt := cnt+1;
 --        END IF;
-    END IF;
-END PROCESS scale_clk;
+--   END IF;
+--END PROCESS scale_clk;  
     
-    
+     scale_clk: PROCESS ( clk )
+        VARIABLE cnt : NATURAL RANGE 0 TO CLOCK_SCALE := 0;
+    BEGIN
+        IF clk'EVENT AND clk = '1' THEN
+            -- SCK (external)
+            IF cnt = 0 THEN
+                SCK <= '0';
+                clk_enable <= '1';
+                cnt := cnt+1;
+            ELSE 
+            
+                IF cnt /= (CLOCK_SCALE/2) THEN
+                     IF cnt =  CLOCK_SCALE-1 THEN
+                        clk_enable <= '0';
+                        cnt:=0;
+                     ELSE 
+                        clk_enable <= '0';
+                        cnt := cnt+1;
+                     END IF;
+                ELSE 
+                     SCK <= '1';
+                     cnt := cnt+1;
+                END IF;
+            END IF;
+       END IF;
+    END PROCESS scale_clk;     
     
 ---------- Process updating the current state -----------
 --update_state: PROCESS ( clk )
