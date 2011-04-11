@@ -17,8 +17,8 @@ USE work.EQ_data_type.ALL;
 
 ENTITY eq_main IS
 	GENERIC(
-            NUM_OF_SAMPLES: NATURAL := 80;
-            NUM_OF_COEFFS : NATURAL := 40;
+            NUM_OF_SAMPLES: NATURAL := 20;
+            NUM_OF_COEFFS : NATURAL := 10;
             NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
@@ -91,6 +91,10 @@ buffer_comp: regular_buffer
             );
 
 FILTER_BLOCK_MAIN: filterblock_main 
+	GENERIC MAP ( NUM_BITS_OUT   => 13,
+            NUM_OF_SAMPLES      => 20,
+            NUM_OF_COEFFS       => 10,
+            NUM_OF_BANDS        => 8)
     PORT MAP( 
             clk     => clk,
             sample1 => sample_filter1,

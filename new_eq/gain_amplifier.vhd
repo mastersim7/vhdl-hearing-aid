@@ -44,15 +44,15 @@ BEGIN
 PROCESS(clk)
     VARIABLE GAIND_Q :Gain_Multi_Result; 
     --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
-    VARIABLE SUMMED : STD_LOGIC_VECTOR(36 DOWNTO 0); 
+    VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 	--as we r doing 8 addition 3 bit is enough to cover all overflow
-    VARIABLE i : INTEGER;
+    VARIABLE i : INTEGER:=0;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
 	    OUTPUT_TO_CLASSD<= (others=>'0');
 	    SUMMED := (others=>'0'); --initialised  to zero/anand
-	    i:=1;-- i should be 1 as array start from 1 (to 8)/anand 
+	    i:=0;-- i should be 1 as array start from 1 (to 8)/anand 
 	    OE<='0';
 	    started <='0'; -- we wait for a enable signal to stert
 	    
@@ -62,15 +62,16 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-		               -- GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
-                		--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
-						SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
+		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+                		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+						--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
                         i := i+1;
 	                ELSE
-		                i:=1; -- ready restart
+		                i:=0; -- ready restart
 		                OUTPUT_TO_CLASSD <= NOT(SUMMED((SUMMED'LEFT))) & SUMMED((SUMMED'LEFT-1) DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
                 	        FOR m IN 0 TO 7 LOOP -- update the output for the interface at once
-               				GAIND_Q_OUT(m)<= GAIND_Q(m)(49 downto 34);
+--OBS has to be changed by hand 
+               				GAIND_Q_OUT(m)<= GAIND_Q(m)(25 downto 10);
 		                END LOOP;
 		                SUMMED := (others=>'0'); --initialised  to zero/anand
                 	 	OE<='1';

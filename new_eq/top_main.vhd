@@ -128,9 +128,9 @@ END COMPONENT;
 --Equalizer 
 COMPONENT eq_main IS
 GENERIC(
-            NUM_OF_SAMPLES: NATURAL := 80;
-            NUM_OF_COEFFS : NATURAL := 40;
-            NUM_OF_BANDS  : NATURAL := 6);
+            NUM_OF_SAMPLES: NATURAL := 20;
+            NUM_OF_COEFFS : NATURAL := 10;
+            NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
             reset        : IN  STD_LOGIC; -- reset
@@ -175,13 +175,14 @@ SIGNAL adc_output : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
 -- DAC signals
 SIGNAL dac_start  : STD_LOGIC := '0'; -- Start D2A conversion
 SIGNAL dac_input  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
+SIGNAL dac_input_temp  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );--should be deleted/anand
 
 -- Equalizer and interface signals
 SIGNAL eq_input             : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 SIGNAL CE_EQ_sig            : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
 SIGNAL REQ_from_IF_sig      : STD_LOGIC;
 SIGNAL GAIN_From_IF_sig     : Gain_Array;
-SIGNAL OE_FILTERS         : STD_LOGIC; -- to interface 
+SIGNAL OE_FILTERS           : STD_LOGIC; -- to interface 
 SIGNAL OUTPUT_TO_CLASSD_sig : sample;
 SIGNAL TO_IF_SUM_sig        : Gained_result_Array_16;-- interface will take this 
 SIGNAL INTER_Q_sig          : Multi_result_array;
@@ -241,23 +242,31 @@ dac_comp: new_dac
                           
 
 Equalizer_comp : eq_main 
+	GENERIC MAP( NUM_OF_SAMPLES => 20,
+            NUM_OF_COEFFS => 10,
+            NUM_OF_BANDS  => 8)
     PORT MAP( 
-              clk  	           => clk, -- System clock (50 MHz)
-              reset	           => reset,
+              clk  	          => clk, -- System clock (50 MHz)
+              reset	          => reset,
               sample_in        => eq_input, -- Changed from sd_input to adc_output
               new_sample_ready => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
-              OE		       => OE_FILTERS,    -- to gain 
-              Q			   => INTER_Q_sig);
+              OE		          => OE_FILTERS,    -- to gain 
+              Q			       => INTER_Q_sig);
 
---dac_input<= NOT INTER_Q_sig(6)(36) & INTER_Q_sig(6)(35 downto 26);
+--dac_input<= NOT INTER_Q_sig(2)(25) & INTER_Q_sig(2)(24 downto 14);
 
  Amplifier_COMP :  gain_amplifier
   GENERIC MAP ( NUM_BITS_OUT => 13,
 				NUM_OF_GAINS => 8,  
 				NUM_OF_FILTERS => 8)
-   PORT MAP( clk      => clk, reset   => reset, FB_OE   => OE_FILTERS, RAW_OUTPUT =>INTER_Q_sig, -- 1 to 8 of 36 to 0 
-			GAIN =>temp_GAINS, OE =>OE_AMP, OUTPUT_TO_CLASSD => dac_input, --output to class d
-           GAIND_Q_OUT => trashed);
+   PORT MAP( clk      => clk,
+             reset   => reset,
+             FB_OE => OE_FILTERS,
+             RAW_OUTPUT =>INTER_Q_sig, -- 1 to 8 of 36 to 0 
+			    GAIN =>temp_GAINS,
+             OE =>OE_AMP,
+				 OUTPUT_TO_CLASSD => dac_input, --output to class d
+             GAIND_Q_OUT => trashed);
 
 --sd_comp: sd     
 --    PORT MAP( input => sd_input,
@@ -267,7 +276,7 @@ Equalizer_comp : eq_main
 --                          sign => sd_sign );
 --
                           
-led      <= eq_input( N-1 DOWNTO 4 ); --shows the input to buffer
+led      <= OE_AMP & eq_input( N-2 DOWNTO 4 ); --shows the input to buffer
 eq_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
 --dac_input <= INTER_Q_sig(6)(36 downto 25);
 
