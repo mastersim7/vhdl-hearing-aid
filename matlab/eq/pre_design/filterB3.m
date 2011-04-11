@@ -12,7 +12,7 @@
 % All frequency values are in Hz.
 Fs = 22300;  % Sampling Frequency
 
-N    = 54;      % Order220
+N    = 39;      % Order220
 
 
 FcB11=	1 % First Cutoff Frequency
