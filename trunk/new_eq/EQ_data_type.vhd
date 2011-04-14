@@ -13,7 +13,7 @@ Package EQ_data_type IS
 	SUBTYPE coefficient_type IS STD_LOGIC_VECTOR(12 DOWNTO 0); 
 	
 	-- to be changed to have less number of taps
-    TYPE taps_type IS ARRAY (0 to 7, 0 TO 9) OF coefficient_type; 
+    TYPE taps_type IS ARRAY (0 to 7, 0 TO 19) OF coefficient_type; 
 	
 	-- The results are double the size of the inputs so the next type
 	SUBTYPE Multi_Result IS STD_LOGIC_VECTOR(25 DOWNTO 0 ); -- from serial filter o/p 26bits

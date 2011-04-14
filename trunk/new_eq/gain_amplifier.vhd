@@ -54,6 +54,9 @@ BEGIN
 	    SUMMED := (others=>'0'); --initialised  to zero/anand
 	    i:=0;-- i should be 1 as array start from 1 (to 8)/anand 
 	    OE<='0';
+		 FOR k IN 0 TO 7 LOOP
+	    GAIND_Q(k) := (OTHERS => '0');
+	    END LOOP;
 	    started <='0'; -- we wait for a enable signal to stert
 	    
 	ELSE
@@ -75,9 +78,18 @@ BEGIN
 		                END LOOP;
 		                SUMMED := (others=>'0'); --initialised  to zero/anand
                 	 	OE<='1';
+							
+							FOR k IN 0 TO 7 LOOP
+	                   GAIND_Q(k) := (OTHERS => '0');
+	                  END LOOP;
+							 started <= '0' ;
 	                END IF;-- i
           	    ELSE --Started 
 		        started <= FB_OE ;-- sleep until the Fiters output gets updated
+				  SUMMED := (others=>'0');
+				  FOR k IN 0 TO 7 LOOP
+	           GAIND_Q(k) := (OTHERS => '0');
+	           END LOOP;
 	            END IF; -- STARTED 
           --  END IF; --CE
         END IF; --reset
