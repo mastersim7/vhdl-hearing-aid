@@ -1,4 +1,4 @@
--- top_main.vhd
+ -- top_main.vhd
 -- Shwan Ciyako , Anandhavel Sakthivel
 -- bracnched  sample_system.vhd
 -- Mathias Lundell
@@ -45,8 +45,11 @@ ENTITY top_main IS
             DAC_SCK : OUT STD_LOGIC; -- Serial Clock DAC
             DAC_SDI : OUT STD_LOGIC; -- Serial Data to DAC
             DAC_LDAC: OUT STD_LOGIC; 
-            -- Serial interface 
+            
+				select_filters:STD_LOGIC_VECTOR( 7 DOWNTO 0 );
+				-- Serial interface 
             RX      : IN STD_LOGIC;
+				
             TX      : OUT STD_LOGIC);-- Latch DAC
          
 END ENTITY top_main;
@@ -54,9 +57,9 @@ END ENTITY top_main;
 ARCHITECTURE top_main_arch OF top_main IS
 
 -- constants 
-constant temp_gains : Gain_Array := ( "0111111111111" ,"0111111111111","0111111111111","0111111111111","0111111111111","0111111111111","0111111111111" ,
-"0111111111111");
-
+constant temp_gains : Gain_Array := ( "0000000000001" ,"0000000000001","0000000000001","0000000000001","0000000000001","0000000000001","0000000000001" ,
+"0000000000001");
+ 
 -- Components for Rs232
 -- Component HIF_RS232_Receive_from_PC IS
     -- GENERIC(
@@ -128,8 +131,8 @@ END COMPONENT;
 --Equalizer 
 COMPONENT eq_main IS
 GENERIC(
-            NUM_OF_SAMPLES: NATURAL := 20;
-            NUM_OF_COEFFS : NATURAL := 10;
+            NUM_OF_SAMPLES: NATURAL := 40;
+            NUM_OF_COEFFS : NATURAL := 20;
             NUM_OF_BANDS  : NATURAL := 8);
     PORT( 
             clk          : IN  STD_LOGIC; -- System clock (50 MHz)
@@ -190,6 +193,8 @@ SIGNAL INTER_Q_sig          : Multi_result_array;
 SIGNAL OE_AMP      : STD_LOGIC:='0';
 SIGNAL trashed : Gained_result_Array_16;
 
+
+--SIGNAL SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 -- Sigma delta signals
 --SIGNAL sd_output         : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 --SIGNAL sd_sign           : STD_LOGIC;
@@ -242,8 +247,8 @@ dac_comp: new_dac
                           
 
 Equalizer_comp : eq_main 
-	GENERIC MAP( NUM_OF_SAMPLES => 20,
-            NUM_OF_COEFFS => 10,
+	GENERIC MAP( NUM_OF_SAMPLES => 40,
+            NUM_OF_COEFFS => 20,
             NUM_OF_BANDS  => 8)
     PORT MAP( 
               clk  	          => clk, -- System clock (50 MHz)
@@ -252,8 +257,10 @@ Equalizer_comp : eq_main
               new_sample_ready => adc_OE,     -- OBS! MAKE SURE THAT adc_OE GIVES INTENDED SIGNAL
               OE		          => OE_FILTERS,    -- to gain 
               Q			       => INTER_Q_sig);
+				  
+	
 
---dac_input<= NOT INTER_Q_sig(2)(25) & INTER_Q_sig(2)(24 downto 14);
+--dac_input<= NOT INTER_Q_sig(4)(25) & INTER_Q_sig(4)(24 downto 14);
 
  Amplifier_COMP :  gain_amplifier
   GENERIC MAP ( NUM_BITS_OUT => 13,
@@ -267,7 +274,7 @@ Equalizer_comp : eq_main
              OE =>OE_AMP,
 				 OUTPUT_TO_CLASSD => dac_input, --output to class d
              GAIND_Q_OUT => trashed);
-
+ 
 --sd_comp: sd     
 --    PORT MAP( input => sd_input,
 --                          clk => clk,
@@ -285,8 +292,11 @@ generate_clock_frequencies: PROCESS ( clk )
     VARIABLE cnt_20kHz  : NATURAL RANGE 0 TO CLK_SCALE_20kHz-1  := 0;
     VARIABLE cnt_2MHz   : NATURAL RANGE 0 TO CLK_SCALE_2MHz-1  := 0;
 BEGIN
-    IF clk'EVENT AND clk = '1' THEN
-        -- 20 kHz
+	 
+	 IF clk'EVENT AND clk = '1' THEN
+ -- 20 kHz
+
+      
         IF cnt_20kHz < CLK_SCALE_20kHz-1 THEN
             cnt_20kHz := cnt_20kHz + 1;
             adc_start <= '0';
@@ -307,5 +317,46 @@ BEGIN
     END IF;
 END PROCESS generate_clock_frequencies;
 
+--   PROCESS(clk)
+--	
+--  VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0):=(others=>'0'); 
+--   BEGIN
+--	summed:=(others=>'0');
+--	
+--	FOR k IN 0 TO 7 LOOP -- parallel of 8 additions ?
+--   SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(INTER_Q_sig(k)));
+--   END LOOP;	
+--	
+--	 dac_input <= ( not summed(25)) & summed(24 downto 14);
+--
+--	end process;
+--	
+--	
+--	   PROCESS(clk)
+--	     BEGIN
+--	case select_filters is
+--	
+--                            WHEN "00000001" => 
+--                               dac_input<= NOT INTER_Q_sig(0)(25) & INTER_Q_sig(0)(24 downto 14); -- APPROXIMATELY 0-75 SWITCH 0
+--                            WHEN "00000010" => 
+--                                dac_input<= NOT INTER_Q_sig(1)(25) & INTER_Q_sig(1)(24 downto 14); -- APPROXIMATELY 75-150 SWITCH 1
+--                            WHEN "00000100" => 
+--                                dac_input<= NOT INTER_Q_sig(2)(25) & INTER_Q_sig(2)(24 downto 14); -- APPROXIMATELY 150-300 SWITCH 2
+--                            WHEN "00001000" => 
+--                                dac_input<= NOT INTER_Q_sig(3)(25) & INTER_Q_sig(3)(24 downto 14);  -- APPROXIMATELY 300- 600SWITCH 3
+--                            WHEN "00010000" => 
+--                                dac_input<= NOT INTER_Q_sig(4)(25) & INTER_Q_sig(4)(24 downto 14); -- APPROXIMATELY 600-1200 SWITCH 4
+--                            WHEN "00100000" => 
+--                                dac_input<= NOT INTER_Q_sig(5)(25) & INTER_Q_sig(5)(24 downto 14); -- APPROXIMATELY 1200-2500 SWITCH 5
+--                            WHEN "01000000" => 
+--                                dac_input<= NOT INTER_Q_sig(6)(25) & INTER_Q_sig(6)(24 downto 14); -- APPROXIMATELY 2500-5000 SWITCH 6
+--                            WHEN "10000000" => 
+--                                dac_input<= NOT INTER_Q_sig(7)(25) & INTER_Q_sig(7)(24 downto 14);  -- APPROXIMATELY 5000-10000 SWITCH 7
+--                            
+--	                         WHEN OTHERS => 
+--                                 NULL;
+--   END CASE;
+--
+--	end process; 
 
 END ARCHITECTURE top_main_arch;
