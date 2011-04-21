@@ -1,0 +1,381 @@
+
+vunit tx_to_pc(HIF_RS232_Transmit_to_PC(Behavioral)) 
+{
+  default clock is (rising_edge(clk));
+ 
+assume always {gain_array_input(0) =("01010101") and gain_array_input(1)=("11001101") and gain_array_input(2)=("00000011") and gain_array_input(3)=("00000100") and gain_array_input(4)=("00000101") and gain_array_input(5)=("00000110") and gain_array_input(6)=("00000111") and gain_array_input(7)=("10001000")};
+ 
+property check_for_serial_transmission_start_bit_first_array is 
+  {oe_tx='1';oe_tx='0'[*7]} |=> {Tx_to_PC='0' };--9
+
+property check_for_serial_transmission_1_first_array is 
+  {oe_tx='1';oe_tx='0'[*13]} |=> {Tx_to_PC='1'};--15
+
+
+property check_for_serial_transmission_2_first_array is 
+  {oe_tx='1';oe_tx='0'[*20]} |=> {Tx_to_PC='0'};--21
+  
+property check_for_serial_transmission_3_first_array is 
+  {oe_tx='1';oe_tx='0'[*26]} |=> {Tx_to_PC='1'};--27
+
+property check_for_serial_transmission_4_first_array is 
+  {oe_tx='1';oe_tx='0'[*32]} |=> {Tx_to_PC='0'};--33
+  
+property check_for_serial_transmission_5_first_array is 
+  {oe_tx='1';oe_tx='0'[*38]} |=> {Tx_to_PC='1'};--39
+
+property check_for_serial_transmission_6_first_array is 
+  {oe_tx='1';oe_tx='0'[*44]} |=> {Tx_to_PC='0'};--45
+
+property check_for_serial_transmission_7_first_array is 
+  {oe_tx='1';oe_tx='0'[*50]} |=> {Tx_to_PC='1'};--51
+  
+property check_for_serial_transmission_8_first_array is 
+  {oe_tx='1';oe_tx='0'[*56]} |=> {Tx_to_PC='0'};--57
+
+  
+property check_for_serial_transmission_stop_bit_first_array is 
+  {oe_tx='1';oe_tx='0'[*62]} |=> {Tx_to_PC='1'};--63
+
+
+
+--11001101
+
+
+property check_for_serial_transmission_start_bit_second_array is 
+  {oe_tx='1';oe_tx='0'[*68]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_1_second_array is 
+  {oe_tx='1';oe_tx='0'[*74]} |=> {Tx_to_PC='1' and flag_Tx='0'};
+
+property check_for_serial_transmission_2_second_array is 
+  {oe_tx='1';oe_tx='0'[*80]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_3_second_array is 
+  {oe_tx='1';oe_tx='0'[*86]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_4_second_array is 
+  {oe_tx='1';oe_tx='0'[*92]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_5_second_array is 
+  {oe_tx='1';oe_tx='0'[*98]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_second_array is 
+  {oe_tx='1';oe_tx='0'[*104]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_second_array is 
+  {oe_tx='1';oe_tx='0'[*110]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_8_second_array is 
+  {oe_tx='1';oe_tx='0'[*116]} |=> {Tx_to_PC='1'};
+
+  
+property check_for_serial_transmission_stop_bit_second_array is 
+  {oe_tx='1';oe_tx='0'[*122]} |=> {Tx_to_PC='1' and flag_Tx='0'  };
+
+
+----------------
+--3-- 00000011
+property check_for_serial_transmission_start_bit_third_array is 
+  {oe_tx='1';oe_tx='0'[*128]} |=> {Tx_to_PC='0' and flag_Tx='0'};
+  
+property check_for_serial_transmission_1_third_array is
+  {oe_tx='1';oe_tx='0'[*134]} |=> {Tx_to_PC='1'};
+
+
+
+property check_for_serial_transmission_2_third_array is 
+  {oe_tx='1';oe_tx='0'[*140]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_3_third_array is--5 means 7
+  {oe_tx='1';oe_tx='0'[*146]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_4_third_array is 
+  {oe_tx='1';oe_tx='0'[*152]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_5_third_array is 
+  {oe_tx='1';oe_tx='0'[*158]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_third_array is 
+  {oe_tx='1';oe_tx='0'[*164]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_third_array is 
+  {oe_tx='1';oe_tx='0'[*170]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_third_array is 
+  {oe_tx='1';oe_tx='0'[*176]} |=> {Tx_to_PC='0'};
+
+  
+property check_for_serial_transmission_stop_bit_third_array is 
+  {oe_tx='1';oe_tx='0'[*182]} |=> {Tx_to_PC='1'};
+
+
+
+--4 --00000100
+
+
+property check_for_serial_transmission_start_bit_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*188]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_1_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*194]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_2_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*200]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_3_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*206]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_4_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*212]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_5_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*218]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*224]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*230]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*236]} |=> {Tx_to_PC='0'};
+
+  
+property check_for_serial_transmission_stop_bit_fourth_array is 
+  {oe_tx='1';oe_tx='0'[*242]} |=> {Tx_to_PC='1' and flag_Tx='0'  };
+
+  --5--00000101
+property check_for_serial_transmission_start_bit_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*248]} |=> {Tx_to_PC='0' and flag_Tx='0'};
+  
+property check_for_serial_transmission_1_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*254]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_2_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*260]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_3_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*266]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_4_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*272]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_5_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*278]} |=> {Tx_to_PC='0' and flag_Tx='0'};
+
+property check_for_serial_transmission_6_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*284]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*290]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*296]} |=> {Tx_to_PC='0'};
+
+  
+property check_for_serial_transmission_stop_bit_fifth_array is 
+  {oe_tx='1';oe_tx='0'[*302]} |=> {Tx_to_PC='1'};
+
+
+
+--6--00000110
+
+
+property check_for_serial_transmission_start_bit_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*308]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_1_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*314]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_2_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*320]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_3_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*326]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_4_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*332]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_5_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*338]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*344]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*350]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*356]} |=> {Tx_to_PC='0'};
+
+  
+property check_for_serial_transmission_stop_bit_sixth_array is 
+  {oe_tx='1';oe_tx='0'[*362]} |=> {Tx_to_PC='1' and flag_Tx='0'  };
+
+  
+--7--00000111
+
+property check_for_serial_transmission_start_bit_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*368]} |=> {Tx_to_PC='0' and flag_Tx='0'};
+  
+property check_for_serial_transmission_1_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*374]} |=> {Tx_to_PC='1'};
+
+property check_for_serial_transmission_2_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*380]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_3_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*386]} |=> {Tx_to_PC='1' and flag_Tx='0'};
+
+property check_for_serial_transmission_4_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*392]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_5_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*398]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*404]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*410]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*416]} |=> {Tx_to_PC='0'};
+
+  
+property check_for_serial_transmission_stop_bit_seventh_array is 
+  {oe_tx='1';oe_tx='0'[*422]} |=> {Tx_to_PC='1'};
+
+
+
+--8--00001000
+
+
+property check_for_serial_transmission_start_bit_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*428]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_1_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*434]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_2_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*440]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_3_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*446]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_4_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*452]} |=> {Tx_to_PC='1'};
+  
+property check_for_serial_transmission_5_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*458]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_6_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*464]} |=> {Tx_to_PC='0'};
+
+property check_for_serial_transmission_7_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*470]} |=> {Tx_to_PC='0'};
+  
+property check_for_serial_transmission_8_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*476]} |=> {Tx_to_PC='1' and flag_Tx='0'};--change
+
+  
+property check_for_serial_transmission_stop_bit_eigth_array is 
+  {oe_tx='1';oe_tx='0'[*482]} |=> {Tx_to_PC='1' and flag_Tx='1'  };-- flag should go high finally
+
+property check_for_serial_transmission_next_loop is 
+  {oe_tx='1';oe_tx='0'[*500];oe_tx='1';oe_tx='0'[*7]} |=> {Tx_to_PC='0' and flag_Tx='0'};-- flag should go high finally
+
+
+   
+ 
+ assert check_for_serial_transmission_start_bit_first_array;
+ assert check_for_serial_transmission_1_first_array;
+  assert check_for_serial_transmission_2_first_array;
+ assert check_for_serial_transmission_3_first_array;
+ assert check_for_serial_transmission_4_first_array;
+ assert check_for_serial_transmission_5_first_array;
+ assert check_for_serial_transmission_6_first_array;
+ assert check_for_serial_transmission_7_first_array;
+ assert check_for_serial_transmission_8_first_array;
+ assert check_for_serial_transmission_stop_bit_first_array;
+
+ assert check_for_serial_transmission_start_bit_second_array;
+ assert check_for_serial_transmission_1_second_array;
+assert check_for_serial_transmission_2_second_array;
+ assert check_for_serial_transmission_3_second_array;
+ assert check_for_serial_transmission_4_second_array;
+ assert check_for_serial_transmission_5_second_array;
+ assert check_for_serial_transmission_6_second_array;
+ assert check_for_serial_transmission_7_second_array;
+ assert check_for_serial_transmission_8_second_array;
+ assert check_for_serial_transmission_stop_bit_second_array;
+
+ assert check_for_serial_transmission_start_bit_third_array;
+ assert check_for_serial_transmission_1_third_array;
+ assert check_for_serial_transmission_2_third_array;
+ assert check_for_serial_transmission_3_third_array;
+ assert check_for_serial_transmission_4_third_array;
+ assert check_for_serial_transmission_5_third_array;
+ assert check_for_serial_transmission_6_third_array;
+ assert check_for_serial_transmission_7_third_array;
+ assert check_for_serial_transmission_8_third_array;
+ assert check_for_serial_transmission_stop_bit_third_array;
+
+ assert check_for_serial_transmission_start_bit_fourth_array;
+ assert check_for_serial_transmission_1_fourth_array;
+ assert check_for_serial_transmission_2_fourth_array;
+ assert check_for_serial_transmission_3_fourth_array;
+ assert check_for_serial_transmission_4_fourth_array;
+ assert check_for_serial_transmission_5_fourth_array;
+ assert check_for_serial_transmission_6_fourth_array;
+ assert check_for_serial_transmission_7_fourth_array;
+ assert check_for_serial_transmission_8_fourth_array;
+ assert check_for_serial_transmission_stop_bit_fourth_array;
+
+assert check_for_serial_transmission_start_bit_fifth_array;
+ assert check_for_serial_transmission_1_fifth_array;
+ assert check_for_serial_transmission_2_fifth_array;
+ assert check_for_serial_transmission_3_fifth_array;
+ assert check_for_serial_transmission_4_fifth_array;
+ assert check_for_serial_transmission_5_fourth_array;
+ assert check_for_serial_transmission_6_fifth_array;
+ assert check_for_serial_transmission_7_fifth_array;
+ assert check_for_serial_transmission_8_fifth_array;
+ assert check_for_serial_transmission_stop_bit_fifth_array;
+
+assert check_for_serial_transmission_start_bit_sixth_array;
+ assert check_for_serial_transmission_1_sixth_array;
+ assert check_for_serial_transmission_2_sixth_array;
+ assert check_for_serial_transmission_3_sixth_array;
+ assert check_for_serial_transmission_4_sixth_array;
+ assert check_for_serial_transmission_5_sixth_array;
+ assert check_for_serial_transmission_6_sixth_array;
+ assert check_for_serial_transmission_7_sixth_array;
+ assert check_for_serial_transmission_8_sixth_array;
+ assert check_for_serial_transmission_stop_bit_sixth_array;
+
+assert check_for_serial_transmission_start_bit_seventh_array;
+ assert check_for_serial_transmission_1_seventh_array;
+ assert check_for_serial_transmission_2_seventh_array;
+ assert check_for_serial_transmission_3_seventh_array;
+ assert check_for_serial_transmission_4_seventh_array;
+ assert check_for_serial_transmission_5_seventh_array;
+ assert check_for_serial_transmission_6_seventh_array;
+ assert check_for_serial_transmission_7_seventh_array;
+ assert check_for_serial_transmission_8_seventh_array;
+ assert check_for_serial_transmission_stop_bit_seventh_array;
+
+assert check_for_serial_transmission_start_bit_eigth_array;
+ assert check_for_serial_transmission_1_eigth_array;
+ assert check_for_serial_transmission_2_eigth_array;
+ assert check_for_serial_transmission_3_eigth_array;
+ assert check_for_serial_transmission_4_eigth_array;
+ assert check_for_serial_transmission_5_eigth_array;
+ assert check_for_serial_transmission_6_eigth_array;
+ assert check_for_serial_transmission_7_eigth_array;
+ assert check_for_serial_transmission_8_eigth_array;
+ assert check_for_serial_transmission_stop_bit_eigth_array;
+assert check_for_serial_transmission_next_loop;
+ 
+}
