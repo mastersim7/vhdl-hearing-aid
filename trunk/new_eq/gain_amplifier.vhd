@@ -31,7 +31,7 @@ ENTITY gain_amplifier IS
             reset   : IN STD_LOGIC;
             FB_OE   : IN STD_LOGIC;
             RAW_OUTPUT : IN Multi_Result_array ;-- 0 to 8 of 36 to 0 
-            GAIN    : IN Gain_Array;
+            GAIN    : IN Gained_result_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
             GAIND_Q_OUT: OUT  Gained_result_Array_16);
