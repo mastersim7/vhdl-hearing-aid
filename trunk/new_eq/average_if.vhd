@@ -20,7 +20,7 @@ ENTITY average_if IS
     PORT( 
             clk     : IN STD_LOGIC;
             reset   :IN STD_LOGIC;
-            CE      : IN STD_LOGIC;
+            --CE      : IN STD_LOGIC;
             OE_GAINAMP : IN STD_LOGIC;
             REQ     :IN STD_LOGIC;
             Gained_Samples: IN Gained_result_Array_16; --an 8-array of 16 bit vectors
@@ -34,7 +34,7 @@ ARCHITECTURE average_if_arch OF average_if IS
 
 BEGIN
 
-PROCESS(clk, CE)
+PROCESS(clk)
     VARIABLE Gained_Samples_var: Gained_result_Array_16;
     VARIABLE i,m : INTEGER;
 BEGIN
@@ -49,7 +49,7 @@ BEGIN
 	   OE<='0';
  	   started <='0'; 
 	ELSE
-		IF CE = '1' THEN --slower clock
+		--IF CE = '1' THEN --slower clock
 			IF started = '1' THEN -- makes sure the entire calculation is being done once per req signal
 				IF OE_GAINAMP = '1' THEN  -- waits until the gain is multiplied to the output and the output updated
 					IF i /= NUM_OF_SAMPLES THEN
@@ -79,7 +79,7 @@ BEGIN
 		        ELSE --STARTED
 		        	started <= REQ;
 		        END IF; --started
-		END IF; --CE
+		--END IF; --CE
         END IF; --reset
     END IF; --cl
 END PROCESS;

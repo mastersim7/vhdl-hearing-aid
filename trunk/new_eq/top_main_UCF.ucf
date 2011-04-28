@@ -42,7 +42,7 @@ NET "led<7>"  LOC = "P11"  ;
 #NET "ssg<7>"  LOC = "P16"  ;
 #RS-232
 NET "Rx"  LOC = "T13"  ;
-#NET "Tx"  LOC = "R13"  ;
+NET "Tx"  LOC = "R13"  ;
 #NET "RXD_A"  LOC = "N10"  ;
 #NET "TXD_A"  LOC = "T14"  ;
 #PS2 port
