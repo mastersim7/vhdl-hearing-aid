@@ -57,8 +57,8 @@ END ENTITY top_main;
 ARCHITECTURE top_main_arch OF top_main IS
 
 -- constants 
-constant temp_gains : Gain_Array := ( "0000000000001" ,"0000000000001","0000000000001","0000000000001","0000000000001","0000000000001","0000000000001" ,
-"0000000000001");
+--constant temp_gains : Gain_Array := ( "0000000000001" ,"0000000000001","0000000000001","0000000000001","0000000000001","0000000000001","0000000000001" ,
+--"0000000000001");
  
 -- Components for Rs232
 -- Component HIF_RS232_Receive_from_PC IS
@@ -90,6 +90,17 @@ constant temp_gains : Gain_Array := ( "0000000000001" ,"0000000000001","00000000
             -- flag_Tx  : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
             -- Tx_to_PC : OUT STD_LOGIC);-- Bit by Bit transmission to PC via RS232
 -- END COMPONENT;
+
+
+COMPONENT HIF_RS232_Receive_from_PC IS
+GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of data+stop
+   PORT( System_clk_Rx : IN STD_LOGIC;
+         Rx: IN STD_LOGIC;
+         reset_rx : IN STD_LOGIC;
+		 Gain_array :OUT Gained_result_Array
+        -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
+       );
+END COMPONENT;
 
 -- Component communicating with the ADC
 COMPONENT new_adc IS
@@ -153,7 +164,7 @@ COMPONENT gain_amplifier IS
             reset   : IN STD_LOGIC;
             FB_OE   : IN STD_LOGIC;
             RAW_OUTPUT : IN Multi_Result_array ;-- 0 to 8 of 36 to 0 
-            GAIN    : IN Gain_Array;
+            GAIN    : IN Gained_result_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
             GAIND_Q_OUT: OUT  Gained_result_Array_16);
@@ -184,7 +195,7 @@ SIGNAL dac_input_temp  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );--should be deleted/an
 SIGNAL eq_input             : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
 SIGNAL CE_EQ_sig            : STD_LOGIC; -- WHAT IS THIS RUNNING ATT ?
 SIGNAL REQ_from_IF_sig      : STD_LOGIC;
-SIGNAL GAIN_From_IF_sig     : Gain_Array;
+SIGNAL GAIN_From_IF_sig     : Gained_result_Array;
 SIGNAL OE_FILTERS           : STD_LOGIC; -- to interface 
 SIGNAL OUTPUT_TO_CLASSD_sig : sample;
 SIGNAL TO_IF_SUM_sig        : Gained_result_Array_16;-- interface will take this 
@@ -244,6 +255,18 @@ dac_comp: new_dac
               -- reset_rx              => reset, 
               -- serial_data_inp_Rx    => Rx,
               -- gain_data_array_Rx    => GAIN_From_IF_sig);
+              
+  Receiver_comp   : HIF_RS232_Receive_from_PC 
+GENERIC MAP( Serial_word_length => 10 ) --receiving 10 bits start+8 bits of data+stop
+   PORT MAP( 
+         System_clk_Rx => clk,
+         Rx=> Rx,
+         reset_rx => reset,
+		 Gain_array  => GAIN_From_IF_sig
+        -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
+       );
+
+              
                           
 
 Equalizer_comp : eq_main 
@@ -270,7 +293,7 @@ Equalizer_comp : eq_main
              reset   => reset,
              FB_OE => OE_FILTERS,
              RAW_OUTPUT =>INTER_Q_sig, -- 1 to 8 of 36 to 0 
-			    GAIN =>temp_GAINS,
+			    GAIN =>GAIN_From_IF_sig,
              OE =>OE_AMP,
 				 OUTPUT_TO_CLASSD => dac_input, --output to class d
              GAIND_Q_OUT => trashed);
