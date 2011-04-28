@@ -91,6 +91,17 @@ ARCHITECTURE top_main_arch OF top_main IS
             -- Tx_to_PC : OUT STD_LOGIC);-- Bit by Bit transmission to PC via RS232
 -- END COMPONENT;
 
+COMPONENT HIF_RS232_Transmit_to_PC IS
+    GENERIC(n:INTEGER := 8); -- number of bits to be sent for each gain levels
+    PORT(
+          clk : IN STD_LOGIC; --system clock inout
+               RESET : IN STD_LOGIC; --system RESET_Tx input
+                  OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+      gain_array_input : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
+                flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
+               Tx_to_PC : OUT STD_LOGIC  -- Bit by Bit transmission to PC via RS232
+        );
+END COMPONENT;
 
 COMPONENT HIF_RS232_Receive_from_PC IS
 GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of data+stop
@@ -101,6 +112,26 @@ GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of
         -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
        );
 END COMPONENT;
+
+COMPONENT average_if IS
+    GENERIC(
+            NUM_BITS_OUT : NATURAL := 16;
+            NUM_OF_SAMPLES : NATURAL := 200;
+            NUM_OF_BANDS: NATURAL := 8);
+    PORT( 
+            clk     : IN STD_LOGIC;
+            reset   :IN STD_LOGIC;
+           -- CE      : IN STD_LOGIC;
+            OE_GAINAMP : IN STD_LOGIC;
+            REQ     :IN STD_LOGIC;
+            Gained_Samples: IN Gained_result_Array_16; --an 8-array of 16 bit vectors
+            OE      : OUT STD_LOGIC; 
+            Q       : OUT Gained_result_Array_8); -- changed down to 8 bits/amit
+END COMPONENT;
+
+
+
+
 
 -- Component communicating with the ADC
 COMPONENT new_adc IS
@@ -202,8 +233,9 @@ SIGNAL TO_IF_SUM_sig        : Gained_result_Array_16;-- interface will take this
 SIGNAL INTER_Q_sig          : Multi_result_array;
 -- 
 SIGNAL OE_AMP      : STD_LOGIC:='0';
-SIGNAL trashed : Gained_result_Array_16;
-
+SIGNAL gain_multiplied_output : Gained_result_Array_16;
+SIGNAL Average_if_output: Gained_result_Array_8;
+SIGNAL OE_from_average_if : STD_LOGIC;
 
 --SIGNAL SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 -- Sigma delta signals
@@ -296,7 +328,36 @@ Equalizer_comp : eq_main
 			    GAIN =>GAIN_From_IF_sig,
              OE =>OE_AMP,
 				 OUTPUT_TO_CLASSD => dac_input, --output to class d
-             GAIND_Q_OUT => trashed);
+             GAIND_Q_OUT => gain_multiplied_output);
+             
+             
+ adding_signals: average_if 
+    GENERIC MAP(
+            NUM_BITS_OUT => 16,
+            NUM_OF_SAMPLES => 200,
+            NUM_OF_BANDS => 8)
+    PORT MAP( 
+            clk     => clk,
+            reset   => reset,
+            --CE      : IN STD_LOGIC;
+            OE_GAINAMP =>OE_AMP,
+            REQ      => REQ_from_IF_sig,
+            Gained_Samples => gain_multiplied_output,
+            OE  => OE_from_average_if,    
+            Q    => Average_if_output   ); -- changed down to 8 bits/amit
+
+ 
+transmit_to_pc: HIF_RS232_Transmit_to_PC 
+    GENERIC MAP(n => 8) -- number of bits to be sent for each gain levels
+    PORT MAP(
+          clk => clk,
+               RESET => reset,
+                  OE_Tx => OE_from_average_if, --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+               gain_array_input => Average_if_output,-- 8 blocks x 8 bits of data to be received from Equalizer
+                flag_Tx => REQ_from_IF_sig,--flag to indicate that Eqaulizer can now send the average gain signals
+               Tx_to_PC => Tx
+        );
+
  
 --sd_comp: sd     
 --    PORT MAP( input => sd_input,
