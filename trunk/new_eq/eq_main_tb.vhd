@@ -18,10 +18,14 @@ architecture eq_main_tb_arch of eq_main_tb is
     -- Declarations
     -----------------------------------------------------------------------------
 
+    constant num_of_samples   : integer := 80;
     constant Size   : integer := 80;
+	constant num_of_coefficients : integer := 40;
     constant num_bits_sample : natural := 12;
     constant num_bits_result : natural := 37;
     
+    type sample_array is array (num_of_samples-1 downto 0) of sample;
+    type result_array is array (num_of_coefficients-1 downto 0) of Multi_Result;
     type sample_array is array (Size-1 downto 0) of sample;
     type result_array is array (Size-1 downto 0) of Multi_Result;
     
@@ -73,7 +77,7 @@ architecture eq_main_tb_arch of eq_main_tb is
         return memory;
     end loadSample;
     
-    -- Load sample
+    -- Load result
     function loadResult (fileName : string) return result_array is 
         file objectFile : text open read_mode is fileName;
         variable memory : result_array;
@@ -150,7 +154,7 @@ BEGIN
         constant END_VALUE : natural := 2500;
         variable count : natural range 0 to END_VALUE := 0;
     begin
-        if i < Size then
+        if i < num_of_samples then
             if clk'event and clk = '1' then
                 if count < END_VALUE then
                     count := count + 1;
@@ -180,17 +184,26 @@ BEGIN
             else
                 reset <= '0';
             end if;
+            if clk_20kHz = '1' then    
+                if eq_oe = '1' then
+                    -- Check first filter
+                assert resultMEM0(i) = eq_Q(1)
             
             if eq_OE = '1' then
                 -- Check first filter
                 assert resultMEM0(i-1) = eq_Q(0)
                     report "Error, output doesn't match expected from resultMEM0." &
+                           " Sample in:" & to_string(sampleMEM(i)) &
+                           " Expected output:" & to_string(resultMEM0(i)) &
+                           " Output:" & to_string(eq_Q(1))
                             " Sample in:" & to_string(sampleMEM(i-1)) &
                             " Expected output:" & to_string(resultMEM0(i-1)) &
                             " Output:" & to_string(eq_Q(0))
                     severity error;
+                end if;
             end if;
         end if;
     end process;
 
+ end architecture;
  end architecture;
