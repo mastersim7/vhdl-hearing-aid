@@ -32,7 +32,7 @@ ENTITY HIF_RS232_Transmit_to_PC IS
           clk : IN STD_LOGIC; --system clock inout
                RESET : IN STD_LOGIC; --system RESET_Tx input
                   OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
-    --  gain_array_input : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
+                  gain_array_input : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
                 --flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
                Tx_to_PC : OUT STD_LOGIC  -- Bit by Bit transmission to PC via RS232
         );
@@ -43,7 +43,7 @@ ARCHITECTURE Behavioral OF HIF_RS232_Transmit_to_PC IS
     SIGNAL OE_Tx_loc : STD_LOGIC;
     SIGNAL RS232_enable : STD_LOGIC;
     SIGNAL counter_clk_div : natural RANGE 0 to 5208;  
-    signal gain_array_input : Gained_result_Array_8 := ("01000001","01000010","01000011","01000100","01000101","01000110","01000111","01001000");
+    --signal gain_array_input : Gained_result_Array_8 := ("01000001","01000010","01000011","01000100","01000101","01000110","01000111","01001000");
     BEGIN
     
     PROCESS(clk,RESET,OE_Tx) 
