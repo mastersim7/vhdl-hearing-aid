@@ -24,8 +24,8 @@ GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of
    PORT( System_clk_Rx : IN STD_LOGIC;
          Rx: IN STD_LOGIC;
          reset_rx : IN STD_LOGIC;
-		 Gain_array :OUT Gained_result_Array;
-         temp_led:OUT STd_LOGIC_vector(7 downto 0)
+		 Gain_array :OUT Gained_result_Array
+        -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
        );
 END HIF_RS232_Receive_from_PC;
 
@@ -41,13 +41,17 @@ BEGIN
 startbit <= Rx; --receive bits from PC continuasly, Rx is mapped with receive pin of RS232 using UCF file
 
 PROCESS(System_clk_Rx,reset_rx)
+
     VARIABLE enable : STD_LOGIC;
     VARIABLE k : NATURAL RANGE 0 TO 8;
     VARIABLE memory_temp : Gained_result_Array_8;
     VARIABLE LUT : Gained_result_Array;
 BEGIN
 IF(reset_rx = '1') THEN
-            Gain_array <=(OTHERS =>"0111111111111");
+           FOR k IN 0 TO 7 LOOP
+	       Gain_array(k) <="0000000000001";
+	       END LOOP;
+           
             counter_clk_div <= 0;            
             --startbit <= '1';
             k := 0;
@@ -157,7 +161,7 @@ ELSIF(reset_rx = '0') THEN
         END IF;        
     END IF;
 END IF;
-temp_led <= LUT(7)(12 downto 5);
+--temp_led <= LUT(7)(12 downto 5);
 END PROCESS;
 
 END Behavioral;
