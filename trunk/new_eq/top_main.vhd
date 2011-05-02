@@ -98,17 +98,30 @@ COMPONENT HIF_RS232_Transmit_to_PC IS
                RESET : IN STD_LOGIC; --system RESET_Tx input
                   OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
       gain_array_input : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
-                flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
+                --flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
                Tx_to_PC : OUT STD_LOGIC  -- Bit by Bit transmission to PC via RS232
         );
 END COMPONENT;
+
+--COMPONENT HIF_RS232_Receive_from_PC IS
+--GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of data+stop
+--   PORT( System_clk_Rx : IN STD_LOGIC;
+--         Rx: IN STD_LOGIC;
+--         reset_rx : IN STD_LOGIC;
+--		 Gain_array :OUT Gained_result_Array
+--        -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
+--       );
+--END COMPONENT;
+
 
 COMPONENT HIF_RS232_Receive_from_PC IS
 GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of data+stop
    PORT( System_clk_Rx : IN STD_LOGIC;
          Rx: IN STD_LOGIC;
          reset_rx : IN STD_LOGIC;
-		 Gain_array :OUT Gained_result_Array
+         --OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+         flag_Tx : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
+         Gain_array :OUT Gained_result_Array
         -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
        );
 END COMPONENT;
@@ -294,6 +307,7 @@ GENERIC MAP( Serial_word_length => 10 ) --receiving 10 bits start+8 bits of data
          System_clk_Rx => clk,
          Rx=> Rx,
          reset_rx => reset,
+          flag_Tx =>REQ_from_IF_sig,
 		 Gain_array  => GAIN_From_IF_sig
         -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
        );
@@ -354,7 +368,7 @@ transmit_to_pc: HIF_RS232_Transmit_to_PC
                RESET => reset,
                   OE_Tx => OE_from_average_if, --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
                gain_array_input => Average_if_output,-- 8 blocks x 8 bits of data to be received from Equalizer
-                flag_Tx => REQ_from_IF_sig,--flag to indicate that Eqaulizer can now send the average gain signals
+                --flag_Tx => REQ_from_IF_sig,--flag to indicate that Eqaulizer can now send the average gain signals
                Tx_to_PC => Tx
         );
 

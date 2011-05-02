@@ -42,7 +42,8 @@ ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
 BEGIN
 
 PROCESS(clk)
-    VARIABLE GAIND_Q : Gain_Multi_Result; 
+    VARIABLE GAIND_Q :Gain_Multi_Result; 
+    VARIABLE temp2 :Gain_Multi_Result_39; 
     --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
     VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 	--as we r doing 8 addition 3 bit is enough to cover all overflow
@@ -65,13 +66,20 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)(25 DOWNTO 13)) * SIGNED(GAIN(i)),1));
-                		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+                        --temp2 <=  RAW_OUTPUT(25) & RAW_OUTPUT(24 DOWNTO 14) ; only msb 12 of rawoutput does not give any output 
+		               temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+                        GAIND_Q(i) := temp2(i)(35 downto 10);
+                        --output goes noisy at gain states more than 14  when this  range is 25 to 0
+                        --output goes noisy at gain states more than 25  when this  range is 30 to 5
+                        --output never goes noisy  when this  range is 38 to 13 but o/p dies at low gain states
+                        
+                                
+                SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
 						--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
                         i := i+1;
 	                ELSE
 		                i:=0; -- ready restart
-		                OUTPUT_TO_CLASSD <= NOT(SUMMED((SUMMED'LEFT))) & SUMMED((SUMMED'LEFT-1) DOWNTO (SUMMED'LEFT - 11)); -- concantinated to 13 bits a signle value out
+		                OUTPUT_TO_CLASSD <= NOT(SUMMED((SUMMED'LEFT))) & SUMMED(24 DOWNTO 14); -- concantinated to 13 bits a signle value out
                 	        FOR m IN 0 TO 7 LOOP -- update the output for the interface at once
 --OBS has to be changed by hand 
                				GAIND_Q_OUT(m)<= GAIND_Q(m)(25 downto 10);
@@ -79,9 +87,9 @@ BEGIN
 		                SUMMED := (others=>'0'); --initialised  to zero/anand
                 	 	OE<='1';
 							
-							FOR k IN 0 TO 7 LOOP
-	                   GAIND_Q(k) := (OTHERS => '0');
-	                  END LOOP;
+--							FOR k IN 0 TO 7 LOOP
+--	                   GAIND_Q(k) := (OTHERS => '0');
+--	                  END LOOP;
 							 started <= '0' ;
 	                END IF;-- i
           	    ELSE --Started 
