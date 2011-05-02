@@ -33,7 +33,7 @@ ENTITY HIF_RS232_Transmit_to_PC IS
                RESET : IN STD_LOGIC; --system RESET_Tx input
                   OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
     --  gain_array_input : IN Gained_result_Array_8; -- 8 blocks x 8 bits of data to be received from Equalizer
-                flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
+                --flag_Tx : OUT STD_LOGIC;--flag to indicate that Eqaulizer can now send the average gain signals
                Tx_to_PC : OUT STD_LOGIC  -- Bit by Bit transmission to PC via RS232
         );
 END HIF_RS232_Transmit_to_PC;
@@ -51,7 +51,7 @@ ARCHITECTURE Behavioral OF HIF_RS232_Transmit_to_PC IS
         VARIABLE j ,k    : INTEGER RANGE 0 TO 10; 
     BEGIN
         IF(RESET = '1') THEN
-            flag_Tx <= '1';
+            --flag_Tx <= '1';
             j := 0;
             counter_clk_div <= 0;
             state := 0;
@@ -62,7 +62,7 @@ ARCHITECTURE Behavioral OF HIF_RS232_Transmit_to_PC IS
             IF(rising_edge(clk))THEN
                 IF(OE_Tx = '1') THEN
                     OE_Tx_loc <= '1';
-                     flag_Tx <= '0';
+                     --flag_Tx <= '0';
                 END IF;
                 IF(OE_Tx_loc = '1') THEN
                     counter_clk_div <= counter_clk_div + 1; -- Increment the counter
@@ -92,7 +92,7 @@ ARCHITECTURE Behavioral OF HIF_RS232_Transmit_to_PC IS
                             Tx_to_PC <= '1'; --Send the stop bit
                             state := 0; -- Reset the state to send the next start bit
                            IF(k = 8) THEN --If all blocks are transmitted then,   
-                                    flag_Tx <= '1'; -- turn on the handshake for equalizer
+                                   --flag_Tx <= '1'; -- turn on the handshake for equalizer
                                     OE_Tx_loc <= '0'; --and then wait for a enable signal from equalizer
                                     k := 0;  --reset the block index to the start of the block
                             END IF; 
