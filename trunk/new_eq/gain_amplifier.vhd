@@ -71,6 +71,7 @@ BEGIN
                         GAIND_Q(i) := temp2(i)(35 downto 10);
                         --output goes noisy at gain states more than 14  when this  range is 25 to 0
                         --output goes noisy at gain states more than 25  when this  range is 30 to 5
+                          --output  goes noisy at gain states more than  31 when this  range is 35 to 10 but o/p dies at low gain states
                         --output never goes noisy  when this  range is 38 to 13 but o/p dies at low gain states
                         
                                 
