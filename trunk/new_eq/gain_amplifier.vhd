@@ -30,7 +30,7 @@ ENTITY gain_amplifier IS
            -- CE      : IN STD_LOGIC;
             reset   : IN STD_LOGIC;
             FB_OE   : IN STD_LOGIC;
-            RAW_OUTPUT : IN Multi_Result_array ;-- 0 to 8 of 36 to 0 
+            RAW_OUTPUT : IN Multi_Result_array ;-- 0 to 7 of 25 to 0 
             GAIN    : IN Gained_result_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
@@ -42,7 +42,7 @@ ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
 BEGIN
 
 PROCESS(clk)
-    VARIABLE GAIND_Q :Gain_Multi_Result; 
+    VARIABLE GAIND_Q : Gain_Multi_Result; 
     --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
     VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 	--as we r doing 8 addition 3 bit is enough to cover all overflow
@@ -65,7 +65,7 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+		                GAIND_Q(i):= STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)(25 DOWNTO 13)) * SIGNED(GAIN(i)),1));
                 		SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
 						--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
                         i := i+1;
