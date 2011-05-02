@@ -55,7 +55,9 @@ PROCESS(System_clk_Rx,reset_rx)
     VARIABLE rx_flag_int : STD_LOGIC;
 BEGIN
 IF(reset_rx = '1') THEN
-            Gain_array <= (OTHERS => "0000000000001");
+           FOR k IN 0 TO 7 LOOP
+            Gain_array(k) <="0000000000001";
+            END LOOP;
             rx_flag_int := '0';
             counter_clk_div <= 0;            
             --startbit <= '1';
@@ -176,3 +178,5 @@ rx_flag_int := '0';
 END PROCESS;
 
 END Behavioral;
+
+
