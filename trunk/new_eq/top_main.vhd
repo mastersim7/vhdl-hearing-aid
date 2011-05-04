@@ -211,6 +211,7 @@ COMPONENT gain_amplifier IS
             GAIN    : IN Gained_result_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
+            select_filters:STD_LOGIC_VECTOR( 7 DOWNTO 0 );
             GAIND_Q_OUT: OUT  Gained_result_Array_16);
 END COMPONENT;
 
@@ -233,7 +234,7 @@ SIGNAL adc_output : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ); -- the data from ADC
 -- DAC signals
 SIGNAL dac_start  : STD_LOGIC := '0'; -- Start D2A conversion
 SIGNAL dac_input  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
-SIGNAL dac_input_temp  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );--should be deleted/anand
+--SIGNAL dac_input_temp  : STD_LOGIC_VECTOR( N-1 DOWNTO 0 ):="111111111111";--should be deleted/anand
 
 -- Equalizer and interface signals
 SIGNAL eq_input             : STD_LOGIC_VECTOR( N-1 DOWNTO 0 );
@@ -249,6 +250,7 @@ SIGNAL OE_AMP      : STD_LOGIC:='0';
 SIGNAL gain_multiplied_output : Gained_result_Array_16;
 SIGNAL Average_if_output: Gained_result_Array_8;
 SIGNAL OE_from_average_if : STD_LOGIC;
+--signal select_filters_sig :STD_LOGIC_VECTOR( 7 DOWNTO 0 );
 
 --SIGNAL SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 -- Sigma delta signals
@@ -342,6 +344,7 @@ Equalizer_comp : eq_main
 			    GAIN =>GAIN_From_IF_sig,
              OE =>OE_AMP,
 				 OUTPUT_TO_CLASSD => dac_input, --output to class d
+                 select_filters => select_filters,
              GAIND_Q_OUT => gain_multiplied_output);
              
              
@@ -381,7 +384,8 @@ transmit_to_pc: HIF_RS232_Transmit_to_PC
 --                          sign => sd_sign );
 --
                           
-led      <= OE_AMP & eq_input( N-2 DOWNTO 4 ); --shows the input to buffer
+--led      <= OE_AMP & eq_input( N-2 DOWNTO 4 ); --shows the input to buffer
+led      <= dac_input( 11 DOWNTO 4 ); --shows the input to buffer
 eq_input <= NOT adc_output(N-1) & adc_output(N-2 DOWNTO 0);
 --dac_input <= INTER_Q_sig(6)(36 downto 25);
 

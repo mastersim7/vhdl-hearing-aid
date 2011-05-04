@@ -34,11 +34,13 @@ ENTITY gain_amplifier IS
             GAIN    : IN Gained_result_Array;
             OE      : OUT STD_LOGIC; 
             OUTPUT_TO_CLASSD: OUT sample;--output to class d
+            select_filters:STD_LOGIC_VECTOR( 7 DOWNTO 0 );
             GAIND_Q_OUT: OUT  Gained_result_Array_16);
 END;
 
 ARCHITECTURE gain_amplifier_arch OF gain_amplifier IS
 	SIGNAL started : STD_LOGIC;
+    SIGNAL temp3   : Gain_Multi_Result_12;
 BEGIN
 
 PROCESS(clk)
@@ -51,7 +53,7 @@ PROCESS(clk)
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
 	IF reset ='1' THEN 
-	    OUTPUT_TO_CLASSD<= (others=>'0');
+	    --OUTPUT_TO_CLASSD<= (others=>'0');
 	    SUMMED := (others=>'0'); --initialised  to zero/anand
 	    i:=0;-- i should be 1 as array start from 1 (to 8)/anand 
 	    OE<='0';
@@ -68,6 +70,7 @@ BEGIN
                         OE <= '0';
                         --temp2 <=  RAW_OUTPUT(25) & RAW_OUTPUT(24 DOWNTO 14) ; only msb 12 of rawoutput does not give any output 
 		               temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+--                       temp3(i) <= temp2(i)(38 downto 27);
                         GAIND_Q(i) := temp2(i)(35 downto 10);
                         --output goes noisy at gain states more than 14  when this  range is 25 to 0
                         --output goes noisy at gain states more than 25  when this  range is 30 to 5
@@ -76,6 +79,7 @@ BEGIN
                         
                                 
                 SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(GAIND_Q(i)));
+               --  SUMMED := STD_LOGIC_VECTOR( SIGNED(SUMMED) + SIGNED(GAIND_Q(i)(25)) & '0' & SIGNED(GAIND_Q(i)(23 downto 0)) );
 						--SUMMED := STD_LOGIC_VECTOR(SIGNED(SUMMED) + SIGNED(RAW_OUTPUT(i)));
                         i := i+1;
 	                ELSE
@@ -104,5 +108,91 @@ BEGIN
         END IF; --reset
     END IF; --clk
 END process;
+
+--	   PROCESS(clk)
+--	     BEGIN
+--	case select_filters is
+--	
+--                            WHEN "00000001" => 
+--                               OUTPUT_TO_CLASSD<= NOT temp3(0)(11) & temp3(0)(10 downto 0); -- APPROXIMATELY 0-75 SWITCH 0
+--                            WHEN "00000010" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(1)(11) & temp3(1)(10 downto 0); -- APPROXIMATELY 75-150 SWITCH 1
+--                            WHEN "00000100" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(2)(11) & temp3(2)(10 downto 0); -- APPROXIMATELY 150-300 SWITCH 2
+--                            WHEN "00001000" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(3)(11) & temp3(3)(10 downto 0);  -- APPROXIMATELY 300- 600SWITCH 3
+--                            WHEN "00010000" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(4)(11) & temp3(4)(10 downto 0); -- APPROXIMATELY 600-1200 SWITCH 4
+--                            WHEN "00100000" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(5)(11) & temp3(5)(10 downto 0); -- APPROXIMATELY 1200-2500 SWITCH 5
+--                            WHEN "01000000" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(6)(11) & temp3(6)(10 downto 0); -- APPROXIMATELY 2500-5000 SWITCH 6
+--                            WHEN "10000000" => 
+--                                OUTPUT_TO_CLASSD<= NOT temp3(7)(11) & temp3(7)(10 downto 0);  -- APPROXIMATELY 5000-10000 SWITCH 7
+--                            
+--	                         WHEN OTHERS => 
+--                                 NULL;
+--   END CASE;
+--
+--	end process; 
+    
+--    
+--    	   PROCESS(clk)
+--	     BEGIN
+--	case select_filters is
+--	
+--                            WHEN "00000001" => 
+--                               OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(0)(25) & RAW_OUTPUT(0)(24 downto 14); -- APPROXIMATELY 0-75 SWITCH 0
+--                            WHEN "00000010" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(1)(25) & RAW_OUTPUT(1)(24 downto 14); -- APPROXIMATELY 75-150 SWITCH 1
+--                            WHEN "00000100" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(2)(25) & RAW_OUTPUT(2)(24 downto 14); -- APPROXIMATELY 150-300 SWITCH 2
+--                            WHEN "00001000" => 
+--                                OUTPUT_TO_CLASSD<=  NOT RAW_OUTPUT(3)(25) & RAW_OUTPUT(3)(24 downto 14);  -- APPROXIMATELY 300- 600SWITCH 3
+--                            WHEN "00010000" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(4)(25) & RAW_OUTPUT(4)(24 downto 14); -- APPROXIMATELY 600-1200 SWITCH 4
+--                            WHEN "00100000" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(5)(25) & RAW_OUTPUT(5)(24 downto 14); -- APPROXIMATELY 1200-2500 SWITCH 5
+--                            WHEN "01000000" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(6)(25) & RAW_OUTPUT(6)(24 downto 14); -- APPROXIMATELY 2500-5000 SWITCH 6
+--                            WHEN "10000000" => 
+--                                OUTPUT_TO_CLASSD<= NOT RAW_OUTPUT(7)(25) & RAW_OUTPUT(7)(24 downto 14);  -- APPROXIMATELY 5000-10000 SWITCH 7
+--                            
+--	                         WHEN OTHERS => 
+--                                 NULL;
+--   END CASE;
+--
+--	end process;
+
+--	   PROCESS(clk)-- to check dac  
+--	     BEGIN
+--	case select_filters is
+--	
+--                            WHEN "00000001" => 
+--                               OUTPUT_TO_CLASSD<="111111111111"; -- 4.2 v
+--                            WHEN "00000010" => 
+--                                OUTPUT_TO_CLASSD<="011111111111"; -- 2.1 v
+--                            WHEN "00000100" => 
+--                                OUTPUT_TO_CLASSD<="001111111111"; -- appro1.1 v 
+--                            WHEN "00001000" => 
+--                                OUTPUT_TO_CLASSD<="000111111111";  --.52v
+--                            WHEN "00010000" => 
+--                                OUTPUT_TO_CLASSD<="000011111111"; -- .26v
+--                            WHEN "00100000" => 
+--                                OUTPUT_TO_CLASSD<="000001111111"; -- .12v
+--                            WHEN "01000000" => 
+--                                OUTPUT_TO_CLASSD<="000000001111"; -- appro 10mv
+--                            WHEN "10000000" => 
+--                                OUTPUT_TO_CLASSD<="000000000000";  -- 0v
+--                            
+--	                         WHEN OTHERS => 
+--                                 NULL;
+--   END CASE;
+--
+--	end process;
+
 END ARCHITECTURE;
+
+
+
               

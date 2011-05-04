@@ -10,14 +10,14 @@ NET "reset"  LOC = "M13"  ;
 #NET "btn<2>"  LOC = "L13"  ;
 #NET "btn<3>"  LOC = "L14"  ;
 #Slide switches
-#NET "swt<0>"  LOC = "F12"  ;
-#NET "swt<1>"  LOC = "G12"  ;
-#NET "swt<2>"  LOC = "H14"  ;
-#NET "swt<3>"  LOC = "H13"  ;
-#NET "swt<4>"  LOC = "J14"  ;
-#NET "swt<5>"  LOC = "J13"  ;
-#NET "swt<6>"  LOC = "K14"  ;
-#NET "swt<7>"  LOC = "K13"  ;
+NET "select_filters<0>"  LOC = "F12"  ;
+NET "select_filters<1>"  LOC = "G12"  ;
+NET "select_filters<2>"  LOC = "H14"  ;
+NET "select_filters<3>"  LOC = "H13"  ;
+NET "select_filters<4>"  LOC = "J14"  ;
+NET "select_filters<5>"  LOC = "J13"  ;
+NET "select_filters<6>"  LOC = "K14"  ;
+NET "select_filters<7>"  LOC = "K13"  ;
 #LEDs
 NET "led<0>"  LOC = "K12"  ;
 NET "led<1>"  LOC = "P14"  ;
