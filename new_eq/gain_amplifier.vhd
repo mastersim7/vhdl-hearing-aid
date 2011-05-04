@@ -21,7 +21,7 @@ USE work.EQ_data_type.ALL;
 USE work.EQ_functions.ALL;
 
 ENTITY gain_amplifier IS
-    GENERIC(
+    GENERIC( 
             NUM_BITS_OUT : NATURAL := 13;
             NUM_OF_GAINS : NATURAL := 8;
             NUM_OF_FILTERS: NATURAL := 8);
@@ -48,7 +48,7 @@ PROCESS(clk)
     VARIABLE temp2 :Gain_Multi_Result_39; 
     --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
     VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
-	--as we r doing 8 addition 3 bit is enough to cover all overflow
+	--a as we r doing 8 addition 3 bit is enough to cover all overflow
     VARIABLE i : INTEGER:=0;
 BEGIN
     IF clk'EVENT AND clk = '1' THEN
