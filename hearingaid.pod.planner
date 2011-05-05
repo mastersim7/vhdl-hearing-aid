@@ -36,23 +36,23 @@
   </calendars>
   <tasks>
     <task id="1" name="Verify Serialfilter.vhd" note="" work="57600" start="20110330T000000Z" end="20110404T170000Z" work-start="20110330T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
-    <task id="2" name="Avarerage can satuaret ?" note="" work="3600" start="20110330T000000Z" end="20110330T140000Z" work-start="20110330T130000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-    <task id="3" name="Interface VB.net" note="" work="43200" start="20110330T000000Z" end="20110401T170000Z" work-start="20110330T130000Z" percent-complete="80" priority="0" type="normal" scheduling="fixed-work">
+    <task id="2" name="Avarerage can satuaret ?" note="" work="3600" start="20110330T000000Z" end="20110330T140000Z" work-start="20110330T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="3" name="Interface VB.net" note="" work="43200" start="20110330T000000Z" end="20110401T170000Z" work-start="20110330T130000Z" percent-complete="90" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110301T000000Z"/>
     </task>
-    <task id="4" name="interface vhdl" note="" work="72000" start="20110330T000000Z" end="20110404T170000Z" work-start="20110330T130000Z" percent-complete="95" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="4" name="interface vhdl" note="" work="72000" start="20110330T000000Z" end="20110404T170000Z" work-start="20110330T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
     <task id="5" name="clean up the data types" note="" work="14400" start="20110404T170000Z" end="20110405T170000Z" work-start="20110405T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="1" type="FS"/>
       </predecessors>
     </task>
-    <task id="6" name="databuffer ? is it done? " note="" work="7200" start="20110330T000000Z" end="20110330T150000Z" work-start="20110330T130000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="6" name="databuffer" note="" work="7200" start="20110330T000000Z" end="20110330T150000Z" work-start="20110330T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
     <task id="7" name="Verify EQ main" note="" work="201600" start="20110404T170000Z" end="20110413T170000Z" work-start="20110405T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="1" type="FS"/>
       </predecessors>
     </task>
-    <task id="8" name="Testbench the rx tc vhdl parts" note="" work="57600" start="20110414T000000Z" end="20110419T142000Z" work-start="20110414T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
+    <task id="8" name="Testbench the rx tc vhdl parts" note="" work="57600" start="20110414T000000Z" end="20110426T163320Z" work-start="20110414T130000Z" percent-complete="90" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110414T000000Z"/>
       <predecessors>
         <predecessor id="1" predecessor-id="4" type="FS"/>
@@ -113,48 +113,41 @@
     <task id="22" name="Milstone: Exctract  Final Layout" note="" work="0" start="20110527T000000Z" end="20110527T000000Z" work-start="20110527T130000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110527T000000Z"/>
     </task>
-    <task id="23" name="Debug the GainAmplifier" note="" work="14400" start="20110502T000000Z" end="20110502T170000Z" work-start="20110502T130000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="23" name="Debug the GainAmplifier" note="" work="12600" start="20110502T000000Z" end="20110502T163000Z" work-start="20110502T130000Z" percent-complete="30" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110502T000000Z"/>
     </task>
     <task id="24" name="Debug the RX TX vhdl part" note="" work="14400" start="20110502T000000Z" end="20110502T170000Z" work-start="20110502T130000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110502T000000Z"/>
     </task>
+    <task id="25" name="Try out the RotatingBuffer again" note="" work="28800" start="20110504T000000Z" end="20110512T154000Z" work-start="20110504T130000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <constraint type="must-start-on" time="20110504T000000Z"/>
+    </task>
   </tasks>
   <resource-groups/>
   <resources>
-    <resource id="1" name="Anandhavel S" short-name="Anand" type="1" units="0" email="" note="&#10;" std-rate="0" calendar="2"/>
-    <resource id="2" name="Amit Kulkani" short-name="Amit" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="3" name="Robin Andersson" short-name="Robin" type="1" units="0" email="" note="" std-rate="0" calendar="2"/>
+    <resource id="1" name="Shwan Ciyako" short-name="Shwan" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="2" name="Mathias Lundell" short-name="Mathias" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="3" name="Alexey" short-name="Alexey" type="1" units="0" email="" note="" std-rate="0"/>
     <resource id="4" name="Danijel R" short-name="Danijel" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="5" name="Alexey" short-name="Alexey" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="6" name="Mathias Lundell" short-name="Mathias" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="7" name="Shwan Ciyako" short-name="Shwan" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="5" name="Robin Andersson" short-name="Robin" type="1" units="0" email="" note="" std-rate="0" calendar="2"/>
+    <resource id="6" name="Amit Kulkani" short-name="Amit" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="7" name="Anandhavel S" short-name="Anand" type="1" units="0" email="" note="&#10;" std-rate="0" calendar="2"/>
   </resources>
   <allocations>
-    <allocation task-id="13" resource-id="1" units="100"/>
-    <allocation task-id="18" resource-id="1" units="10"/>
-    <allocation task-id="22" resource-id="1" units="100"/>
-    <allocation task-id="20" resource-id="1" units="100"/>
-    <allocation task-id="21" resource-id="1" units="50"/>
-    <allocation task-id="14" resource-id="1" units="100"/>
-    <allocation task-id="4" resource-id="1" units="25"/>
-    <allocation task-id="8" resource-id="1" units="20"/>
-    <allocation task-id="24" resource-id="2" units="100"/>
-    <allocation task-id="18" resource-id="2" units="50"/>
-    <allocation task-id="19" resource-id="2" units="100"/>
-    <allocation task-id="4" resource-id="2" units="100"/>
-    <allocation task-id="8" resource-id="2" units="100"/>
-    <allocation task-id="3" resource-id="2" units="100"/>
-    <allocation task-id="12" resource-id="3" units="90"/>
-    <allocation task-id="11" resource-id="3" units="50"/>
-    <allocation task-id="10" resource-id="3" units="50"/>
-    <allocation task-id="9" resource-id="3" units="75"/>
+    <allocation task-id="13" resource-id="1" units="40"/>
+    <allocation task-id="18" resource-id="1" units="25"/>
+    <allocation task-id="5" resource-id="1" units="100"/>
+    <allocation task-id="25" resource-id="2" units="10"/>
+    <allocation task-id="18" resource-id="2" units="25"/>
+    <allocation task-id="16" resource-id="2" units="100"/>
+    <allocation task-id="7" resource-id="2" units="100"/>
+    <allocation task-id="25" resource-id="3" units="10"/>
+    <allocation task-id="23" resource-id="3" units="100"/>
     <allocation task-id="18" resource-id="3" units="10"/>
-    <allocation task-id="22" resource-id="3" units="100"/>
-    <allocation task-id="20" resource-id="3" units="100"/>
-    <allocation task-id="17" resource-id="3" units="100"/>
-    <allocation task-id="21" resource-id="3" units="75"/>
-    <allocation task-id="2" resource-id="3" units="100"/>
+    <allocation task-id="16" resource-id="3" units="100"/>
+    <allocation task-id="7" resource-id="3" units="100"/>
+    <allocation task-id="6" resource-id="3" units="100"/>
+    <allocation task-id="1" resource-id="3" units="100"/>
     <allocation task-id="12" resource-id="4" units="90"/>
     <allocation task-id="11" resource-id="4" units="50"/>
     <allocation task-id="10" resource-id="4" units="50"/>
@@ -163,17 +156,29 @@
     <allocation task-id="22" resource-id="4" units="100"/>
     <allocation task-id="17" resource-id="4" units="100"/>
     <allocation task-id="21" resource-id="4" units="75"/>
-    <allocation task-id="23" resource-id="5" units="100"/>
+    <allocation task-id="12" resource-id="5" units="90"/>
+    <allocation task-id="11" resource-id="5" units="50"/>
+    <allocation task-id="10" resource-id="5" units="50"/>
+    <allocation task-id="9" resource-id="5" units="75"/>
     <allocation task-id="18" resource-id="5" units="10"/>
-    <allocation task-id="16" resource-id="5" units="100"/>
-    <allocation task-id="7" resource-id="5" units="100"/>
-    <allocation task-id="6" resource-id="5" units="100"/>
-    <allocation task-id="1" resource-id="5" units="100"/>
-    <allocation task-id="18" resource-id="6" units="25"/>
-    <allocation task-id="16" resource-id="6" units="100"/>
-    <allocation task-id="7" resource-id="6" units="100"/>
-    <allocation task-id="13" resource-id="7" units="40"/>
-    <allocation task-id="18" resource-id="7" units="25"/>
-    <allocation task-id="5" resource-id="7" units="100"/>
+    <allocation task-id="22" resource-id="5" units="100"/>
+    <allocation task-id="20" resource-id="5" units="100"/>
+    <allocation task-id="17" resource-id="5" units="100"/>
+    <allocation task-id="21" resource-id="5" units="75"/>
+    <allocation task-id="2" resource-id="5" units="100"/>
+    <allocation task-id="25" resource-id="6" units="10"/>
+    <allocation task-id="24" resource-id="6" units="100"/>
+    <allocation task-id="18" resource-id="6" units="50"/>
+    <allocation task-id="19" resource-id="6" units="100"/>
+    <allocation task-id="4" resource-id="6" units="100"/>
+    <allocation task-id="3" resource-id="6" units="100"/>
+    <allocation task-id="13" resource-id="7" units="100"/>
+    <allocation task-id="18" resource-id="7" units="10"/>
+    <allocation task-id="22" resource-id="7" units="100"/>
+    <allocation task-id="20" resource-id="7" units="100"/>
+    <allocation task-id="21" resource-id="7" units="50"/>
+    <allocation task-id="14" resource-id="7" units="100"/>
+    <allocation task-id="4" resource-id="7" units="25"/>
+    <allocation task-id="8" resource-id="7" units="45"/>
   </allocations>
 </project>
