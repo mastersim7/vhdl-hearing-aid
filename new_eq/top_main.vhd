@@ -119,7 +119,7 @@ GENERIC( Serial_word_length : NATURAL :=10); --receiving 10 bits start+8 bits of
    PORT( System_clk_Rx : IN STD_LOGIC;
          Rx: IN STD_LOGIC;
          reset_rx : IN STD_LOGIC;
-         --OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
+        -- OE_Tx : IN STD_LOGIC; --Flag sent by the Equalizer conveying that data filling into 'gain_array_output' is finished
          flag_Tx : OUT STD_LOGIC; --flag to indicate that Eqaulizer can now send the average gain signals
          Gain_array :OUT Gained_result_Array
         -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
@@ -309,6 +309,7 @@ GENERIC MAP( Serial_word_length => 10 ) --receiving 10 bits start+8 bits of data
          System_clk_Rx => clk,
          Rx=> Rx,
          reset_rx => reset,
+         --OE_Tx => OE_from_average_if,
           flag_Tx =>REQ_from_IF_sig,
 		 Gain_array  => GAIN_From_IF_sig
         -- temp_led:OUT STd_LOGIC_vector(7 downto 0)
