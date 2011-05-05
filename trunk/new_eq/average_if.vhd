@@ -78,7 +78,10 @@ BEGIN
 			        END IF; --OE_GSINSMP
 		        ELSE --STARTED
 		        	started <= REQ;
-		        END IF; --started
+                    if started = '0' then
+                    OE <= '0';
+                    end if;
+                    END IF; --started
 		--END IF; --CE
         END IF; --reset
     END IF; --cl

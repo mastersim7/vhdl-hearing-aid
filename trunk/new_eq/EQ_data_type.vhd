@@ -24,6 +24,7 @@ Package EQ_data_type IS
      TYPE Gain_Multi_Result IS ARRAY (0 to 7) OF STD_LOGIC_VECTOR(25 DOWNTO 0 );-- after multiplied with gain values as array 26bits
 	TYPE Gain_Multi_Result_39 IS ARRAY (0 to 7) OF STD_LOGIC_VECTOR(38 DOWNTO 0 );
     TYPE Gain_Multi_Result_12 IS ARRAY (0 to 7) OF STD_LOGIC_VECTOR(11 DOWNTO 0 );
+     TYPE Gain_Multi_Result_13 IS ARRAY (0 to 7) OF STD_LOGIC_VECTOR(12 DOWNTO 0 );
 	-- Manly used in IF
 	TYPE AVERAGE_SIG_LEV_type IS ARRAY (7 DOWNTO 0) OF STD_LOGIC_VECTOR( 12 downto 0 ); -- 13bits to the averageif to sum up 200 of them
     TYPE Gained_result_Array is ARRAY(0 to 7) OF STD_LOGIC_VECTOR( 12 downto 0 ); -- 13 bits 

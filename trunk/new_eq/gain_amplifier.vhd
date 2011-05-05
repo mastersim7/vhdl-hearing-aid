@@ -46,6 +46,7 @@ BEGIN
 PROCESS(clk)
     VARIABLE GAIND_Q :Gain_Multi_Result; 
     VARIABLE temp2 :Gain_Multi_Result_39; 
+    variable temp_msb_13 :Gain_Multi_Result_13; 
     --VARIABLE SUMMED : Gain_Multi_extended; -- 53 bits added extra 3 bits to account for overflow ,
     VARIABLE SUMMED : STD_LOGIC_VECTOR(25 DOWNTO 0); 
 	--a as we r doing 8 addition 3 bit is enough to cover all overflow
@@ -68,10 +69,12 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-                        --temp2 <=  RAW_OUTPUT(25) & RAW_OUTPUT(24 DOWNTO 14) ; only msb 12 of rawoutput does not give any output 
-		               temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
+                        temp_msb_13(i) := RAW_OUTPUT(i)(25 DOWNTO 13) ;-- only msb 12 of rawoutput does not give any output 
+                        GAIND_Q(i) :=STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(temp_msb_13(i)) * SIGNED(GAIN(i)),1));		           
+                   -- temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
 --                       temp3(i) <= temp2(i)(38 downto 27);
-                        GAIND_Q(i) := temp2(i)(35 downto 10);
+
+                       -- GAIND_Q(i) := temp2(i)(35 downto 10);
                         --output goes noisy at gain states more than 14  when this  range is 25 to 0
                         --output goes noisy at gain states more than 25  when this  range is 30 to 5
                           --output  goes noisy at gain states more than  31 when this  range is 35 to 10 but o/p dies at low gain states
