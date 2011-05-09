@@ -2,7 +2,7 @@
 %greatest = (2^ magnitude-1) -1
 %n = 111;
 % Coefficients
-coeff_num = 40; % number of randomly generated coefficients
+coeff_num = 20; % number of randomly generated coefficients
 coeff_int = 0;
 coeff_frac = 0.0;
 coeff_bin = '';  
