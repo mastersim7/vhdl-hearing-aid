@@ -53,6 +53,7 @@ PROCESS(System_clk_Rx,reset_rx)
     VARIABLE memory_temp : Gained_result_Array_8;
     VARIABLE LUT : Gained_result_Array;
     VARIABLE rx_flag_int : STD_LOGIC;
+    VARIABLE Count_int :NATURAL RANGE 0 TO 8;
 BEGIN
 IF(reset_rx = '1') THEN
            FOR k IN 0 TO 7 LOOP
@@ -165,16 +166,33 @@ ELSIF(reset_rx = '0') THEN
 --                        IF(k = 8) THEN                       
 --                            k := 0;
 --                        END IF;
-                    END IF;
-                END IF;
-            END IF;
-        END IF;        
-    END IF;
-END IF;
+                    END IF;--j = Serial_word_length-2 
+                END IF;--j
+            END IF;--counter_clk_div
+        END IF;  --startbit
+        
+  IF(rx_flag_int = '1') THEN
+    count_int := count_int + 1;
+    flag_Tx  <= rx_flag_int;
+   END IF;
 
-flag_Tx  <= rx_flag_int;
-rx_flag_int := '0';    
---temp_led <= LUT(7)(12 downto 5);
+  IF(Count_int = 7 ) THEN
+       rx_flag_int := '0';
+       flag_Tx  <= '0';
+       Count_int := 0;
+  END IF;    
+     
+    END IF;--clock
+END IF;--reset
+--IF(OE_Tx = '1') THEN
+--rx_flag_in := '0';
+--END IF;
+--flag_Tx  <= rx_flag_int;
+----flag_Tx  <= '1';
+--
+--rx_flag_int := '0';    
+----temp_led <= LUT(7)(12 downto 5);
+
 END PROCESS;
 
 END Behavioral;

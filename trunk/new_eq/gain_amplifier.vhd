@@ -14,6 +14,12 @@
 --However, the input wordlength is needlessly large
 -- removed CE no need in asic or FPGA right now /Shwan
 
+
+
+-- the multiplication is MSB 13 bits(RAW_OUTPUT(i)(25 DOWNTO 13)) and gain values 13 bits , but this does not give proper output
+-- i took 13 * 13 multiplication because of resource constraints in FPGA
+-- in ASIC we can do 39* 13 (RAW_OUTPUT(i)) entire multiplication we can get a proper output
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
@@ -69,13 +75,14 @@ BEGIN
 	            IF started = '1' THEN 
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
-                        temp_msb_13(i) := RAW_OUTPUT(i)(25 DOWNTO 13) ;-- only msb 12 of rawoutput does not give any output 
-                        GAIND_Q(i) :=STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(temp_msb_13(i)) * SIGNED(GAIN(i)),1));		           
-                   -- temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));
---                       temp3(i) <= temp2(i)(38 downto 27);
+                        temp_msb_13(i) := RAW_OUTPUT(i)(25 DOWNTO 13) ;-- only msb 12 of rawoutput does not give any output --for FPGA
+                        GAIND_Q(i) :=STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(temp_msb_13(i)) * SIGNED(GAIN(i)),1));	--for FPGA	           
+                   -- temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));--for asic
+--                       temp3(i) <= temp2(i)(38 downto 27);-- for intermediate testing
 
-                       -- GAIND_Q(i) := temp2(i)(35 downto 10);
-                        --output goes noisy at gain states more than 14  when this  range is 25 to 0
+                       -- GAIND_Q(i) := temp2(i)(35 downto 10);--for asic                     
+
+							--output goes noisy at gain states more than 14  when this  range is 25 to 0
                         --output goes noisy at gain states more than 25  when this  range is 30 to 5
                           --output  goes noisy at gain states more than  31 when this  range is 35 to 10 but o/p dies at low gain states
                         --output never goes noisy  when this  range is 38 to 13 but o/p dies at low gain states

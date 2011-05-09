@@ -45,17 +45,30 @@ BEGIN
         -- CE high, calculate a result. Output updated when all coefficients used
         ELSIF CE = '1' THEN
             -- Extend incoming parameters.
-            IF sample1(MSB) = '1' THEN
-                p1 := '1' & sample1;
+				--testing before asic for amp.
+				IF sample1(MSB) = '1' THEN
+                p1 := sample1 &'1' ;
             ELSE
-                p1 := '0' & sample1;
+                p1 := sample1 &'0';
             END IF;
         
             IF sample2(MSB) = '1' THEN
-                p2 := '1' & sample2;
+                p2 := sample2 & '1' ;
             ELSE
-                p2 := '0' & sample2;
+                p2 :=  sample2 & '0';
             END IF;
+--
+--            IF sample1(MSB) = '1' THEN
+--                p1 := '1' & sample1;
+--            ELSE
+--                p1 := '0' & sample1;
+--            END IF;
+--        
+--            IF sample2(MSB) = '1' THEN
+--                p2 := '1' & sample2;
+--            ELSE
+--                p2 := '0' & sample2;
+--            END IF;
         
             -- Perform signed addition
             two_samples := STD_LOGIC_VECTOR( SIGNED(p1) + SIGNED(p2) );
