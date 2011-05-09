@@ -76,8 +76,8 @@ BEGIN
         	    	IF (i /= (NUM_OF_GAINS)) THEN --+1
                         OE <= '0';
                         temp_msb_13(i) := RAW_OUTPUT(i)(25 DOWNTO 13) ;-- only msb 12 of rawoutput does not give any output --for FPGA
-                        GAIND_Q(i) :=STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(temp_msb_13(i)) * SIGNED(GAIN(i)),1));	--for FPGA	           
-                   -- temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));--for asic
+                       GAIND_Q(i) :=STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(temp_msb_13(i)) * SIGNED(GAIN(i)),1));	--for FPGA	           
+                  -- temp2(i) := STD_LOGIC_VECTOR(SHIFT_LEFT(SIGNED(RAW_OUTPUT(i)) * SIGNED(GAIN(i)),1));--for asic
 --                       temp3(i) <= temp2(i)(38 downto 27);-- for intermediate testing
 
                        -- GAIND_Q(i) := temp2(i)(35 downto 10);--for asic                     
