@@ -82,23 +82,7 @@ Partial Class Form1
         Me.Close_Button = New System.Windows.Forms.Button
         Me.Label2 = New System.Windows.Forms.Label
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
         Me.Label_1 = New System.Windows.Forms.Label
-        Me.ProgressBar2 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar3 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar4 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar5 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar6 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar7 = New System.Windows.Forms.ProgressBar
-        Me.ProgressBar8 = New System.Windows.Forms.ProgressBar
-        Me.Band_1 = New System.Windows.Forms.Label
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.Label6 = New System.Windows.Forms.Label
-        Me.Label7 = New System.Windows.Forms.Label
-        Me.Label8 = New System.Windows.Forms.Label
-        Me.Label273 = New System.Windows.Forms.Label
         Me.receive_gain = New System.Windows.Forms.Button
         Me.Label49 = New System.Windows.Forms.Label
         Me.Label50 = New System.Windows.Forms.Label
@@ -913,15 +897,6 @@ Partial Class Form1
         '
         Me.Timer1.Interval = 1000
         '
-        'ProgressBar1
-        '
-        Me.ProgressBar1.Location = New System.Drawing.Point(54, 289)
-        Me.ProgressBar1.Maximum = 500
-        Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-        Me.ProgressBar1.TabIndex = 588
-        '
         'Label_1
         '
         Me.Label_1.AutoSize = True
@@ -930,134 +905,6 @@ Partial Class Form1
         Me.Label_1.Name = "Label_1"
         Me.Label_1.Size = New System.Drawing.Size(2, 15)
         Me.Label_1.TabIndex = 589
-        '
-        'ProgressBar2
-        '
-        Me.ProgressBar2.Location = New System.Drawing.Point(54, 325)
-        Me.ProgressBar2.Maximum = 500
-        Me.ProgressBar2.Name = "ProgressBar2"
-        Me.ProgressBar2.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar2.TabIndex = 597
-        '
-        'ProgressBar3
-        '
-        Me.ProgressBar3.Location = New System.Drawing.Point(54, 363)
-        Me.ProgressBar3.Maximum = 500
-        Me.ProgressBar3.Name = "ProgressBar3"
-        Me.ProgressBar3.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar3.TabIndex = 598
-        '
-        'ProgressBar4
-        '
-        Me.ProgressBar4.Location = New System.Drawing.Point(54, 399)
-        Me.ProgressBar4.Maximum = 500
-        Me.ProgressBar4.Name = "ProgressBar4"
-        Me.ProgressBar4.Size = New System.Drawing.Size(289, 10)
-        Me.ProgressBar4.TabIndex = 599
-        '
-        'ProgressBar5
-        '
-        Me.ProgressBar5.Location = New System.Drawing.Point(54, 435)
-        Me.ProgressBar5.Maximum = 500
-        Me.ProgressBar5.Name = "ProgressBar5"
-        Me.ProgressBar5.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar5.TabIndex = 600
-        '
-        'ProgressBar6
-        '
-        Me.ProgressBar6.Location = New System.Drawing.Point(54, 478)
-        Me.ProgressBar6.Maximum = 500
-        Me.ProgressBar6.Name = "ProgressBar6"
-        Me.ProgressBar6.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar6.TabIndex = 601
-        '
-        'ProgressBar7
-        '
-        Me.ProgressBar7.Location = New System.Drawing.Point(54, 521)
-        Me.ProgressBar7.Maximum = 500
-        Me.ProgressBar7.Name = "ProgressBar7"
-        Me.ProgressBar7.Size = New System.Drawing.Size(291, 10)
-        Me.ProgressBar7.TabIndex = 602
-        '
-        'ProgressBar8
-        '
-        Me.ProgressBar8.Location = New System.Drawing.Point(54, 563)
-        Me.ProgressBar8.Maximum = 500
-        Me.ProgressBar8.Name = "ProgressBar8"
-        Me.ProgressBar8.Size = New System.Drawing.Size(290, 10)
-        Me.ProgressBar8.TabIndex = 603
-        '
-        'Band_1
-        '
-        Me.Band_1.AutoSize = True
-        Me.Band_1.Location = New System.Drawing.Point(2, 289)
-        Me.Band_1.Name = "Band_1"
-        Me.Band_1.Size = New System.Drawing.Size(46, 13)
-        Me.Band_1.TabIndex = 604
-        Me.Band_1.Text = "BAND-1"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(2, 325)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(46, 13)
-        Me.Label3.TabIndex = 605
-        Me.Label3.Text = "BAND-2"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(2, 360)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(46, 13)
-        Me.Label4.TabIndex = 606
-        Me.Label4.Text = "BAND-3"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(2, 396)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(46, 13)
-        Me.Label5.TabIndex = 607
-        Me.Label5.Text = "BAND-4"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(2, 435)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(46, 13)
-        Me.Label6.TabIndex = 608
-        Me.Label6.Text = "BAND-5"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(2, 478)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(46, 13)
-        Me.Label7.TabIndex = 609
-        Me.Label7.Text = "BAND-6"
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(2, 518)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(46, 13)
-        Me.Label8.TabIndex = 610
-        Me.Label8.Text = "BAND-7"
-        '
-        'Label273
-        '
-        Me.Label273.AutoSize = True
-        Me.Label273.Location = New System.Drawing.Point(2, 560)
-        Me.Label273.Name = "Label273"
-        Me.Label273.Size = New System.Drawing.Size(46, 13)
-        Me.Label273.TabIndex = 611
-        Me.Label273.Text = "BAND-8"
         '
         'receive_gain
         '
@@ -3539,23 +3386,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label79)
         Me.Controls.Add(Me.Label80)
         Me.Controls.Add(Me.receive_gain)
-        Me.Controls.Add(Me.Label273)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Band_1)
-        Me.Controls.Add(Me.ProgressBar8)
-        Me.Controls.Add(Me.ProgressBar7)
-        Me.Controls.Add(Me.ProgressBar6)
-        Me.Controls.Add(Me.ProgressBar5)
-        Me.Controls.Add(Me.ProgressBar4)
-        Me.Controls.Add(Me.ProgressBar3)
-        Me.Controls.Add(Me.ProgressBar2)
         Me.Controls.Add(Me.Label_1)
-        Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Close_Button)
         Me.Controls.Add(Me.Label48)
@@ -3686,23 +3517,7 @@ Partial Class Form1
     Friend WithEvents Close_Button As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
-    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents Label_1 As System.Windows.Forms.Label
-    Friend WithEvents ProgressBar2 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar3 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar4 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar5 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar6 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar7 As System.Windows.Forms.ProgressBar
-    Friend WithEvents ProgressBar8 As System.Windows.Forms.ProgressBar
-    Friend WithEvents Band_1 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents Label273 As System.Windows.Forms.Label
     Friend WithEvents receive_gain As System.Windows.Forms.Button
     Friend WithEvents Label49 As System.Windows.Forms.Label
     Friend WithEvents Label50 As System.Windows.Forms.Label

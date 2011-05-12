@@ -61,14 +61,14 @@ Public Class Form1
             Dim Valu_int7 As Integer = value_7
             Dim Valu_int8 As Integer = value_8
 
-            ProgressBar1.Value = Valu_int1
-            ProgressBar2.Value = Valu_int2
-            ProgressBar3.Value = Valu_int3
-            ProgressBar4.Value = Valu_int4
-            ProgressBar5.Value = Valu_int5
-            ProgressBar6.Value = Valu_int6
-            ProgressBar7.Value = Valu_int7
-            ProgressBar8.Value = Valu_int8
+            'ProgressBar1.Value = Valu_int1
+            'ProgressBar2.Value = Valu_int2
+            'ProgressBar3.Value = Valu_int3
+            'ProgressBar4.Value = Valu_int4
+            'ProgressBar5.Value = Valu_int5
+            'ProgressBar6.Value = Valu_int6
+            'ProgressBar7.Value = Valu_int7
+            'ProgressBar8.Value = Valu_int8
         End If
         With Datarecieved_textbox
             '.Clear()
@@ -92,14 +92,14 @@ Public Class Form1
             Button1.Enabled = True
             Button2.Enabled = False
             Datarecieved_textbox.Clear()
-            ProgressBar1.Value = 0
-            ProgressBar2.Value = 0
-            ProgressBar3.Value = 0
-            ProgressBar4.Value = 0
-            ProgressBar5.Value = 0
-            ProgressBar6.Value = 0
-            ProgressBar7.Value = 0
-            ProgressBar8.Value = 0
+            'ProgressBar1.Value = 0
+            'ProgressBar2.Value = 0
+            'ProgressBar3.Value = 0
+            'ProgressBar4.Value = 0
+            'ProgressBar5.Value = 0
+            'ProgressBar6.Value = 0
+            'ProgressBar7.Value = 0
+            'ProgressBar8.Value = 0
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
