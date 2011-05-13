@@ -1,0 +1,94 @@
+ncelab: 09.20-s020: (c) Copyright 1995-2010 Cadence Design Systems, Inc.
+TOOL:	ncelab	09.20-s020: Started on May 13, 2011 at 19:17:02 CEST
+ncelab
+    -messages
+    -v93
+    WORKLIB.tb:tb_arch
+
+	Elaborating the design hierarchy:
+ncelab: *W,CFETMP: VHDL entity/component 'TOP_MAIN' (./test_bench.vhd: line 31, position 21) contains more generics than Verilog foreign module.
+		Caching library 'std' ....... Done
+		Caching library 'synopsys' ....... Done
+		Caching library 'ieee' ....... Done
+		Caching library 'ambit' ....... Done
+		Caching library 'vital_memory' ....... Done
+		Caching library 'ncutils' ....... Done
+		Caching library 'ncinternal' ....... Done
+		Caching library 'ncmodels' ....... Done
+		Caching library 'cds_assertions' ....... Done
+		Caching library 'cds_inhconn' ....... Done
+		Caching library 'cds_spicelib' ....... Done
+		Caching library 'sdilib' ....... Done
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.add_signed:module <0x0744de7a>
+			streams:   1, words:   102
+		worklib.add_signed_1:module <0x2a811e51>
+			streams:   1, words:   102
+		worklib.add_unsigned_318:module <0x57964179>
+			streams:   1, words:   163
+		worklib.csa_tree_add12621_group_333:module <0x55bd1a6e>
+			streams:   1, words:   163
+		worklib.csa_tree_add12721_group_335:module <0x5f4d501c>
+			streams:   1, words:   163
+		worklib.eq_main_NUM_OF_SAMPLES200_NUM_OF_COEFFS100_NUM_OF_BANDS8:module <0x1ee93ea7>
+			streams:   1, words:  6679
+		worklib.filterblock_main_NUM_BITS_OUT13_NUM_OF_SAMPLES200_NUM_OF_COEFFS100_NUM_OF_BANDS8:module <0x60a3caeb>
+			streams:   2, words:  6842
+		worklib.full_adder:module <0x24b9fc28>
+			streams:   0, words:     0
+		worklib.full_adder_24:module <0x6dad8c62>
+			streams:   0, words:     0
+		worklib.gain_amplifier_NUM_BITS_OUT13_NUM_OF_GAINS8_NUM_OF_FILTERS8:module <0x3a41a440>
+			streams:   0, words:     0
+		worklib.increment_signed:module <0x136ef144>
+			streams:   1, words:   163
+		worklib.increment_unsigned:module <0x6ba6deaa>
+			streams:   1, words:   163
+		worklib.increment_unsigned_331:module <0x3240bb80>
+			streams:   1, words:   163
+		worklib.latch_N12_1:module <0x597fe2a8>
+			streams:   1, words:   163
+		worklib.mult_const_trivial:module <0x40960d87>
+			streams:   1, words:   224
+		worklib.mult_signed:module <0x56903dbf>
+			streams:   1, words:   102
+		worklib.mult_signed_1484:module <0x6325b5b6>
+			streams:   1, words:   102
+		worklib.regular_buffer_N12_NUM_OF_SAMPLES200:module <0x3698f139>
+			streams:   0, words:     0
+		worklib.ripple_addsub_N12:module <0x31af5a0a>
+			streams:   1, words:   102
+		worklib.ripple_addsub_N12_1:module <0x1f994019>
+			streams:   0, words:     0
+		worklib.ripple_addsub_N12_2:module <0x6ecfa74d>
+			streams:   1, words:   102
+		worklib.ripple_addsub_N12_3:module <0x3a93c639>
+			streams:   0, words:     0
+		worklib.sd2_N12:module <0x15d239c3>
+			streams:   0, words:     0
+		worklib.serial_filter_NUM_OF_COEFFS100:module <0x1b44ee6c>
+			streams:   1, words:   855
+		worklib.serial_filter_NUM_OF_COEFFS100_1:module <0x74a2775d>
+			streams:   1, words:   855
+		worklib.sub_unsigned:module <0x7236eedc>
+			streams:   1, words:   346
+		worklib.top_main:module <0x1b0d84a3>
+			streams:   0, words:     0
+	Loading native compiled code:     .................... Done
+	Building instance specific data structures.
+	Design hierarchy summary:
+		                 Instances  Unique
+	VHDL Design hierarchy:
+		Components:          16192      95
+		Default bindings:        2       -
+		Processes:           22643     110
+		Signals:              6171      16
+	Verilog Design hierarchy:
+		Modules:                79      79
+		Scalar wires:          490       -
+		Vectored wires:         12       -
+		Cont. assignments:      18     439
+		Pseudo assignments:      2       2
+	Writing initial simulation snapshot: WORKLIB.TB:TB_ARCH
+TOOL:	ncelab	09.20-s020: Exiting on May 13, 2011 at 19:17:09 CEST  (total: 00:00:07)

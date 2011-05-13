@@ -1,0 +1,12 @@
+ncsim: 09.20-s020: (c) Copyright 1995-2010 Cadence Design Systems, Inc.
+ncsim> source /chalmers/sw/sup/cds/incisiv-9.20.018/IUS92/tools/inca/files/ncsimrc
+ncsim> dumpsaif -hierarchy -output top.saif -scope top_main_comp -overwrite -verbose
+Picking up all ports in the current scope hierarchy
+ncsim: *W,PRNTAL: Some objects excluded from probe (-access -R).
+ncsim> run
+ASSERT/FAILURE (time 100100 US) from process :clk_20kHz_generation (architecture WORKLIB.tb:tb_arch)
+Test bench finished
+Assertion at 100100 US + 0
+./test_bench.vhd:310       assert false
+ncsim> dumpsaif -end
+ncsim> exit

@@ -1,0 +1,22 @@
+# Cadence Encounter(R) RTL Compiler
+#   version v09.10-p104_1 (32-bit) built Jun 18 2009
+#
+
+
+source test.s
+source power_probability.s
+report power
+source power_probability.s
+report power
+source power_probability.s
+read_vcd -static -vcd_module top_main_comp topread_saif
+read_saif -instance top_main_comp top.saif
+report power
+report power > saif_10mhz_100coeff.txt
+write_tcf > saif.tcf
+read_saif -instance top_main_comp top.saif
+report power > power_saif_10mhz_100coeff.txt
+report power > power_saif_10mhz_100coeff.txt
+read_saif -instance top_main_comp top.saif
+report power > power_saif_10mhz_100coeff.txt
+write_tcf > saif.tcf
