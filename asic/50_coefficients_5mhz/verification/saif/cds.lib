@@ -1,0 +1,2 @@
+INCLUDE /chalmers/sw/sup/cds/incisiv-9.20.018/IUS92/tools.lnx86/inca/files/cds.lib
+DEFINE worklib tmp/worklib
