@@ -1,0 +1,15 @@
+ncvhdl: 09.20-s020: (c) Copyright 1995-2010 Cadence Design Systems, Inc.
+TOOL:	ncvhdl	09.20-s020: Started on May 13, 2011 at 21:17:28 CEST
+ncvhdl
+    -messages
+    -linedebug
+    -v93
+    test_bench.vhd
+
+test_bench.vhd:
+	errors: 0, warnings: 0
+WORKLIB.TB (entity):
+	streams: 1, words: 38
+WORKLIB.TB:TB_ARCH (architecture):
+	streams: 1, words: 830
+TOOL:	ncvhdl	09.20-s020: Exiting on May 13, 2011 at 21:17:29 CEST  (total: 00:00:01)
