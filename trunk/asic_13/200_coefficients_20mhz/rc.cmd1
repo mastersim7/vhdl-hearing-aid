@@ -1,0 +1,12 @@
+# Cadence Encounter(R) RTL Compiler
+#   version v09.10-p104_1 (32-bit) built Jun 18 2009
+#
+
+
+source test.s
+report timing > timing_20MHZ.txt
+report timing -lint
+source power_probability.s
+report gates > gates_20mhz.txt
+report area
+report area > area_20mhz.txt
