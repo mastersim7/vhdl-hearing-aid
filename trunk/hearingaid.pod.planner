@@ -95,10 +95,10 @@
     <task id="17" name="Milstone: Submit the Final VAMS results" note="" work="0" start="20110515T000000Z" end="20110515T000000Z" work-start="20110516T130000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110515T000000Z"/>
     </task>
-    <task id="18" name="Write The Final Report" note="" work="216000" start="20110503T000000Z" end="20110517T155000Z" work-start="20110503T130000Z" percent-complete="50" priority="0" type="normal" scheduling="fixed-work">
+    <task id="18" name="Write The Final Report" note="" work="216000" start="20110503T000000Z" end="20110517T155000Z" work-start="20110503T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110503T000000Z"/>
     </task>
-    <task id="19" name="Write The Final Report - project" note="" work="28800" start="20110514T000000Z" end="20110517T170000Z" work-start="20110516T130000Z" percent-complete="80" priority="0" type="normal" scheduling="fixed-work">
+    <task id="19" name="Write The Final Report - project" note="" work="28800" start="20110514T000000Z" end="20110517T170000Z" work-start="20110516T130000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110514T000000Z"/>
     </task>
     <task id="20" name="Tolgate : Submit Final Report" note="" work="0" start="20110518T000000Z" end="20110518T000000Z" work-start="20110518T130000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
@@ -110,7 +110,7 @@
     <task id="21" name="Milstone: Final Presentation" note="" work="0" start="20110524T000000Z" end="20110524T000000Z" work-start="20110524T130000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20110524T000000Z"/>
     </task>
-    <task id="22" name="Final Presentation" note="" work="28800" start="20110517T155000Z" end="20110518T143000Z" work-start="20110517T155000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="22" name="Final Presentation" note="" work="28800" start="20110517T155000Z" end="20110518T143000Z" work-start="20110517T155000Z" percent-complete="80" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="18" type="FS"/>
       </predecessors>
@@ -133,31 +133,42 @@
   </tasks>
   <resource-groups/>
   <resources>
-    <resource id="1" name="Shwan Ciyako" short-name="Shwan" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="2" name="Mathias Lundell" short-name="Mathias" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="3" name="Alexey" short-name="Alexey" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="1" name="Anandhavel S" short-name="Anand" type="1" units="0" email="" note="&#10;" std-rate="0" calendar="2"/>
+    <resource id="2" name="Amit Kulkani" short-name="Amit" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="3" name="Robin Andersson" short-name="Robin" type="1" units="0" email="" note="" std-rate="0" calendar="2"/>
     <resource id="4" name="Danijel R" short-name="Danijel" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="5" name="Robin Andersson" short-name="Robin" type="1" units="0" email="" note="" std-rate="0" calendar="2"/>
-    <resource id="6" name="Amit Kulkani" short-name="Amit" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="7" name="Anandhavel S" short-name="Anand" type="1" units="0" email="" note="&#10;" std-rate="0" calendar="2"/>
+    <resource id="5" name="Alexey" short-name="Alexey" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="6" name="Mathias Lundell" short-name="Mathias" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="7" name="Shwan Ciyako" short-name="Shwan" type="1" units="0" email="" note="" std-rate="0"/>
   </resources>
   <allocations>
-    <allocation task-id="19" resource-id="1" units="50"/>
-    <allocation task-id="13" resource-id="1" units="40"/>
-    <allocation task-id="18" resource-id="1" units="25"/>
-    <allocation task-id="5" resource-id="1" units="100"/>
+    <allocation task-id="22" resource-id="1" units="100"/>
+    <allocation task-id="13" resource-id="1" units="100"/>
+    <allocation task-id="18" resource-id="1" units="10"/>
+    <allocation task-id="24" resource-id="1" units="100"/>
+    <allocation task-id="21" resource-id="1" units="100"/>
+    <allocation task-id="23" resource-id="1" units="50"/>
+    <allocation task-id="14" resource-id="1" units="100"/>
+    <allocation task-id="4" resource-id="1" units="25"/>
+    <allocation task-id="8" resource-id="1" units="45"/>
+    <allocation task-id="19" resource-id="2" units="50"/>
     <allocation task-id="27" resource-id="2" units="10"/>
-    <allocation task-id="18" resource-id="2" units="25"/>
-    <allocation task-id="16" resource-id="2" units="100"/>
-    <allocation task-id="7" resource-id="2" units="100"/>
+    <allocation task-id="26" resource-id="2" units="100"/>
+    <allocation task-id="18" resource-id="2" units="50"/>
+    <allocation task-id="20" resource-id="2" units="100"/>
+    <allocation task-id="4" resource-id="2" units="100"/>
+    <allocation task-id="3" resource-id="2" units="100"/>
     <allocation task-id="22" resource-id="3" units="100"/>
-    <allocation task-id="27" resource-id="3" units="10"/>
-    <allocation task-id="25" resource-id="3" units="100"/>
+    <allocation task-id="12" resource-id="3" units="90"/>
+    <allocation task-id="11" resource-id="3" units="50"/>
+    <allocation task-id="10" resource-id="3" units="50"/>
+    <allocation task-id="9" resource-id="3" units="75"/>
     <allocation task-id="18" resource-id="3" units="10"/>
-    <allocation task-id="16" resource-id="3" units="100"/>
-    <allocation task-id="7" resource-id="3" units="100"/>
-    <allocation task-id="6" resource-id="3" units="100"/>
-    <allocation task-id="1" resource-id="3" units="100"/>
+    <allocation task-id="24" resource-id="3" units="100"/>
+    <allocation task-id="21" resource-id="3" units="100"/>
+    <allocation task-id="17" resource-id="3" units="100"/>
+    <allocation task-id="23" resource-id="3" units="75"/>
+    <allocation task-id="2" resource-id="3" units="100"/>
     <allocation task-id="12" resource-id="4" units="90"/>
     <allocation task-id="11" resource-id="4" units="50"/>
     <allocation task-id="10" resource-id="4" units="50"/>
@@ -167,31 +178,20 @@
     <allocation task-id="17" resource-id="4" units="100"/>
     <allocation task-id="23" resource-id="4" units="75"/>
     <allocation task-id="22" resource-id="5" units="100"/>
-    <allocation task-id="12" resource-id="5" units="90"/>
-    <allocation task-id="11" resource-id="5" units="50"/>
-    <allocation task-id="10" resource-id="5" units="50"/>
-    <allocation task-id="9" resource-id="5" units="75"/>
+    <allocation task-id="27" resource-id="5" units="10"/>
+    <allocation task-id="25" resource-id="5" units="100"/>
     <allocation task-id="18" resource-id="5" units="10"/>
-    <allocation task-id="24" resource-id="5" units="100"/>
-    <allocation task-id="21" resource-id="5" units="100"/>
-    <allocation task-id="17" resource-id="5" units="100"/>
-    <allocation task-id="23" resource-id="5" units="75"/>
-    <allocation task-id="2" resource-id="5" units="100"/>
-    <allocation task-id="19" resource-id="6" units="50"/>
+    <allocation task-id="16" resource-id="5" units="100"/>
+    <allocation task-id="7" resource-id="5" units="100"/>
+    <allocation task-id="6" resource-id="5" units="100"/>
+    <allocation task-id="1" resource-id="5" units="100"/>
     <allocation task-id="27" resource-id="6" units="10"/>
-    <allocation task-id="26" resource-id="6" units="100"/>
-    <allocation task-id="18" resource-id="6" units="50"/>
-    <allocation task-id="20" resource-id="6" units="100"/>
-    <allocation task-id="4" resource-id="6" units="100"/>
-    <allocation task-id="3" resource-id="6" units="100"/>
-    <allocation task-id="22" resource-id="7" units="100"/>
-    <allocation task-id="13" resource-id="7" units="100"/>
-    <allocation task-id="18" resource-id="7" units="10"/>
-    <allocation task-id="24" resource-id="7" units="100"/>
-    <allocation task-id="21" resource-id="7" units="100"/>
-    <allocation task-id="23" resource-id="7" units="50"/>
-    <allocation task-id="14" resource-id="7" units="100"/>
-    <allocation task-id="4" resource-id="7" units="25"/>
-    <allocation task-id="8" resource-id="7" units="45"/>
+    <allocation task-id="18" resource-id="6" units="25"/>
+    <allocation task-id="16" resource-id="6" units="100"/>
+    <allocation task-id="7" resource-id="6" units="100"/>
+    <allocation task-id="19" resource-id="7" units="50"/>
+    <allocation task-id="13" resource-id="7" units="40"/>
+    <allocation task-id="18" resource-id="7" units="25"/>
+    <allocation task-id="5" resource-id="7" units="100"/>
   </allocations>
 </project>
