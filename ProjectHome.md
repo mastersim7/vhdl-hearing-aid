@@ -1,0 +1,2 @@
+This code is part of a project the commiters do as a part of INTEGRATED ELECTRONIC SYSTEM DESIGN, MSC PROGR, at CHALMERS UNIVERSITY OF TECHNOLOGY - GOTHENBURG, SWEDEN
+The code is not done as per that there might be some parts in the repo that is not licensed under gplv3 , specially those parts that has another author but us the committeres.
